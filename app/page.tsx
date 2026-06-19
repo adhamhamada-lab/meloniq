@@ -630,8 +630,7 @@ console.log(
 await res.json()
 );
 
-alert("Subscribed ✅");
-
+alert(email);
 }}
 
 className="
