@@ -527,7 +527,7 @@ text-[#55614A]
 
 </section>
 
-{/* NEWSLETTER */}
+{/* NEWSLETTER
 
 <section
   className="
@@ -693,7 +693,7 @@ Subscribe
 
   </div>
 
-</section>
+</section> */}
 
 {/* FOOTER */}
 
