@@ -598,7 +598,7 @@ md:text-[72px]
 
 
 
-<form
+ {/* <form
 
 onSubmit={async (e) => {
 
@@ -689,7 +689,7 @@ Subscribe
 
 </button>
 
-</form>
+</form> */}
 
   </div>
 
