@@ -17,10 +17,6 @@ title: "Meloniq | Handmade Botanical Care",
 
 description:
 "Discover handmade botanical products inspired by nature.",
-
-icons: {
-icon: "/images/logooo.png",
-},
 };
 
 export default function RootLayout({
