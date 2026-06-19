@@ -598,7 +598,7 @@ md:text-[72px]
 
 
 
-    <form
+<form
 onSubmit={async (e) => {
 
 e.preventDefault();
@@ -606,6 +606,9 @@ e.preventDefault();
 const email =
 e.currentTarget.email.value;
 
+console.log(email);
+
+const res =
 await fetch(
 "/api/subscribe",
 {
@@ -621,6 +624,10 @@ JSON.stringify({
 email,
 }),
 }
+);
+
+console.log(
+await res.json()
 );
 
 alert("Subscribed ✅");
