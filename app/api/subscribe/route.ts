@@ -7,6 +7,7 @@ try {
 const body = await req.json();
 
 const email = body.email;
+console.log("EMAIL RECEIVED:", email);
 
 const filePath = path.join(
 process.cwd(),
