@@ -598,51 +598,88 @@ md:text-[72px]
 
 
 
-    <div
-      className="
-      mt-14
-      flex
-      flex-col
-      md:flex-row
-      justify-center
-      gap-5
-      reveal
-      "
-    >
+    <form
+onSubmit={async (e) => {
 
-      <input
-        type="email"
-        placeholder="Your email"
-        className="
-        px-8
-        py-5
-        rounded-full
-        bg-white
-        outline-none
-        w-full
+e.preventDefault();
+
+const email =
+e.currentTarget.email.value;
+
+await fetch(
+"/api/subscribe",
+{
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json",
+},
+
+body:
+JSON.stringify({
+email,
+}),
+}
+);
+
+alert("Subscribed ✅");
+
+}}
+
+className="
+mt-14
+flex
+flex-col
+md:flex-row
+justify-center
+gap-5
+"
+>
+
+<input
+type="email"
+
+name="email"
+
+required
+
+placeholder="Your email"
+
+className="
+px-8
+py-5
+rounded-full
+bg-white
+outline-none
+
+w-full
 max-w-[420px]
-        text-[#55614A]
-        reveal
-        "
-      />
 
+text-[#55614A]
+"
+/>
 
+<button
+type="submit"
 
-      <button
-        className="
-        px-12
-        py-5
-        rounded-full
-        bg-[#55614A]
-        text-white
-        hover:scale-105
-        duration-300
-        "
-      >
-        Subscribe
-      </button>
+className="
+px-12
+py-5
+rounded-full
+bg-[#55614A]
+text-white
 
-    </div>
+hover:scale-105
+duration-300
+"
+>
+
+Subscribe
+
+</button>
+
+</form>
 
   </div>
 
