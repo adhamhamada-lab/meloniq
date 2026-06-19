@@ -608,7 +608,7 @@ const form =
 e.currentTarget;
 
 const email =
-(
+String(
 new FormData(form)
 .get("email")
 );
@@ -631,6 +631,8 @@ email,
 );
 
 alert("Subscribed ✅");
+
+form.reset();
 
 }}
 
