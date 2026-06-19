@@ -599,16 +599,20 @@ md:text-[72px]
 
 
 <form
+
 onSubmit={async (e) => {
 
 e.preventDefault();
 
+const form =
+e.currentTarget;
+
 const email =
-e.currentTarget.email.value;
+(
+new FormData(form)
+.get("email")
+);
 
-console.log(email);
-
-const res =
 await fetch(
 "/api/subscribe",
 {
@@ -626,11 +630,8 @@ email,
 }
 );
 
-console.log(
-await res.json()
-);
+alert("Subscribed ✅");
 
-alert(email);
 }}
 
 className="
@@ -641,6 +642,7 @@ md:flex-row
 justify-center
 gap-5
 "
+
 >
 
 <input
