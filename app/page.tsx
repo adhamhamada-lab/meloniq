@@ -3,12 +3,7 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-Instagram,
-Facebook,
-MessageCircle
-}
-from "lucide-react";
+import {  MessageCircle } from "lucide-react";
 
 
 export default function Home() {
@@ -576,7 +571,7 @@ items-center
 gap-12
 reveal
 "
->
+/>
 
 {/* LEFT */}
 
