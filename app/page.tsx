@@ -3,6 +3,13 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import {
+Instagram,
+Facebook,
+MessageCircle
+}
+from "lucide-react";
+
 
 export default function Home() {
 
@@ -604,21 +611,16 @@ Handmade botanical care inspired by calm rituals.
 
 {/* RIGHT */}
 
+{/* RIGHT */}
+
 <div
 className="
 flex
-flex-wrap
+items-center
+gap-8
 
-justify-center
-
-gap-6
-md:gap-10
-
-uppercase
-tracking-[0.18em]
-
-text-sm
 text-[#55614A]
+
 reveal
 "
 >
@@ -626,42 +628,45 @@ reveal
 <a
 href="https://wa.me/201227788169"
 target="_blank"
-className="hover:opacity-50 duration-300"
+className="
+hover:scale-110
+duration-300
+"
 >
-Whatsapp
+
+<MessageCircle size={30}/>
+
 </a>
 
 
 <a
-href="https://www.instagram.com/meloniq23?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+href="https://www.instagram.com/meloniq23"
 target="_blank"
-className="hover:opacity-50 duration-300"
+className="
+hover:scale-110
+duration-300
+"
 >
-Instagram
+
+<Instagram size={30}/>
+
 </a>
 
 
 <a
 href="https://www.facebook.com/profile.php?id=61580340421564"
 target="_blank"
-className="hover:opacity-50 duration-300"
+className="
+hover:scale-110
+duration-300
+"
 >
-Facebook
+
+<Facebook size={30}/>
+
 </a>
 
-
-{/* <a
-href="mailto:hello@meloniq.com"
-target="_blank"
-className="hover:opacity-50 duration-300"
->
-Email
-</a> */}
-
 </div>
- 
-</div>
-
 
 
 <div
