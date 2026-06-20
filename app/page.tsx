@@ -276,13 +276,12 @@ shadow-2xl
 {/* ABOUT */}
 
 <section
-id="about"
-className="
-px-8
-md:px-16
-py-32
-reveal
-"
+  id="about"
+  className="
+  px-8
+  md:px-16
+  py-32
+  "
 >
 
   <div
@@ -297,7 +296,6 @@ reveal
       tracking-[0.35em]
       text-[#66705D]
       text-sm
-      reveal
       "
     >
       OUR PHILOSOPHY
@@ -311,7 +309,6 @@ reveal
       md:grid-cols-[1.4fr_0.8fr]
       gap-20
       items-start
-      reveal
       "
     >
 
@@ -323,7 +320,6 @@ reveal
           md:text-[80px]
           leading-[1]
           text-[#55614A]
-          reveal
           "
         >
           Botanical care
@@ -343,48 +339,65 @@ reveal
           md:text-[28px]
           leading-[1.9]
           text-[#66705D]
-          reveal
           "
         >
-          Meloniq creates products inspired
-          by natural ingredients and everyday
-          rituals. Simple textures, calm colors
-          and handmade care.
+          Meloniq started as a simple family hobby
+          making natural soap, before it grew into a
+          craft we truly care about. Every product is
+          handmade in a small workshop, using carefully
+          chosen natural ingredients gentle enough even
+          for sensitive skin.
         </p>
 
+      </div>
 
-        <div
-          className="
-          mt-12
-          flex
-          gap-10
-          reveal
-          "
-        >
-
-          {/* <div>
-
-            <h3
-              className="
-              text-[48px]
-              text-[#55614A]
-              "
-            >
-              100%
-            </h3>
-
-            <p className="text-[#66705D]">
-              Handmade
-            </p>
-
-          </div> */}
+    </div>
 
 
+    <div
+      className="
+      mt-20
+      grid
+      grid-cols-2
+      md:grid-cols-4
+      gap-10
+      "
+    >
 
-          
+      <div>
+        <h3 className="text-[40px] md:text-[48px] text-[#55614A]">
+          100%
+        </h3>
+        <p className="mt-2 text-[#66705D] text-base md:text-lg">
+          Natural Ingredients
+        </p>
+      </div>
 
-        </div>
+      <div>
+        <h3 className="text-[40px] md:text-[48px] text-[#55614A]">
+          Fully
+        </h3>
+        <p className="mt-2 text-[#66705D] text-base md:text-lg">
+          Handmade
+        </p>
+      </div>
 
+      <div>
+        <h3 className="text-[40px] md:text-[48px] text-[#55614A]">
+          Gentle
+        </h3>
+        <p className="mt-2 text-[#66705D] text-base md:text-lg">
+          For Sensitive Skin
+        </p>
+      </div>
+
+      <div>
+        <h3 className="text-[40px] md:text-[48px] text-[#55614A]">
+          Free
+        </h3>
+        <p className="mt-2 text-[#66705D] text-base md:text-lg">
+          From Harsh Chemicals
+        </p>
       </div>
 
     </div>
@@ -392,7 +405,6 @@ reveal
   </div>
 
 </section>
-
       {/* PRODUCTS */}
 
 <section className="px-8 md:px-16 py-24">
@@ -647,7 +659,7 @@ Email
 </a> */}
 
 </div>
-
+ 
 </div>
 
 
@@ -667,7 +679,7 @@ text-sm
 "
 >
 
-© 2026 Meloniq
+© 2026 Meloniq 
 
 </div>
 
