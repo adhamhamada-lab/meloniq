@@ -3,7 +3,8 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {  MessageCircle } from "lucide-react";
+import { Instagram, MessageCircle } from "lucide-react";
+import Facebook from "lucide-react/dist/esm/icons/facebook";
 
 
 export default function Home() {
