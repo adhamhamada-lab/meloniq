@@ -59,8 +59,8 @@ return (
   bg-[#E4E7D6]
   px-8
   md:px-16
-  py-6
-  md:py-10
+  py-3
+  md:py-14
   flex
   justify-between
   items-center
