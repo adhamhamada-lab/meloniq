@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 
 
 export default function Home() {
+
+const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 useEffect(() => {
 
@@ -51,9 +53,14 @@ return (
 
 <nav
   className="
+  sticky
+  top-0
+  z-50
+  bg-[#E4E7D6]
   px-8
   md:px-16
-  py-10
+  py-6
+  md:py-10
   flex
   justify-between
   items-center
@@ -61,7 +68,7 @@ return (
   "
 >
 
-  <Link href="/">
+  <Link href="/" onClick={() => setIsMenuOpen(false)}>
 
 <Image
   src="/images/logooo.png"
@@ -70,7 +77,7 @@ return (
   height={100}
   priority
   className="
-  w-[180px]
+  w-[150px]
   md:w-[260px]
   h-auto
   object-contain
@@ -82,22 +89,20 @@ return (
 
 </Link>
 
-
+  {/* Desktop links */}
 <div
 className="
-flex
+hidden
+md:flex
 items-center
 
-gap-4
-md:gap-16
+gap-16
 
 text-[#55614A]
 
-text-[13px]
-md:text-[16px]
+text-[16px]
 
-tracking-[0.08em]
-md:tracking-[0.18em]
+tracking-[0.18em]
 
 uppercase
 "
@@ -140,6 +145,91 @@ uppercase
 
     
 
+  </div>
+
+  {/* Hamburger button (mobile only) */}
+  <button
+    onClick={() => setIsMenuOpen(!isMenuOpen)}
+    className="
+    md:hidden
+    flex
+    flex-col
+    justify-center
+    items-center
+    gap-[5px]
+    w-8
+    h-8
+    z-50
+    "
+    aria-label="Toggle menu"
+    aria-expanded={isMenuOpen}
+  >
+    <span
+      className={`block h-[1.5px] w-6 bg-[#55614A] duration-300 ${
+        isMenuOpen ? "rotate-45 translate-y-[6.5px]" : ""
+      }`}
+    />
+    <span
+      className={`block h-[1.5px] w-6 bg-[#55614A] duration-300 ${
+        isMenuOpen ? "opacity-0" : "opacity-100"
+      }`}
+    />
+    <span
+      className={`block h-[1.5px] w-6 bg-[#55614A] duration-300 ${
+        isMenuOpen ? "-rotate-45 -translate-y-[6.5px]" : ""
+      }`}
+    />
+  </button>
+
+  {/* Mobile dropdown menu */}
+  <div
+    className={`
+    md:hidden
+    fixed
+    top-0
+    left-0
+    w-full
+    h-screen
+    bg-[#E4E7D6]
+    flex
+    flex-col
+    items-center
+    justify-center
+    gap-10
+    text-[#55614A]
+    text-[15px]
+    tracking-[0.18em]
+    uppercase
+    duration-300
+    z-40
+    ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}
+    `}
+  >
+    <a
+      href="/shop"
+      onClick={() => setIsMenuOpen(false)}
+      className="hover:opacity-60 duration-300"
+    >
+      Shop
+    </a>
+
+    <a
+      href="#about"
+      onClick={() => setIsMenuOpen(false)}
+      className="hover:opacity-60 duration-300"
+    >
+      About
+    </a>
+
+    <a
+      href="https://wa.me/201227788169"
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={() => setIsMenuOpen(false)}
+      className="hover:opacity-60 duration-300"
+    >
+      Contact
+    </a>
   </div>
 
 </nav>
