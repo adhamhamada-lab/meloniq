@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 
 const WHATSAPP_NUMBER = "201227788169";
@@ -40,60 +43,61 @@ function getWhatsappLink(title: string) {
 }
 
 export default function Shop() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
     <main className="bg-[#E4E7D6] min-h-screen">
 
       {/* NAVBAR */}
       <nav
         className="
+        sticky
+        top-0
+        z-50
+        bg-[#E4E7D6]
         px-8
         md:px-16
-        py-10
+        py-2
+        md:py-3
         flex
         justify-between
         items-center
         "
       >
-       <a href="/">
+        <a href="/" onClick={() => setIsMenuOpen(false)}>
 
-<Image
-  src="/images/logooo.png"
-  alt="Meloniq"
-  width={260}
-  height={100}
-  priority
-  className="
-  w-[180px]
-  md:w-[260px]
-  h-auto
-  object-contain
-  hover:scale-[1.02]
-  duration-300
-  cursor-pointer
-  "
-/>
+          <Image
+            src="/images/logooo.png"
+            alt="Meloniq"
+            width={260}
+            height={100}
+            priority
+            className="
+            w-[100px]
+            md:w-[140px]
+            h-auto
+            object-contain
+            hover:scale-[1.02]
+            duration-300
+            cursor-pointer
+            "
+          />
 
-</a>
+        </a>
 
-<div
-className="
-flex
-items-center
-
-gap-4
-md:gap-16
-
-text-[#55614A]
-
-text-[13px]
-md:text-[16px]
-
-tracking-[0.08em]
-md:tracking-[0.18em]
-
-uppercase
-"
->
+        {/* Desktop links */}
+        <div
+          className="
+          hidden
+          md:flex
+          items-center
+          gap-16
+          text-[#55614A]
+          text-[16px]
+          tracking-[0.18em]
+          uppercase
+          "
+        >
           <a href="/" className="hover:opacity-60 duration-300">
             Home
           </a>
@@ -103,14 +107,104 @@ uppercase
           <a href="/#about" className="hover:opacity-60 duration-300">
             About
           </a>
-  <a
-  href="https://wa.me/201227788169"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="hover:opacity-60 duration-300"
->
-  Contact
-</a>
+          <a
+            href="https://wa.me/201227788169"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-60 duration-300"
+          >
+            Contact
+          </a>
+        </div>
+
+        {/* Hamburger button (mobile only) */}
+        <button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="
+          md:hidden
+          flex
+          flex-col
+          justify-center
+          items-center
+          gap-[5px]
+          w-8
+          h-8
+          z-50
+          "
+          aria-label="Toggle menu"
+          aria-expanded={isMenuOpen}
+        >
+          <span
+            className={`block h-[1.5px] w-6 bg-[#55614A] duration-300 ${
+              isMenuOpen ? "rotate-45 translate-y-[6.5px]" : ""
+            }`}
+          />
+          <span
+            className={`block h-[1.5px] w-6 bg-[#55614A] duration-300 ${
+              isMenuOpen ? "opacity-0" : "opacity-100"
+            }`}
+          />
+          <span
+            className={`block h-[1.5px] w-6 bg-[#55614A] duration-300 ${
+              isMenuOpen ? "-rotate-45 -translate-y-[6.5px]" : ""
+            }`}
+          />
+        </button>
+
+        {/* Mobile dropdown menu */}
+        <div
+          className={`
+          md:hidden
+          fixed
+          top-0
+          left-0
+          w-full
+          h-screen
+          bg-[#E4E7D6]
+          flex
+          flex-col
+          items-center
+          justify-center
+          gap-10
+          text-[#55614A]
+          text-[15px]
+          tracking-[0.18em]
+          uppercase
+          duration-300
+          z-40
+          ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}
+          `}
+        >
+          <a
+            href="/"
+            onClick={() => setIsMenuOpen(false)}
+            className="hover:opacity-60 duration-300"
+          >
+            Home
+          </a>
+          <a
+            href="/shop"
+            onClick={() => setIsMenuOpen(false)}
+            className="hover:opacity-60 duration-300"
+          >
+            Shop
+          </a>
+          <a
+            href="/#about"
+            onClick={() => setIsMenuOpen(false)}
+            className="hover:opacity-60 duration-300"
+          >
+            About
+          </a>
+          <a
+            href="https://wa.me/201227788169"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setIsMenuOpen(false)}
+            className="hover:opacity-60 duration-300"
+          >
+            Contact
+          </a>
         </div>
       </nav>
 
@@ -145,6 +239,7 @@ mt-20
         >
           {products.map((item, index) => (
             <div
+              key={`${item.title}-${index}`}
              className="
 block
 bg-[#D7DCCB]
