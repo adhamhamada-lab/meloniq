@@ -77,8 +77,8 @@ return (
   height={100}
   priority
   className="
-  w-[150px]
-  md:w-[260px]
+  w-[120px]
+  md:w-[170px]
   h-auto
   object-contain
   hover:scale-[1.02]
