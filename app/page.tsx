@@ -60,7 +60,7 @@ return (
   px-8
   md:px-16
   py-3
-  md:py-14
+  md:py-4
   flex
   justify-between
   items-center
