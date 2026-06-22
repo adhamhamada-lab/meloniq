@@ -285,7 +285,7 @@ duration-500
                     rel="noopener noreferrer"
                     className="px-8 py-3 rounded-full bg-[#55614A] text-white text-sm uppercase tracking-[0.1em] hover:scale-105 duration-300"
                   >
-                    اطلب الآن
+                    Order Now
                   </a>
                 </div>
               </div>
