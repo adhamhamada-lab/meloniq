@@ -37,7 +37,7 @@ params.get("product") || "";
     setLoading(false);
 
 if (res.ok) {
-setMessage("Your order has been submitted successfully ✨");
+setMessage("Your order has been submitted successfully");
 e.target.reset();
 } else {
 setMessage("Something went wrong. Please try again.");
