@@ -9,6 +9,7 @@ function OrderContent() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const params = useSearchParams();
+  const [done, setDone] = useState(false);
 
 const product =
 params.get("product") || "";
@@ -37,7 +38,7 @@ params.get("product") || "";
     setLoading(false);
 
 if (res.ok) {
-setMessage("Your order has been submitted successfully");
+setDone(true);
 e.target.reset();
 } else {
 setMessage("Something went wrong. Please try again.");
@@ -165,7 +166,58 @@ md:text-[180px]
             </p>
 
           </div>
+{done ? (
 
+<div
+className="
+bg-[#D7DCCB]
+rounded-[40px]
+p-10
+text-center
+shadow-2xl
+"
+>
+
+<div className="text-[60px]">
+✓
+</div>
+
+<h2
+className="
+text-[40px]
+text-[#55614A]
+"
+>
+Order Submitted
+</h2>
+
+<p
+className="
+mt-4
+text-[#66705D]
+"
+>
+Thank you for choosing Meloniq ✨
+</p>
+
+<Link
+href="/shop"
+className="
+inline-block
+mt-8
+px-8
+py-4
+rounded-full
+bg-[#55614A]
+text-white
+"
+>
+Back to Shop
+</Link>
+
+</div>
+
+) : (
           <form
             onSubmit={send}
             className="
@@ -272,6 +324,7 @@ tracking-[0.12em]
             </button>
 
           </form>
+          )}
 
         </div>
 
