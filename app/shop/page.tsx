@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const WHATSAPP_NUMBER = "201227788169";
 
@@ -279,14 +280,24 @@ duration-500
                     {item.price}
                   </p>
 
-                  <a
-                    href={getWhatsappLink(item.title)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-8 py-3 rounded-full bg-[#55614A] text-white text-sm uppercase tracking-[0.1em] hover:scale-105 duration-300"
-                  >
-                    Order Now
-                  </a>
+                  <Link
+href={`/order?product=${encodeURIComponent(item.title)}`}
+className="
+px-8
+py-3
+rounded-full
+bg-[#55614A]
+text-white
+text-sm
+uppercase
+tracking-[0.1em]
+hover:scale-105
+duration-300
+inline-block
+"
+>
+Order Now
+</Link>
                 </div>
               </div>
             </div>
