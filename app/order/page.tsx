@@ -148,7 +148,7 @@ text-lg
               max-w-[520px]
               "
             >
-              Enter your details and your order will arrive directly in your dashboard.
+              Enter your details.
             </p>
 
           </div>
