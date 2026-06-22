@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const WHATSAPP_NUMBER = "201227788169";
+
 
 const products = [
   {
@@ -39,9 +39,6 @@ const products = [
   },
 ];
 
-function getWhatsappLink(title: string) {
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(title)}`;
-}
 
 export default function Shop() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
