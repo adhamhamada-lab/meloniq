@@ -7,6 +7,7 @@ import Image from "next/image";
 
 function OrderContent() {
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
   const params = useSearchParams();
 
 const product =
@@ -35,12 +36,12 @@ params.get("product") || "";
 
     setLoading(false);
 
-    if (res.ok) {
-      alert("Order sent successfully");
-      e.target.reset();
-    } else {
-      alert("Something went wrong");
-    }
+if (res.ok) {
+setMessage("Your order has been submitted successfully ✨");
+e.target.reset();
+} else {
+setMessage("Something went wrong. Please try again.");
+}
   }
 
   const inputStyle = `
@@ -223,6 +224,20 @@ text-lg
               text-lg
               "
             />
+            {message && (
+  <div
+    className="
+    rounded-[24px]
+    bg-[#55614A]
+    text-white
+    py-4
+    px-6
+    text-center
+    "
+  >
+    {message}
+  </div>
+)}
 
             <button
               disabled={loading}
