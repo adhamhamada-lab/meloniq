@@ -1,11 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function OrderPage() {
   const [loading, setLoading] = useState(false);
+  const params = useSearchParams();
+
+const product =
+params.get("product") || "";
 
   async function send(e: any) {
     e.preventDefault();
@@ -174,9 +179,10 @@ text-lg
               className={inputStyle}
             />
 
-            <input
+           <input
               required
               name="product"
+              defaultValue={product}
               placeholder="Product"
               className={inputStyle}
             />
