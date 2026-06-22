@@ -4,6 +4,8 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
+    console.log(body);
+
     const { data, error } = await supabase
       .from("orders")
       .insert([
@@ -18,7 +20,7 @@ export async function POST(req: Request) {
       .select();
 
     if (error) {
-      console.log(error);
+      console.log("SUPABASE ERROR:", error);
 
       return Response.json(
         {
@@ -33,10 +35,12 @@ export async function POST(req: Request) {
       success: true,
       data,
     });
-  } catch (e: any) {
+  } catch (e) {
+    console.log("SERVER ERROR:", e);
+
     return Response.json(
       {
-        error: e.message,
+        error: "Server failed",
       },
       { status: 500 }
     );
