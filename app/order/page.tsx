@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
-export default function OrderPage() {
+function OrderContent() {
   const [loading, setLoading] = useState(false);
   const params = useSearchParams();
 
@@ -249,5 +249,12 @@ text-lg
       </section>
 
     </main>
+  );
+}
+export default function OrderPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <OrderContent />
+    </Suspense>
   );
 }
