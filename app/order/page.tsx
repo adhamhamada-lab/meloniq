@@ -197,7 +197,7 @@ mt-4
 text-[#66705D]
 "
 >
-Thank you for choosing Meloniq ✨
+Thank you for choosing Meloniq 
 </p>
 
 <Link
