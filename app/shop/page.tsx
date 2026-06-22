@@ -296,21 +296,123 @@ duration-500
 
       {/* FOOTER */}
       <footer
-        id="footer"
+  id="footer"
+  className="
+  py-16
+  border-t
+  border-[#C7CDB6]
+  text-center
+  text-[#55614A]
+  "
+>
+  <div className="space-y-8">
+
+    <h3 className="text-3xl">
+      Meloniq
+    </h3>
+
+    <p className="text-sm opacity-70 max-w-[400px] mx-auto">
+      Handmade botanical care inspired by calm rituals.
+    </p>
+
+    {/* SOCIAL ICONS */}
+    <div
+      className="
+      flex
+      justify-center
+      items-center
+      gap-8
+      pt-2
+      "
+    >
+      {/* WhatsApp */}
+      <a
+        href="https://wa.me/201227788169"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="WhatsApp"
         className="
-        py-12
-        border-t
-        text-center
         text-[#55614A]
+        opacity-80
+        hover:opacity-100
+        hover:scale-110
+        duration-300
         "
       >
-        <div className="space-y-4">
-          <p>© 2026 Meloniq</p>
-          <p className="text-sm opacity-70">
-            Crafted with botanical inspiration.
-          </p>
-        </div>
-      </footer>
+        <svg
+          width="26"
+          height="26"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+        >
+          <path d="M20.5 11.9c0 4.7-3.9 8.6-8.6 8.6-1.5 0-2.9-.4-4.1-1.1L3.5 20.5l1.1-4.2c-.8-1.3-1.3-2.8-1.3-4.4 0-4.7 3.9-8.6 8.6-8.6s8.6 3.9 8.6 8.6z" />
+          <path d="M8.7 8.6c.1-.3.4-.5.7-.5h.6c.2 0 .4.1.5.3l.7 1.5c.1.2.1.4 0 .6l-.4.6c-.1.2-.1.4 0 .6.4.7 1.3 1.6 2 2 .2.1.4.1.6 0l.6-.4c.2-.1.4-.1.6 0l1.5.7c.2.1.3.3.3.5v.6c0 .3-.2.6-.5.7-.6.2-1.5.4-2.4-.1-1.4-.6-2.8-2-3.4-3.4-.5-.9-.3-1.8-.1-2.4z" />
+        </svg>
+      </a>
+
+      {/* Instagram */}
+      <a
+        href="https://www.instagram.com/meloniq23"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Instagram"
+        className="
+        text-[#55614A]
+        opacity-80
+        hover:opacity-100
+        hover:scale-110
+        duration-300
+        "
+      >
+        <svg
+          width="26"
+          height="26"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+        >
+          <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+          <circle cx="12" cy="12" r="4" />
+          <circle cx="17.2" cy="6.8" r="0.9" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+
+      {/* Facebook */}
+      <a
+        href="https://www.facebook.com/profile.php?id=61580340421564"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Facebook"
+        className="
+        text-[#55614A]
+        opacity-80
+        hover:opacity-100
+        hover:scale-110
+        duration-300
+        "
+      >
+        <svg
+          width="26"
+          height="26"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+        >
+          <path d="M14 21v-7h2.4l.4-3H14V9c0-.9.3-1.5 1.6-1.5H17V5c-.3 0-1.3-.1-2.4-.1-2.4 0-4.1 1.5-4.1 4.2V11H8v3h2.5v7" />
+        </svg>
+      </a>
+    </div>
+
+    <p className="text-sm opacity-60 pt-4">
+      © 2026 Meloniq
+    </p>
+
+  </div>
+</footer>
     </main>
   );
 }
