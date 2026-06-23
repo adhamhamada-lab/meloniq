@@ -61,7 +61,7 @@ p-8
 </p>
 
 <p className="mt-2 text-[#55614A]">
-<b>Phone:</b> {o.contact}
+<b>Phone:</b> {o.phone}
 </p>
 
 <p className="mt-2 text-[#55614A]">
