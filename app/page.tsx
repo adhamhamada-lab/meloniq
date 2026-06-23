@@ -531,7 +531,7 @@ mt-20
 
     {[
       {
-        image: "/images/p1.jpg",
+        image: "/images/golden-bloom.jpeg",
         title: "Golden Bloom",
       },
 

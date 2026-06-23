@@ -8,7 +8,7 @@ import Link from "next/link";
 
 const products = [
   {
-    image: "/images/p1.jpg",
+    image: "/images/golden-bloom.jpeg",
     title: "Golden Bloom",
     price: "150 EGP",
     slug: "golden-bloom",
