@@ -633,7 +633,7 @@ text-[#55614A]
 </section>
 
 
-
+<Reviews/>
 
 
 {/* FOOTER */}
