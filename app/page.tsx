@@ -57,7 +57,10 @@ return (
   sticky
   top-0
   z-50
-  bg-[#E4E7D6]
+ bg-[#E4E7D6]/95
+backdrop-blur-sm
+border-b
+border-[#D5D9C8]
   px-8
   md:px-16
   py-3
