@@ -1,74 +1,81 @@
 "use client";
 
-import {
-useState
-}
-from "react";
+import { useState } from "react";
 
-export default function Reviews(){
+export default function Reviews() {
 
-const [
-name,
-setName
-]=
-useState("");
-
-const [
-review,
-setReview
-]=
-useState("");
+const [name,setName]=useState("");
+const [review,setReview]=useState("");
+const [loading,setLoading]=useState(false);
 
 async function send(){
+
+if(!name || !review) return;
+
+setLoading(true);
 
 await fetch(
 "/api/review",
 {
-
-method:
-"POST",
+method:"POST",
 
 headers:{
-"Content-Type":
-"application/json"
+"Content-Type":"application/json",
 },
 
-body:
-JSON.stringify({
-
+body:JSON.stringify({
 name,
-
 review,
-
 }),
-
 }
-
 );
 
-alert(
-"Review submitted ✨"
-);
+setLoading(false);
 
 setName("");
-
 setReview("");
+
+alert("Thank you ✨");
 
 }
 
-return(
+return (
 
 <section
 className="
-py-24
-px-8
+px-6
+md:px-16
+py-32
+bg-[#E4E7D6]
 "
 >
 
+<div
+className="
+max-w-[1200px]
+mx-auto
+"
+>
+
+<p
+className="
+uppercase
+tracking-[0.25em]
+text-[#7C8572]
+text-sm
+mb-4
+"
+>
+Customer Love
+</p>
+
 <h2
 className="
-text-5xl
-mb-8
+text-[56px]
+md:text-[100px]
+leading-[0.9]
+text-[#55614A]
+mb-16
 "
 >
 Reviews
@@ -76,63 +83,87 @@ Reviews
 
 <div
 className="
+bg-[#D7DCCB]
+rounded-[40px]
+p-8
+md:p-14
+max-w-[760px]
+"
+>
+
+<div
+className="
 flex
 flex-col
-gap-4
-max-w-[600px]
+gap-5
 "
 >
 
 <input
-
 value={name}
-
 onChange={(e)=>
 setName(
 e.target.value
 )}
-
-placeholder="Name"
-
+placeholder="Your Name"
 className="
-p-5
+w-full
+bg-white
 rounded-full
+px-8
+py-5
+outline-none
+text-[#55614A]
 "
 />
 
 <textarea
-
 value={review}
-
 onChange={(e)=>
 setReview(
 e.target.value
 )}
-
-placeholder="Review"
-
+placeholder="Tell us about your experience..."
+rows={6}
 className="
-p-5
+w-full
+bg-white
 rounded-[30px]
+px-8
+py-6
+outline-none
+resize-none
+text-[#55614A]
 "
 />
 
 <button
-
 onClick={send}
-
+disabled={loading}
 className="
+mt-3
 bg-[#55614A]
 text-white
-p-5
 rounded-full
+py-5
+hover:scale-[1.02]
+duration-300
 "
-
 >
 
-Submit
+{
+loading
+?
+"Sending..."
+:
+"Submit Review"
+}
 
 </button>
+
+</div>
+
+</div>
 
 </div>
 
