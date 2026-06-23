@@ -51,8 +51,14 @@ export default function AdminPage() {
       </h1>
 
       <div className="mt-4 flex gap-6 text-[#66705D] text-lg">
-        <span>🟡 Pending: <b>{pending.length}</b></span>
-        <span>🟢 Done: <b>{done.length}</b></span>
+        <span className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-[#C4A35A] inline-block" />
+          Pending: <b>{pending.length}</b>
+        </span>
+        <span className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-[#55614A] inline-block" />
+          Done: <b>{done.length}</b>
+        </span>
       </div>
 
       {loading ? (
