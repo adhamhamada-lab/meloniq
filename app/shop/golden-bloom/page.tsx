@@ -9,7 +9,7 @@ const product = {
   name: "Golden Bloom",
   category: "Hydrating Botanical Soap",
   use: "Deep Hydration & Skin Nourishment",
-  image: "/images/golden-bloom.jpg",
+  image: "/images/goldenbloom.jpg",
   price: "",
   ingredients: [
     { name: "Argan Oil", desc: "Deeply nourishes and softens skin" },
