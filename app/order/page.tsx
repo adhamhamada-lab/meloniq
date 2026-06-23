@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 const PRODUCTS = [
-  "Soap",
+  "Golden Bloom",
   "Body Oil",
   "Cream",
   "Shampoo Bar",

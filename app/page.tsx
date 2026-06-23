@@ -532,7 +532,7 @@ mt-20
     {[
       {
         image: "/images/p1.jpg",
-        title: "Soap",
+        title: "Golden Bloom",
       },
 
       {
