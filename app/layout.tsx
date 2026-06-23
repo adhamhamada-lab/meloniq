@@ -1,19 +1,27 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const seasons = localFont({
+src: [
+{
+path: "../public/fonts/The Seasons Regular.ttf",
+weight: "400",
+style: "normal",
+},
+
+{
+path: "../public/fonts/The Seasons Italic.ttf",
+weight: "400",
+style: "italic",
+},
+],
+
+display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const metadata = {
+export const metadata: Metadata = {
 title: "Meloniq | Handmade Botanical Care",
 
 description:
@@ -21,6 +29,7 @@ description:
 
 openGraph: {
 title: "Meloniq",
+
 description:
 "Discover handmade botanical products inspired by nature.",
 
@@ -39,18 +48,23 @@ card: "summary_large_image",
 };
 
 export default function RootLayout({
-  children,
+children,
 }: Readonly<{
-  children: React.ReactNode;
+children: React.ReactNode;
 }>) {
-  return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}
-        <Analytics />
-      </body>
-    </html>
-  );
+return (
+<html
+lang="en"
+className="h-full antialiased"
+>
+<body
+className={`${seasons.className} min-h-full flex flex-col`}
+>
+{children}
+
+<Analytics />
+
+</body>
+</html>
+);
 }
