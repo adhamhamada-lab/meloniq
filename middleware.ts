@@ -5,7 +5,7 @@ export function middleware(req: NextRequest) {
 
   const validUser = process.env.ADMIN_USER!
   const validPass = process.env.ADMIN_PASS!
-  const validAuth = 'Basic ' + Buffer.from(`${validUser}:${validPass}`).toString('base64')
+  const validAuth = 'Basic ' + btoa(`${validUser}:${validPass}`)
 
   if (auth !== validAuth) {
     return new NextResponse('Unauthorized', {
