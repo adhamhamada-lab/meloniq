@@ -6,9 +6,9 @@ export default function Reviews() {
 
 const [name,setName]=useState("");
 const [review,setReview]=useState("");
+const [rating,setRating]=useState(5);
 
 const [reviews,setReviews]=useState<any[]>([]);
-
 const [loading,setLoading]=useState(false);
 
 async function loadReviews(){
@@ -56,6 +56,7 @@ body:
 JSON.stringify({
 name,
 review,
+rating,
 }),
 }
 );
@@ -67,8 +68,8 @@ res.ok
 ){
 
 setName("");
-
 setReview("");
+setRating(5);
 
 loadReviews();
 
@@ -142,9 +143,7 @@ gap-5
 >
 
 <input
-
 value={name}
-
 onChange={(e)=>
 setName(
 e.target.value
@@ -162,6 +161,56 @@ outline-none
 text-[#55614A]
 "
 />
+
+<div
+className="
+flex
+gap-2
+text-[40px]
+justify-center
+"
+>
+
+{
+
+[1,2,3,4,5].map(
+(star)=>(
+
+<button
+key={star}
+
+type="button"
+
+onClick={()=>
+setRating(
+star
+)
+}
+
+className="
+text-[#55614A]
+hover:scale-110
+duration-200
+"
+>
+
+{
+star <= rating
+?
+"★"
+:
+"☆"
+}
+
+</button>
+
+)
+
+)
+
+}
+
+</div>
 
 <textarea
 
@@ -199,6 +248,8 @@ bg-[#55614A]
 text-white
 rounded-full
 py-5
+hover:opacity-90
+duration-300
 "
 
 >
@@ -247,12 +298,16 @@ p-8
 <div
 className="
 text-[#55614A]
-text-xl
-mb-4
+text-2xl
+mb-5
 "
 >
 
-★★★★★
+{
+"★".repeat(
+item.rating || 5
+)
+}
 
 </div>
 

@@ -8,36 +8,49 @@ const body =
 await req.json();
 
 const {
-error
+name,
+review,
+rating,
+}
+=
+body;
+
+const {
+error,
 }
 =
 await supabase
-.from("reviews")
+.from(
+"reviews"
+)
 .insert([
 {
-name:
-body.name,
-
-review:
-body.review,
+name,
+review,
+rating,
 },
 ]);
 
-if(error){
+if(
+error
+){
 
 return Response.json(
 {
-success:false
+success:false,
+error,
 },
 {
-status:500
+status:500,
 }
 );
 
 }
 
-return Response.json({
-success:true
-});
+return Response.json(
+{
+success:true,
+}
+);
 
 }
