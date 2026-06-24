@@ -12,10 +12,10 @@ const products = [
     slug: "golden-bloom",
   },
   {
-    image: "/images/p2.jpg",
-    title: "Body Oil",
+    image: "/images/p2.jpeg",
+    title: "p2",
     price: "220 EGP",
-    slug: "",
+    slug: "p2",
   },
   {
     image: "/images/p3.jpg",
