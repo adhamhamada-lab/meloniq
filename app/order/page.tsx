@@ -7,7 +7,7 @@ import Image from "next/image";
 
 const PRODUCTS = [
   "Golden Bloom",
-  "Body Oil",
+  "p2",
   "Cream",
   "Shampoo Bar",
   "Face Serum",

@@ -176,7 +176,7 @@ return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-10 mt-20">
       {[
         { image: "/images/golden-bloom.jpeg", title: "Golden Bloom", slug: "golden-bloom" },
-        { image: "/images/p2.jpg", title: "Body Oil", slug: "" },
+        { image: "/images/p2.jpg", title: "p2", slug: "p2" },
         { image: "/images/p3.jpg", title: "Cream", slug: "" },
       ].map((item) => (
         <a
