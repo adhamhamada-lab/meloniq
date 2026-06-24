@@ -48,7 +48,7 @@ return (
     flex justify-between items-center
     duration-300
     ${scrolled
-      ? "py-2 md:py-3 bg-[#E4E7D6]/95 backdrop-blur-sm border-b border-[#D5D9C8] shadow-sm"
+      ? "py-1 md:py-2 bg-[#E4E7D6]/80 backdrop-blur-sm border-b border-[#D5D9C8] shadow-sm"
       : "py-5 md:py-8 bg-[#E4E7D6]"
     }
     `}
