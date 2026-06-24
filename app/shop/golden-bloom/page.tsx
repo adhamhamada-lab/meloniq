@@ -3,6 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useCart } from "@/app/context/CartContext";
+import Navbar from "@/components/Navbar";
 
 const product = {
   slug: "golden-bloom",
@@ -10,7 +12,7 @@ const product = {
   category: "Hydrating Botanical Soap",
   use: "Deep Hydration & Skin Nourishment",
   image: "/images/golden-bloom.jpeg",
-  price: "",
+  price: "150 EGP",
   ingredients: [
     { name: "Argan Oil", desc: "Deeply nourishes and softens skin" },
     { name: "Frankincense", desc: "Luban Dhakar — renews and tones" },
@@ -21,31 +23,26 @@ const product = {
 
 export default function GoldenBloomPage() {
   const [qty, setQty] = useState(1);
+  const [added, setAdded] = useState(false);
+  const { addItem } = useCart();
+
+  function handleAddToCart() {
+    for (let i = 0; i < qty; i++) {
+      addItem({
+        slug: product.slug,
+        title: product.name,
+        price: product.price,
+        image: product.image,
+      });
+    }
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  }
 
   return (
     <main className="bg-[#E4E7D6] min-h-screen">
 
-      {/* NAVBAR */}
-      <nav className="sticky top-0 z-50 bg-[#E4E7D6] px-8 md:px-16 py-2 md:py-3 flex justify-between items-center">
-        <Link href="/">
-          <Image
-            src="/images/logooo.png"
-            alt="Meloniq"
-            width={260}
-            height={100}
-            priority
-            className="w-[100px] md:w-[140px] h-auto object-contain hover:scale-[1.02] duration-300"
-          />
-        </Link>
-        <div className="hidden md:flex items-center gap-16 text-[#55614A] text-[16px] tracking-[0.18em] uppercase">
-          <Link href="/shop" className="hover:opacity-60 duration-300">Shop</Link>
-          <Link href="/#about" className="hover:opacity-60 duration-300">About</Link>
-          <a href="https://wa.me/201227788169" target="_blank" rel="noopener noreferrer" className="hover:opacity-60 duration-300">Contact</a>
-        </div>
-        <Link href="/shop" className="md:hidden uppercase tracking-[0.18em] text-[#55614A] text-sm hover:opacity-60 duration-300">
-          ← Shop
-        </Link>
-      </nav>
+      <Navbar />
 
       {/* PRODUCT HERO */}
       <section className="px-8 md:px-16 pt-10 pb-24">
@@ -86,10 +83,7 @@ export default function GoldenBloomPage() {
               </p>
               <div className="grid grid-cols-2 gap-3">
                 {product.ingredients.map((ing) => (
-                  <div
-                    key={ing.name}
-                    className="bg-[#D7DCCB] rounded-[20px] px-5 py-4"
-                  >
+                  <div key={ing.name} className="bg-[#D7DCCB] rounded-[20px] px-5 py-4">
                     <p className="text-[#55614A] font-medium text-sm">{ing.name}</p>
                     <p className="text-[#66705D] text-xs mt-1 leading-relaxed">{ing.desc}</p>
                   </div>
@@ -97,12 +91,10 @@ export default function GoldenBloomPage() {
               </div>
             </div>
 
-            {/* PRICE + QTY + ORDER */}
+            {/* PRICE + QTY + BUTTONS */}
             <div className="flex flex-col gap-4">
 
-              {product.price && (
-                <p className="text-[#55614A] text-3xl">{product.price}</p>
-              )}
+              <p className="text-[#55614A] text-3xl">{product.price}</p>
 
               {/* Quantity */}
               <div className="flex items-center gap-4">
@@ -124,21 +116,27 @@ export default function GoldenBloomPage() {
                 </div>
               </div>
 
-              {/* Order button */}
-              <Link
-                href={`/order?product=${encodeURIComponent(product.name)}&quantity=${qty}`}
-                className="
-                px-12 py-5
-                rounded-full
-                bg-[#55614A]
-                text-white
-                text-xl
-                text-center
-                hover:scale-[1.02]
-                duration-300
-                "
+              {/* Add to Cart */}
+              <button
+                onClick={handleAddToCart}
+                className={`
+                  px-12 py-5 rounded-full text-xl text-center duration-300
+                  ${added
+                    ? "bg-[#D7DCCB] text-[#55614A]"
+                    : "border border-[#55614A] text-[#55614A] hover:bg-[#55614A] hover:text-white"
+                  }
+                `}
               >
-                Order Now
+                {added ? "Added to Cart ✓" : "Add to Cart"}
+              </button>
+
+              {/* Buy Now */}
+              <Link
+                href="/checkout"
+                onClick={handleAddToCart}
+                className="px-12 py-5 rounded-full bg-[#55614A] text-white text-xl text-center hover:scale-[1.02] duration-300"
+              >
+                Buy Now
               </Link>
 
               <Link
@@ -157,9 +155,7 @@ export default function GoldenBloomPage() {
       <footer className="py-16 border-t border-[#C7CDB6] text-center text-[#55614A]">
         <div className="space-y-8">
           <h3 className="text-3xl">Meloniq</h3>
-          <p className="text-sm opacity-70 max-w-[400px] mx-auto">
-            Handmade botanical care inspired by calm rituals.
-          </p>
+          <p className="text-sm opacity-70 max-w-[400px] mx-auto">Handmade botanical care inspired by calm rituals.</p>
           <div className="flex justify-center items-center gap-8 pt-2">
             <a href="https://wa.me/201227788169" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="text-[#55614A] opacity-80 hover:opacity-100 hover:scale-110 duration-300">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
