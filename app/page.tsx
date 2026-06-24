@@ -1,20 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Reviews from "@/components/Reviews";
+import Navbar from "@/components/Navbar";
 
 export default function Home() {
 
-const [isMenuOpen, setIsMenuOpen] = useState(false);
-const [scrolled, setScrolled] = useState(false);
 
-useEffect(() => {
-  const handleScroll = () => setScrolled(window.scrollY > 60);
-  window.addEventListener("scroll", handleScroll);
-  return () => window.removeEventListener("scroll", handleScroll);
-}, []);
 
 useEffect(() => {
 
@@ -40,60 +34,7 @@ return (
 
 <main className="bg-[#E4E7D6] min-h-screen">
 
-  {/* NAVBAR */}
-  <nav
-    className={`
-    sticky top-0 z-50
-    px-8 md:px-16
-    flex justify-between items-center
-    duration-300
-    ${scrolled
-      ? "py-1 md:py-2 bg-[#E4E7D6]/80 backdrop-blur-sm border-b border-[#D5D9C8] shadow-sm"
-      : "py-5 md:py-8 bg-[#E4E7D6]"
-    }
-    `}
-  >
-
-    <Link href="/" onClick={() => setIsMenuOpen(false)}>
-      <Image
-        src="/images/logooo.png"
-        alt="Meloniq"
-        width={260}
-        height={100}
-        priority
-        className={`h-auto object-contain hover:scale-[1.02] duration-300 cursor-pointer ${
-          scrolled ? "w-[100px] md:w-[140px]" : "w-[130px] md:w-[200px]"
-        }`}
-      />
-    </Link>
-
-    {/* Desktop links */}
-    <div className="hidden md:flex items-center gap-16 text-[#55614A] text-[16px] tracking-[0.18em] uppercase">
-      <a href="/shop" className="hover:opacity-60 duration-300">Shop</a>
-      <a href="#about" className="hover:opacity-60 duration-300">About</a>
-      <a href="https://wa.me/201227788169" target="_blank" rel="noopener noreferrer" className="hover:opacity-60 duration-300">Contact</a>
-    </div>
-
-    {/* Hamburger button */}
-    <button
-      onClick={() => setIsMenuOpen(!isMenuOpen)}
-      className="md:hidden flex flex-col justify-center items-center gap-[5px] w-8 h-8 z-50"
-      aria-label="Toggle menu"
-      aria-expanded={isMenuOpen}
-    >
-      <span className={`block h-[1.5px] w-6 bg-[#55614A] duration-300 ${isMenuOpen ? "rotate-45 translate-y-[6.5px]" : ""}`} />
-      <span className={`block h-[1.5px] w-6 bg-[#55614A] duration-300 ${isMenuOpen ? "opacity-0" : "opacity-100"}`} />
-      <span className={`block h-[1.5px] w-6 bg-[#55614A] duration-300 ${isMenuOpen ? "-rotate-45 -translate-y-[6.5px]" : ""}`} />
-    </button>
-
-    {/* Mobile menu */}
-    <div className={`md:hidden fixed top-0 left-0 w-full h-screen bg-[#E4E7D6] flex flex-col items-center justify-center gap-10 text-[#55614A] text-[15px] tracking-[0.18em] uppercase duration-300 z-40 ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}>
-      <a href="/shop" onClick={() => setIsMenuOpen(false)} className="hover:opacity-60 duration-300">Shop</a>
-      <a href="#about" onClick={() => setIsMenuOpen(false)} className="hover:opacity-60 duration-300">About</a>
-      <a href="https://wa.me/201227788169" target="_blank" rel="noopener noreferrer" onClick={() => setIsMenuOpen(false)} className="hover:opacity-60 duration-300">Contact</a>
-    </div>
-
-  </nav>
+<Navbar />
 
   {/* HERO */}
   <section className="px-8 md:px-20 pt-10 pb-24 overflow-hidden animate-[fade_0.9s_ease] reveal">
