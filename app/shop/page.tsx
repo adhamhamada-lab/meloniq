@@ -1,10 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-
-
 
 const products = [
   {
@@ -45,29 +43,31 @@ const products = [
   },
 ];
 
-
 export default function Shop() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <main className="bg-[#E4E7D6] min-h-screen">
 
       {/* NAVBAR */}
-      <nav
-        className="
-        sticky
-        top-0
-        z-50
-        bg-[#E4E7D6]
-        px-8
-        md:px-16
-        py-2
-        md:py-3
-        flex
-        justify-between
-        items-center
-        "
-      >
+      <nav className={`
+        sticky top-0 z-50
+        px-8 md:px-16
+        flex justify-between items-center
+        duration-300
+        ${scrolled
+          ? "py-2 md:py-3 bg-[#E4E7D6]/95 backdrop-blur-sm border-b border-[#D5D9C8] shadow-sm"
+          : "py-5 md:py-8 bg-[#E4E7D6]"
+        }
+      `}>
+
         <a href="/" onClick={() => setIsMenuOpen(false)}>
           <Image
             src="/images/logooo.png"
@@ -75,31 +75,14 @@ export default function Shop() {
             width={260}
             height={100}
             priority
-            className="
-            w-[100px]
-            md:w-[140px]
-            h-auto
-            object-contain
-            hover:scale-[1.02]
-            duration-300
-            cursor-pointer
-            "
+            className={`h-auto object-contain hover:scale-[1.02] duration-300 cursor-pointer ${
+              scrolled ? "w-[100px] md:w-[140px]" : "w-[130px] md:w-[200px]"
+            }`}
           />
         </a>
 
         {/* Desktop links */}
-        <div
-          className="
-          hidden
-          md:flex
-          items-center
-          gap-16
-          text-[#55614A]
-          text-[16px]
-          tracking-[0.18em]
-          uppercase
-          "
-        >
+        <div className="hidden md:flex items-center gap-16 text-[#55614A] text-[16px] tracking-[0.18em] uppercase">
           <a href="/" className="hover:opacity-60 duration-300">Home</a>
           <a href="/shop" className="opacity-100 font-medium">Shop</a>
           <a href="/#about" className="hover:opacity-60 duration-300">About</a>
@@ -144,7 +127,6 @@ export default function Shop() {
               key={`${item.title}-${index}`}
               className="bg-[#D7DCCB] rounded-[40px] overflow-hidden hover:-translate-y-3 hover:shadow-2xl hover:scale-[1.01] duration-500"
             >
-              {/* صورة المنتج - لو فيه slug تودي للصفحة، لو لأ تفضل زي ما هي */}
               <Link href={item.slug ? `/shop/${item.slug}` : "#"}>
                 <Image
                   src={item.image}
@@ -162,9 +144,7 @@ export default function Shop() {
                   </h3>
                 </Link>
 
-                <p className="mt-4 text-[#66705D] text-lg">
-                  Crafted with clean ingredients.
-                </p>
+                <p className="mt-4 text-[#66705D] text-lg">Crafted with clean ingredients.</p>
 
                 <div className="mt-10 flex items-center justify-between">
                   <p className="text-[#55614A] text-xl">{item.price}</p>
@@ -195,9 +175,7 @@ export default function Shop() {
       <footer id="footer" className="py-16 border-t border-[#C7CDB6] text-center text-[#55614A]">
         <div className="space-y-8">
           <h3 className="text-3xl">Meloniq</h3>
-          <p className="text-sm opacity-70 max-w-[400px] mx-auto">
-            Handmade botanical care inspired by calm rituals.
-          </p>
+          <p className="text-sm opacity-70 max-w-[400px] mx-auto">Handmade botanical care inspired by calm rituals.</p>
           <div className="flex justify-center items-center gap-8 pt-2">
             <a href="https://wa.me/201227788169" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="text-[#55614A] opacity-80 hover:opacity-100 hover:scale-110 duration-300">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
