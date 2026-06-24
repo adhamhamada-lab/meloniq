@@ -1,29 +1,59 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Reviews() {
 
 const [name,setName]=useState("");
 const [review,setReview]=useState("");
+
+const [reviews,setReviews]=useState<any[]>([]);
+
 const [loading,setLoading]=useState(false);
+
+async function loadReviews(){
+
+const res =
+await fetch(
+"/api/review/list"
+);
+
+const data =
+await res.json();
+
+setReviews(
+data || []
+);
+
+}
+
+useEffect(()=>{
+loadReviews();
+},[]);
 
 async function send(){
 
-if(!name || !review) return;
+if(
+!name ||
+!review
+)
+return;
 
 setLoading(true);
 
+const res =
 await fetch(
 "/api/review",
 {
 method:"POST",
 
 headers:{
-"Content-Type":"application/json",
+"Content-Type":
+"application/json",
 },
 
-body:JSON.stringify({
+body:
+JSON.stringify({
 name,
 review,
 }),
@@ -32,14 +62,21 @@ review,
 
 setLoading(false);
 
+if(
+res.ok
+){
+
 setName("");
+
 setReview("");
 
-alert("Thank you ✨");
+loadReviews();
 
 }
 
-return (
+}
+
+return(
 
 <section
 className="
@@ -66,7 +103,9 @@ text-sm
 mb-4
 "
 >
+
 Customer Love
+
 </p>
 
 <h2
@@ -78,7 +117,9 @@ text-[#55614A]
 mb-16
 "
 >
+
 Reviews
+
 </h2>
 
 <div
@@ -88,6 +129,7 @@ rounded-[40px]
 p-8
 md:p-14
 max-w-[760px]
+mb-20
 "
 >
 
@@ -100,12 +142,16 @@ gap-5
 >
 
 <input
+
 value={name}
+
 onChange={(e)=>
 setName(
 e.target.value
 )}
+
 placeholder="Your Name"
+
 className="
 w-full
 bg-white
@@ -118,13 +164,18 @@ text-[#55614A]
 />
 
 <textarea
+
 value={review}
+
 onChange={(e)=>
 setReview(
 e.target.value
 )}
+
 placeholder="Tell us about your experience..."
+
 rows={6}
+
 className="
 w-full
 bg-white
@@ -138,17 +189,18 @@ text-[#55614A]
 />
 
 <button
+
 onClick={send}
+
 disabled={loading}
+
 className="
-mt-3
 bg-[#55614A]
 text-white
 rounded-full
 py-5
-hover:scale-[1.02]
-duration-300
 "
+
 >
 
 {
@@ -162,6 +214,82 @@ loading
 </button>
 
 </div>
+
+</div>
+
+<div
+className="
+grid
+md:grid-cols-2
+gap-8
+"
+>
+
+{
+
+reviews.map(
+(item)=>(
+
+<div
+
+key={
+item.id
+}
+
+className="
+bg-white
+rounded-[30px]
+p-8
+"
+
+>
+
+<div
+className="
+text-[#55614A]
+text-xl
+mb-4
+"
+>
+
+★★★★★
+
+</div>
+
+<h3
+className="
+text-3xl
+mb-3
+text-[#55614A]
+"
+>
+
+{
+item.name
+}
+
+</h3>
+
+<p
+className="
+text-[#66705D]
+leading-relaxed
+"
+>
+
+{
+item.review
+}
+
+</p>
+
+</div>
+
+)
+
+)
+
+}
 
 </div>
 

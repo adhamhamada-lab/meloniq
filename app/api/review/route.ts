@@ -2,14 +2,15 @@ import { supabase } from "@/lib/supabase";
 
 export async function POST(
 req: Request
-) {
+){
 
 const body =
 await req.json();
 
 const {
 error
-} =
+}
+=
 await supabase
 .from("reviews")
 .insert([
@@ -22,13 +23,7 @@ body.review,
 },
 ]);
 
-if (
-error
-) {
-
-console.log(
-error
-);
+if(error){
 
 return Response.json(
 {
@@ -41,8 +36,7 @@ status:500
 
 }
 
-return Response.json(
-{
+return Response.json({
 success:true
 });
 
