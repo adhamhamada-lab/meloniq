@@ -362,7 +362,7 @@ isMenuOpen
 </nav>
 
 
-{/* MOBILE MENU */}
+{/* Mobile menu */}
 
 <div
 className={`
@@ -374,6 +374,7 @@ top-[90px]
 left-0
 
 w-full
+h-[calc(100vh-90px)]
 
 bg-[#E4E7D6]
 
@@ -381,10 +382,9 @@ flex
 flex-col
 
 items-center
+justify-center
 
 gap-10
-
-py-10
 
 text-[#55614A]
 
@@ -404,7 +404,7 @@ isMenuOpen
 ?
 "opacity-100 visible"
 :
-"opacity-0 invisible pointer-events-none"
+"opacity-0 invisible"
 }
 
 `}
@@ -412,18 +412,16 @@ isMenuOpen
 
 <Link
 href="/shop"
-onClick={()=>
-setIsMenuOpen(false)
-}
+onClick={()=>setIsMenuOpen(false)}
+className="hover:opacity-60 duration-300"
 >
 Shop
 </Link>
 
 <Link
 href="/#about"
-onClick={()=>
-setIsMenuOpen(false)
-}
+onClick={()=>setIsMenuOpen(false)}
+className="hover:opacity-60 duration-300"
 >
 About
 </Link>
@@ -432,21 +430,18 @@ About
 href="https://wa.me/201227788169"
 target="_blank"
 rel="noopener noreferrer"
-onClick={()=>
-setIsMenuOpen(false)
-}
+onClick={()=>setIsMenuOpen(false)}
+className="hover:opacity-60 duration-300"
 >
 Contact
 </a>
 
 <Link
 href="/cart"
-onClick={()=>
-setIsMenuOpen(false)
-}
+onClick={()=>setIsMenuOpen(false)}
+className="hover:opacity-60 duration-300"
 >
-Cart
-{cartCount>0 && ` (${cartCount})`}
+Cart {cartCount > 0 && `(${cartCount})`}
 </Link>
 
 </div>
