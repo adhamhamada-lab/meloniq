@@ -50,3 +50,31 @@ transform:
 translateY(0);
 
 }
+@keyframes logoFade {
+
+0%{
+opacity:.45;
+transform:scale(.96);
+}
+
+50%{
+opacity:1;
+transform:scale(1);
+}
+
+100%{
+opacity:.45;
+transform:scale(.96);
+}
+
+}
+
+.logo-loading{
+
+animation:
+logoFade
+1.8s
+ease-in-out
+infinite;
+
+}
