@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { CartProvider } from "./context/CartContext";
+import SplashScreen from "@/components/SplashScreen";
 
 const seasons = localFont({
   src: [
@@ -45,13 +46,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
-      <body className={`${seasons.className} min-h-full flex flex-col`}>
-        <CartProvider>
-          {children}
-        </CartProvider>
-        <Analytics />
-      </body>
-    </html>
+<html lang="en" className="h-full antialiased">
+
+<body className={`${seasons.className} min-h-full flex flex-col`}>
+
+<SplashScreen>
+
+<CartProvider>
+
+{children}
+
+</CartProvider>
+
+<Analytics />
+
+</SplashScreen>
+
+</body>
+
+</html>
   );
 }
