@@ -256,7 +256,32 @@ strokeWidth="1.6"
 <path d="M16 10a4 4 0 0 1-8 0"/>
 
 </svg>
+{
+cartCount > 0 && (
 
+<span
+className="
+absolute
+-top-2
+-right-2
+w-4
+h-4
+rounded-full
+bg-[#55614A]
+text-white
+text-[10px]
+flex
+items-center
+justify-center
+"
+>
+
+{cartCount}
+
+</span>
+
+)
+}
 </Link>
 
 
