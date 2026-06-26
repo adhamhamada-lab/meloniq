@@ -47,7 +47,7 @@ z-[9999]
 <div className="logo-loading">
 
 <Image
-src="/images/logooo.png"
+src="/images/logoo.png"
 alt="Meloniq"
 width={280}
 height={120}
