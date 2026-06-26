@@ -5,11 +5,9 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 
 const PRODUCTS = [
+  "Golden Bloom Soap",
   "Tea Tree Oil Soap",
   "Argan & Frankincense Soap",
-  "Licorice Oil Soap",
-  "Saad Oil Soap",
-
 ];
 
 type Item = {
@@ -79,14 +77,14 @@ export default function PreorderPage() {
           {/* LEFT */}
           <div className="lg:sticky lg:top-32">
             <p className="tracking-[0.35em] text-[#66705D] text-sm">COMING SOON</p>
-            <h1 className="mt-6 text-[64px] sm:text-[90px] md:text-[120px] leading-[0.9] text-[#55614A]">
+            <h1 className="mt-6 text-[48px] sm:text-[70px] md:text-[120px] leading-[0.9] text-[#55614A]">
               Pre-Order
             </h1>
-            <p className="mt-8 text-[#66705D] text-[20px] leading-relaxed max-w-[480px]">
+            <p className="mt-6 text-[#66705D] text-[17px] md:text-[20px] leading-relaxed max-w-[480px]">
               Reserve your Meloniq products before they're available. We'll craft them fresh just for you.
             </p>
 
-            <div className="mt-10 flex flex-col gap-4">
+            <div className="mt-8 flex flex-col gap-3">
               <div className="flex items-start gap-3">
                 <span className="text-[#55614A] text-lg mt-1">✦</span>
                 <p className="text-[#66705D]">Handcrafted fresh after your order</p>
