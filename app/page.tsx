@@ -116,7 +116,7 @@ return (
     </h2>
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-10 mt-20">
       {[
-        { image: "/images/golden-bloom.jpeg", title: "Golden Bloom", slug: "golden-bloom" },
+        { image: "/images/teatreeoilsoap.jpeg", title: "Tea Tree Oil Soap", slug: "teatreeoilsoap" },
         { image: "/images/p2.jpg", title: "p2", slug: "p2" },
         { image: "/images/p3.jpg", title: "Cream", slug: "" },
         { image: "/images/p4.jpg", title: "Cream", slug: "" },
