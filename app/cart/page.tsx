@@ -30,60 +30,68 @@ export default function CartPage() {
         ) : (
           <div className="mt-12 flex flex-col gap-6">
 
-            {/* Items */}
-            {items.map((item) => (
-              <div
-                key={item.slug}
-                className="bg-[#D7DCCB] rounded-[30px] p-6 flex items-center gap-6"
-              >
-                {/* Image */}
-                <div className="shrink-0">
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    width={100}
-                    height={100}
-                    className="w-[80px] h-[80px] md:w-[100px] md:h-[100px] rounded-[16px] object-cover"
-                  />
-                </div>
+{/* Items */}
+{items.map((item) => (
+  <div
+    key={item.slug}
+    className="bg-[#D7DCCB] rounded-[30px] p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 relative"
+  >
+    {/* Product Main Content Group */}
+    <div className="flex items-center gap-4 md:gap-6 flex-1">
+      {/* Image */}
+      <div className="shrink-0">
+        <Image
+          src={item.image}
+          alt={item.title}
+          width={100}
+          height={100}
+          className="w-[80px] h-[80px] md:w-[100px] md:h-[100px] rounded-[16px] object-cover"
+        />
+      </div>
 
-                {/* Info */}
-                <div className="flex-1">
-                  <h3 className="text-xl md:text-2xl text-[#55614A]">{item.title}</h3>
-                  <p className="text-[#66705D] text-sm mt-1">{item.price}</p>
-                </div>
+      {/* Info */}
+      <div className="min-w-0 pr-6 md:pr-0">
+        <h3 className="text-xl md:text-2xl text-[#55614A] leading-tight break-words">{item.title}</h3>
+        <p className="text-[#66705D] text-sm mt-1">{item.price}</p>
+      </div>
+    </div>
 
-                {/* Quantity */}
-                <div className="flex items-center gap-3 bg-white rounded-full px-4 py-2">
-                  <button
-                    onClick={() => updateQty(item.slug, item.quantity - 1)}
-                    className="w-7 h-7 rounded-full text-[#55614A] hover:bg-[#55614A] hover:text-white duration-300 text-lg flex items-center justify-center"
-                  >
-                    −
-                  </button>
-                  <span className="text-[#55614A] w-5 text-center">{item.quantity}</span>
-                  <button
-                    onClick={() => updateQty(item.slug, item.quantity + 1)}
-                    className="w-7 h-7 rounded-full text-[#55614A] hover:bg-[#55614A] hover:text-white duration-300 text-lg flex items-center justify-center"
-                  >
-                    +
-                  </button>
-                </div>
+    {/* Actions Group (Quantity, Subtotal, and Remove) */}
+    <div className="flex items-center justify-between md:justify-end gap-6 border-t border-[#C7CDB6]/40 pt-4 md:pt-0 md:border-none">
+      
+      {/* Quantity Selector */}
+      <div className="flex items-center gap-3 bg-white rounded-full px-4 py-2 shrink-0 shadow-sm">
+        <button
+          onClick={() => updateQty(item.slug, item.quantity - 1)}
+          className="w-7 h-7 rounded-full text-[#55614A] hover:bg-[#55614A] hover:text-white duration-300 text-lg flex items-center justify-center"
+        >
+          −
+        </button>
+        <span className="text-[#55614A] w-5 text-center font-medium">{item.quantity}</span>
+        <button
+          onClick={() => updateQty(item.slug, item.quantity + 1)}
+          className="w-7 h-7 rounded-full text-[#55614A] hover:bg-[#55614A] hover:text-white duration-300 text-lg flex items-center justify-center"
+        >
+          +
+        </button>
+      </div>
 
-                {/* Subtotal */}
-                <p className="text-[#55614A] text-lg w-[90px] text-right hidden md:block">
-                  {parseInt(item.price.replace(/[^0-9]/g, "")) * item.quantity} EGP
-                </p>
+      {/* Subtotal */}
+      <p className="text-[#55614A] text-lg w-[90px] text-right hidden md:block font-medium">
+        {parseInt(item.price.replace(/[^0-9]/g, "")) * item.quantity} EGP
+      </p>
 
-                {/* Remove */}
-                <button
-                  onClick={() => removeItem(item.slug)}
-                  className="text-[#55614A] opacity-40 hover:opacity-100 duration-300 text-xl"
-                >
-                  ×
-                </button>
-              </div>
-            ))}
+      {/* Remove Button */}
+      <button
+        onClick={() => removeItem(item.slug)}
+        className="text-[#55614A] opacity-40 hover:opacity-100 duration-300 text-2xl absolute top-6 right-6 md:static"
+        aria-label="Remove item"
+      >
+        ×
+      </button>
+    </div>
+  </div>
+))}
 
             {/* Total + Checkout */}
             <div className="mt-6 bg-[#D7DCCB] rounded-[30px] p-8 flex flex-col md:flex-row items-center justify-between gap-6">
