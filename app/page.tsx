@@ -150,7 +150,7 @@ return (
   {/* FOOTER */}
   <footer id="footer" className="py-16 border-t border-[#C7CDB6] text-center text-[#55614A]">
     <div className="space-y-8">
-      <h3 className="text-5xl tracking-tighter">
+      <h3 className="text-5xl tracking-[-0.05em]">
   <em>m</em>eloniq
 </h3>
       <p className="text-sm opacity-70 max-w-[400px] mx-auto">Handmade botanical care inspired by calm rituals.</p>
