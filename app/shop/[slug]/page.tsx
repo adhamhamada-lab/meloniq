@@ -124,19 +124,64 @@ export default function ProductPage({
               <p className="mt-4 text-[#66705D] text-lg md:text-xl leading-relaxed">{product.use}</p>
             </div>
 
-            {product.ingredients.length > 0 && (
-              <div>
-                <p className="tracking-[0.25em] text-[#66705D] text-xs uppercase mb-4">Key Ingredients</p>
-                <div className="grid grid-cols-2 gap-3">
-                  {product.ingredients.map((ing) => (
-                    <div key={ing.name} className="bg-[#D7DCCB] rounded-[20px] px-5 py-4">
-                      <p className="text-[#55614A] font-medium text-sm">{ing.name}</p>
-                      <p className="text-[#66705D] text-xs mt-1 leading-relaxed">{ing.desc}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+{product.ingredients.length > 0 && (
+
+  <div>
+    <p className="tracking-[0.25em] text-[#55614A] text-sm uppercase mb-5 font-medium">
+      Key Ingredients
+    </p>
+
+```
+<div className="grid grid-cols-2 gap-4">
+
+  {product.ingredients.map((ing) => (
+
+    <div
+      key={ing.name}
+      className="
+      bg-[#D7DCCB]
+      rounded-[22px]
+      px-6
+      py-5
+      border
+      border-[#C7CDB6]
+      shadow-sm
+      "
+    >
+
+      <p
+        className="
+        text-[#4B5642]
+        text-[18px]
+        font-semibold
+        leading-tight
+        "
+      >
+        {ing.name}
+      </p>
+
+      <p
+        className="
+        text-[#55614A]
+        text-[14px]
+        leading-7
+        mt-3
+        opacity-90
+        "
+      >
+        {ing.desc}
+      </p>
+
+    </div>
+
+  ))}
+
+</div>
+```
+
+  </div>
+)}
+
 
             <div className="flex flex-col gap-4">
 
