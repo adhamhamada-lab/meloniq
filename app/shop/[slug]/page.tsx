@@ -28,7 +28,7 @@ const products = [
     category: "Anti-Wrinkle & Skin Nourishing Soap",
     use: "Helps Improve Skin Elasticity While Nourishing & Hydrating for a Smoother, More Youthful Appearance.",
     image: "/images/Argan & Frankincense Soap.jpeg",
-    price: "",
+    price: "120",
     ingredients: [
       { name: "Argan Oil", desc: "Deeply Nourishes the Skin" },
 { name: "Frankincense", desc: "Improves Skin Elasticity" },
