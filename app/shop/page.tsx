@@ -19,10 +19,10 @@ const products = [
     slug: "argan-frankincense-soap",
   },
   {
-    image: "/images/p3.jpg",
-    title: "Cream",
+    image: "/images/licoriceoilsoap.jpg",
+    title: "Licorice Oil Soap",
     price: "180 EGP",
-    slug: "",
+    slug: "licoriceoilsoap",
   },
   {
     image: "/images/p1.jpg",

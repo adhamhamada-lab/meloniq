@@ -118,7 +118,7 @@ return (
       {[
         { image: "/images/teatreeoilsoap.jpeg", title: "Tea Tree Oil Soap", slug: "teatreeoilsoap" },
         { image: "/images/Argan & Frankincense Soap.jpeg", title: "Argan & Frankincense Soap", slug: "argan-frankincense-soap" },
-        { image: "/images/p3.jpg", title: "Cream", slug: "" },
+        { image: "/images/licoriceoilsoap.jpeg", title: "Licorice Oil Soap", slug: "licoriceoilsoap" },
         { image: "/images/p4.jpg", title: "Cream", slug: "" },
       ].map((item) => (
         <a
