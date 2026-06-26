@@ -13,10 +13,10 @@ const products = [
     slug: "teatreeoilsoap",
   },
   {
-    image: "/images/p2.jpeg",
-    title: "p2",
+    image: "/images/Argan & Frankincense Soap.jpeg",
+    title: "Argan & Frankincense Soap",
     price: "220 EGP",
-    slug: "p2",
+    slug: "Argan & Frankincense Soap",
   },
   {
     image: "/images/p3.jpg",
