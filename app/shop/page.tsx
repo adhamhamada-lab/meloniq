@@ -7,10 +7,10 @@ import Navbar from "@/components/Navbar";
 
 const products = [
   {
-    image: "/images/golden-bloom.jpeg",
-    title: "Golden Bloom",
+    image: "/images/teatreeoilsoap.jpeg",
+    title: "Tea Tree Oil Soap",
     price: "150 EGP",
-    slug: "golden-bloom",
+    slug: "teatreeoilsoap",
   },
   {
     image: "/images/p2.jpeg",
@@ -30,18 +30,7 @@ const products = [
     price: "140 EGP",
     slug: "",
   },
-  {
-    image: "/images/p2.jpg",
-    title: "Face Serum",
-    price: "260 EGP",
-    slug: "",
-  },
-  {
-    image: "/images/p3.jpg",
-    title: "Lip Balm",
-    price: "90 EGP",
-    slug: "",
-  },
+
 ];
 
 export default function Shop() {

@@ -9,17 +9,17 @@ import { notFound } from "next/navigation";
 
 const products = [
   {
-    slug: "golden-bloom",
-    name: "Golden Bloom",
-    category: "Hydrating Botanical Soap",
-    use: "Deep Hydration & Skin Nourishment",
-    image: "/images/golden-bloom.jpeg",
+    slug: "teatreeoilsoap",
+    name: "Tea Tree Oil Soap",
+    category: "For Oily & Acne-Prone Skin",
+    use: "Leaves Skin Feeling Fresh & Balanced",
+    image: "/images/teatreeoilsoap.jpeg",
     price: "150 EGP",
     ingredients: [
-      { name: "Argan Oil", desc: "Deeply nourishes and softens skin" },
-      { name: "Frankincense", desc: "Luban Dhakar — renews and tones" },
-      { name: "Jasmine", desc: "Calms and gently perfumes the skin" },
-      { name: "Sweet Almond Oil", desc: "Soothes and locks in moisture" },
+      { name: "Sweet Almond Oil", desc: "Deeply nourishes and softens skin" },
+      { name: "Tea Tree Essential Oil", desc: "Luban Dhakar — renews and tones" },
+      { name: "Peppermint", desc: "Calms and gently perfumes the skin" },
+      { name: "Lemon Essential Oil", desc: "Soothes and locks in moisture" },
     ],
   },
   {
