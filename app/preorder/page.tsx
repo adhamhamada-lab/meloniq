@@ -5,9 +5,10 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 
 const PRODUCTS = [
-  "Golden Bloom Soap",
   "Tea Tree Oil Soap",
   "Argan & Frankincense Soap",
+  "Licorice Oil Soap",
+  "Saad Oil Soap",
 ];
 
 type Item = {
