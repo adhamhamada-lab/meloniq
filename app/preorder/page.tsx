@@ -198,9 +198,11 @@ export default function PreorderPage() {
       </section>
 
       {/* FOOTER */}
-      <footer className="py-16 border-t border-[#C7CDB6] text-center text-[#55614A]">
-        <div className="space-y-8">
-          <h3 className="text-3xl">Meloniq</h3>
+  <footer id="footer" className="py-16 border-t border-[#C7CDB6] text-center text-[#55614A]">
+    <div className="space-y-8">
+      <h1 className="text-6xl tracking-[-0.1em]">
+  <em>m</em>eloniq
+</h1>
           <p className="text-sm opacity-70 max-w-[400px] mx-auto">Handmade botanical care inspired by calm rituals.</p>
           <div className="flex justify-center items-center gap-8 pt-2">
             <a href="https://wa.me/201227788169" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="text-[#55614A] opacity-80 hover:opacity-100 hover:scale-110 duration-300">
