@@ -127,38 +127,38 @@ export default function PreorderPage() {
                 <p className="text-[#66705D] tracking-[0.15em] uppercase text-sm px-2">Products</p>
 
                 {items.map((item, index) => (
-                  <div key={index} className="flex gap-3 items-center">
-                    <select
-                      required
-                      value={item.product}
-                      onChange={(e) => updateItem(index, "product", e.target.value)}
-                      className="bg-white text-[#55614A] rounded-full px-7 py-5 outline-none border border-transparent focus:border-[#55614A] duration-300 text-lg flex-1"
-                    >
-                      <option value="" disabled>Select product</option>
-                      {PRODUCTS.map((p) => (
-                        <option key={p} value={p}>{p}</option>
-                      ))}
-                    </select>
+                  <div key={index} className="flex gap-2 items-center w-full">
+  <select
+    required
+    value={item.product}
+    onChange={(e) => updateItem(index, "product", e.target.value)}
+    className="bg-white text-[#55614A] rounded-full px-4 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-base flex-1 min-w-0"
+  >
+    <option value="" disabled>Select product</option>
+    {PRODUCTS.map((p) => (
+      <option key={p} value={p}>{p}</option>
+    ))}
+  </select>
 
-                    <input
-                      required
-                      type="number"
-                      min={1}
-                      value={item.quantity}
-                      onChange={(e) => updateItem(index, "quantity", Number(e.target.value))}
-                      className="bg-white text-[#55614A] rounded-full px-5 py-5 outline-none border border-transparent focus:border-[#55614A] duration-300 text-lg w-[90px] text-center"
-                    />
+  <input
+    required
+    type="number"
+    min={1}
+    value={item.quantity}
+    onChange={(e) => updateItem(index, "quantity", Number(e.target.value))}
+    className="bg-white text-[#55614A] rounded-full px-3 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-base w-[60px] text-center shrink-0"
+  />
 
-                    {items.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => removeItem(index)}
-                        className="w-10 h-10 rounded-full bg-white text-[#55614A] hover:bg-[#55614A] hover:text-white duration-300 text-xl flex items-center justify-center shrink-0"
-                      >
-                        ×
-                      </button>
-                    )}
-                  </div>
+  {items.length > 1 && (
+    <button
+      type="button"
+      onClick={() => removeItem(index)}
+      className="w-9 h-9 rounded-full bg-white text-[#55614A] hover:bg-[#55614A] hover:text-white duration-300 text-xl flex items-center justify-center shrink-0"
+    >
+      ×
+    </button>
+  )}
+</div>
                 ))}
 
                 <button
