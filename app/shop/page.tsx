@@ -101,7 +101,26 @@ export default function Shop() {
           ))}
         </div>
       </section>
-
+{/* PRE-ORDER BANNER */}
+<section className="px-8 md:px-16 pb-24">
+  <div className="bg-[#D7DCCB] rounded-[40px] p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8">
+    <div>
+      <p className="tracking-[0.35em] text-[#66705D] text-sm uppercase">Can't find what you're looking for?</p>
+      <h2 className="mt-4 text-[36px] md:text-[56px] leading-[1] text-[#55614A]">
+        Reserve Before It's Made
+      </h2>
+      <p className="mt-4 text-[#66705D] text-lg max-w-[500px] leading-relaxed">
+        Place a pre-order and we'll craft your products fresh. Pay on delivery, no upfront payment needed.
+      </p>
+    </div>
+    <Link
+      href="/preorder"
+      className="shrink-0 px-10 py-5 rounded-full bg-[#55614A] text-white text-lg uppercase tracking-[0.1em] hover:scale-105 duration-300"
+    >
+      Pre-Order Now →
+    </Link>
+  </div>
+</section>
       {/* FOOTER */}
       <footer id="footer" className="py-16 border-t border-[#C7CDB6] text-center text-[#55614A]">
         <div className="space-y-8">
