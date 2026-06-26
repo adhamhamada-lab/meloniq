@@ -25,10 +25,10 @@ const products = [
     slug: "licoriceoilsoap",
   },
   {
-    image: "/images/p1.jpeg",
-    title: "Shampoo Bar",
+    image: "/images/saadoilsoap.jpeg",
+    title: "Saad Oil Soap",
     price: "140 EGP",
-    slug: "",
+    slug: "saadoilsoap",
   },
 
 ];

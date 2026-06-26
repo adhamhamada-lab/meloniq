@@ -119,7 +119,7 @@ return (
         { image: "/images/teatreeoilsoap.jpeg", title: "Tea Tree Oil Soap", slug: "teatreeoilsoap" },
         { image: "/images/Argan & Frankincense Soap.jpeg", title: "Argan & Frankincense Soap", slug: "argan-frankincense-soap" },
         { image: "/images/licoriceoilsoap.jpeg", title: "Licorice Oil Soap", slug: "licoriceoilsoap" },
-        { image: "/images/p4.jpg", title: "Cream", slug: "" },
+        { image: "/images/saadoilsoap.jpeg", title: "Saad Oil Soap", slug: "saadoilsoap" },
       ].map((item) => (
         <a
           href={item.slug ? `/shop/${item.slug}` : "/shop"}
