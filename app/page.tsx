@@ -119,6 +119,7 @@ return (
         { image: "/images/golden-bloom.jpeg", title: "Golden Bloom", slug: "golden-bloom" },
         { image: "/images/p2.jpg", title: "p2", slug: "p2" },
         { image: "/images/p3.jpg", title: "Cream", slug: "" },
+        { image: "/images/p4.jpg", title: "Cream", slug: "" },
       ].map((item) => (
         <a
           href={item.slug ? `/shop/${item.slug}` : "/shop"}
