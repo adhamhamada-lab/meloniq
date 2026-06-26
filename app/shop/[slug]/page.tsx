@@ -23,7 +23,7 @@ const products = [
     ],
   },
   {
-    slug: "Argan & Frankincense Soap",
+    slug: "argan-frankincense-soap",
     name: "Argan & Frankincense Soap",
     category: "Anti-Wrinkle & Skin Nourishing Soap",
     use: "Helps Improve Skin Elasticity While Nourishing & Hydrating for a Smoother, More Youthful Appearance.",
@@ -31,9 +31,9 @@ const products = [
     price: "120",
     ingredients: [
       { name: "Argan Oil", desc: "Deeply Nourishes the Skin" },
-{ name: "Frankincense", desc: "Improves Skin Elasticity" },
-{ name: "Jasmine", desc: "Softens & Revitalizes Skin" },
-{ name: "Beeswax", desc: "Locks in Moisture" },
+      { name: "Frankincense", desc: "Improves Skin Elasticity" },
+      { name: "Jasmine", desc: "Softens & Revitalizes Skin" },
+      { name: "Beeswax", desc: "Locks in Moisture" },
      ],
   },
   {

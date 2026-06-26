@@ -16,7 +16,7 @@ const products = [
     image: "/images/Argan & Frankincense Soap.jpeg",
     title: "Argan & Frankincense Soap",
     price: "220 EGP",
-    slug: "Argan & Frankincense Soap",
+    slug: "argan-frankincense-soap",
   },
   {
     image: "/images/p3.jpg",
