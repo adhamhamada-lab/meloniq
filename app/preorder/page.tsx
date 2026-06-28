@@ -80,7 +80,6 @@ function PreorderContent() {
 
           {/* LEFT */}
           <div className="lg:sticky lg:top-32">
-            <p className="tracking-[0.35em] text-[#66705D] text-sm">COMING SOON</p>
             <h1 className="mt-6 text-[48px] sm:text-[70px] md:text-[120px] leading-[0.9] text-[#55614A]">
               Pre-Order
             </h1>
