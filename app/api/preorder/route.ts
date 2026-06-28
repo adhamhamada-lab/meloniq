@@ -8,14 +8,15 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const { data, error } = await supabase
-      .from("preorders")
-      .insert([{
-        name: body.name,
-        contact: body.contact,
-        address: body.address,
-        items: body.items,
-      }])
-      .select();
+  .from("preorders")
+  .insert([{
+    name: body.name,
+    contact: body.contact,
+    address: body.address,
+    items: body.items,
+    discount_code: body.discount_code || null,  // ← ضيف السطر ده
+  }])
+  .select();
 
     if (error) {
       return Response.json({ error: error.message }, { status: 500 });
