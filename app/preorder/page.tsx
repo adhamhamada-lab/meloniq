@@ -83,7 +83,7 @@ function PreorderContent() {
             <h1 className="mt-6 text-[48px] sm:text-[70px] md:text-[120px] leading-[0.9] text-[#55614A]">
               Pre-Order
             </h1>
-            <p className="mt-6 text-[#66705D] text-[17px] md:text-[20px] leading-relaxed max-w-[480px]">
+            <p className="mt-6 text-[#66705D] text-[17px] md:text-[20px] leading-relaxed max-w-[480px] font-semibold">
              ⏳ Please note: Every MELONIQ product is handcrafted after your order is confirmed. Preparation takes up to 7 business days before shipping.
             </p>
 
