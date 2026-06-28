@@ -211,7 +211,7 @@ function PreorderContent() {
               {/* DISCOUNT CODE */}
               <div className="flex flex-col gap-2">
                 <p className="text-[#66705D] tracking-[0.15em] uppercase text-sm px-2">Discount Code</p>
-                <div className="flex gap-3">
+                <div className="flex gap-2">
                   <input
                     type="text"
                     value={discountCode}
@@ -227,7 +227,7 @@ function PreorderContent() {
                     type="button"
                     onClick={validateDiscount}
                     disabled={validating || !discountCode.trim()}
-                    className="px-6 py-4 rounded-full border border-[#55614A] text-[#55614A] text-sm uppercase tracking-[0.1em] hover:bg-[#55614A] hover:text-white duration-300 disabled:opacity-50 shrink-0"
+                    className="px-4 py-4 rounded-full border border-[#55614A] text-[#55614A] text-sm uppercase tracking-[0.1em] hover:bg-[#55614A] hover:text-white duration-300 disabled:opacity-50 shrink-0"
                   >
                     {validating ? "..." : "Apply"}
                   </button>
