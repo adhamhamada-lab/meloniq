@@ -21,6 +21,12 @@ const products = [
       { name: "Peppermint", desc: "Refreshes & Soothes Skin" },
       { name: "Lemon Essential Oil", desc: "Helps Control Excess Oil" },
     ],
+  recommendedFor: [
+      "Oily Skin",
+      "Combination Skin",
+      "Acne-Prone Skin",
+    ], 
+  
   },
   {
     slug: "argan-frankincense-soap",
@@ -35,6 +41,13 @@ const products = [
       { name: "Jasmine", desc: "Softens & Revitalizes Skin" },
       { name: "Beeswax", desc: "Locks in Moisture" },
      ],
+     recommendedFor: [
+  "Dry Skin",
+  "Normal Skin",
+  "Combination Skin",
+  "Mature Skin",
+  "Aging Skin",
+],
   },
   {
     slug: "licoriceoilsoap",
@@ -49,6 +62,14 @@ const products = [
      { name: "Sweet Almond Oil", desc: "Nourishes & Softens Skin" },
      { name: "Beeswax", desc: "Locks in Moisture" }, 
     ],
+  recommendedFor: [
+  "Normal Skin",
+  "Dry Skin",
+  "Combination Skin",
+  "Dull Skin",
+  "Uneven Skin Tone",
+],
+  
   },
   {
     slug: "saadoilsoap",
@@ -65,6 +86,13 @@ const products = [
     { name: "Sweet Almond Oil", desc: "Nourishes & Softens Skin" },
     { name: "Goat Milk", desc: "Gently Exfoliates & Smooths Skin" },
     ],
+    recommendedFor: [
+  "Dry Skin",
+  "Sensitive Skin",
+  "Normal Skin",
+  "Combination Skin",
+  "All Skin Types",
+],
   },
 ];
 
