@@ -85,7 +85,7 @@ function PreorderContent() {
               Pre-Order
             </h1>
             <p className="mt-6 text-[#66705D] text-[17px] md:text-[20px] leading-relaxed max-w-[480px]">
-              Reserve your Meloniq products before they're available. We'll craft them fresh just for you.
+             ⏳ Please note: Every MELONIQ product is handcrafted after your order is confirmed. Preparation takes up to 7 business days before shipping.
             </p>
 
             <div className="mt-8 flex flex-col gap-3">
