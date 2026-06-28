@@ -154,7 +154,7 @@ About
 </Link>
 
 <a
-href="https://wa.me/201227788169"
+href="https://wa.me/20 12 21851545"
 target="_blank"
 rel="noopener noreferrer"
 className="hover:opacity-60 duration-300"
@@ -452,7 +452,7 @@ About
 </Link>
 
 <a
-href="https://wa.me/201227788169"
+href="https://wa.me/20 12 21851545"
 target="_blank"
 rel="noopener noreferrer"
 onClick={()=>setIsMenuOpen(false)}
