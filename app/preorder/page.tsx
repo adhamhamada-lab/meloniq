@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 
@@ -16,8 +17,10 @@ type Item = {
   quantity: number;
 };
 
-export default function PreorderPage() {
-  const [items, setItems] = useState<Item[]>([{ product: "", quantity: 1 }]);
+function PreorderContent() {
+  const params = useSearchParams();
+  const initialProduct = params.get("product") || "";
+  const [items, setItems] = useState<Item[]>([{ product: initialProduct, quantity: 1 }]);
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [message, setMessage] = useState("");
@@ -123,43 +126,42 @@ export default function PreorderPage() {
             >
               <input required name="name" placeholder="Full Name" className={inputStyle} />
 
-              {/* Items */}
               <div className="flex flex-col gap-4">
                 <p className="text-[#66705D] tracking-[0.15em] uppercase text-sm px-2">Products</p>
 
                 {items.map((item, index) => (
                   <div key={index} className="flex gap-2 items-center w-full">
-  <select
-    required
-    value={item.product}
-    onChange={(e) => updateItem(index, "product", e.target.value)}
-    className="bg-white text-[#55614A] rounded-full px-4 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-base flex-1 min-w-0"
-  >
-    <option value="" disabled>Select product</option>
-    {PRODUCTS.map((p) => (
-      <option key={p} value={p}>{p}</option>
-    ))}
-  </select>
+                    <select
+                      required
+                      value={item.product}
+                      onChange={(e) => updateItem(index, "product", e.target.value)}
+                      className="bg-white text-[#55614A] rounded-full px-4 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-base flex-1 min-w-0"
+                    >
+                      <option value="" disabled>Select product</option>
+                      {PRODUCTS.map((p) => (
+                        <option key={p} value={p}>{p}</option>
+                      ))}
+                    </select>
 
-  <input
-    required
-    type="number"
-    min={1}
-    value={item.quantity}
-    onChange={(e) => updateItem(index, "quantity", Number(e.target.value))}
-    className="bg-white text-[#55614A] rounded-full px-3 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-base w-[60px] text-center shrink-0"
-  />
+                    <input
+                      required
+                      type="number"
+                      min={1}
+                      value={item.quantity}
+                      onChange={(e) => updateItem(index, "quantity", Number(e.target.value))}
+                      className="bg-white text-[#55614A] rounded-full px-3 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-base w-[60px] text-center shrink-0"
+                    />
 
-  {items.length > 1 && (
-    <button
-      type="button"
-      onClick={() => removeItem(index)}
-      className="w-9 h-9 rounded-full bg-white text-[#55614A] hover:bg-[#55614A] hover:text-white duration-300 text-xl flex items-center justify-center shrink-0"
-    >
-      ×
-    </button>
-  )}
-</div>
+                    {items.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeItem(index)}
+                        className="w-9 h-9 rounded-full bg-white text-[#55614A] hover:bg-[#55614A] hover:text-white duration-300 text-xl flex items-center justify-center shrink-0"
+                      >
+                        ×
+                      </button>
+                    )}
+                  </div>
                 ))}
 
                 <button
@@ -198,12 +200,11 @@ export default function PreorderPage() {
         </div>
       </section>
 
-      {/* FOOTER */}
-  <footer id="footer" className="py-16 border-t border-[#C7CDB6] text-center text-[#55614A]">
-    <div className="space-y-8">
-      <h1 className="text-6xl tracking-[-0.1em]">
-  <em>m</em>eloniq
-</h1>
+      <footer id="footer" className="py-16 border-t border-[#C7CDB6] text-center text-[#55614A]">
+        <div className="space-y-8">
+          <h1 className="text-6xl tracking-[-0.1em]">
+            <em>m</em>eloniq
+          </h1>
           <p className="text-sm opacity-70 max-w-[400px] mx-auto">Handmade botanical care inspired by calm rituals.</p>
           <div className="flex justify-center items-center gap-8 pt-2">
             <a href="https://wa.me/201227788169" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="text-[#55614A] opacity-80 hover:opacity-100 hover:scale-110 duration-300">
@@ -228,5 +229,13 @@ export default function PreorderPage() {
         </div>
       </footer>
     </main>
+  );
+}
+
+export default function PreorderPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PreorderContent />
+    </Suspense>
   );
 }

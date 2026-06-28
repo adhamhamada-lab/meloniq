@@ -250,7 +250,7 @@ export default function ProductPage({
 </button> */}
 
               <Link
-                href="/preorder"
+                href={`/preorder?product=${encodeURIComponent(product.name)}`}
                 onClick={handleAddToCart}
                 className="px-12 py-5 rounded-full bg-[#55614A] text-white text-xl text-center hover:scale-[1.02] duration-300"
               >
