@@ -107,8 +107,7 @@ export default function AdminPage() {
 
   function OrderCard({ o, faded, type }: { o: Order; faded?: boolean; type: "orders" | "preorders" }) {
     return (
-      <div className={`rounded-[35px] p-8 flex justify-between items-start gap-6 ${faded ? "opacity-60 bg-[#c8cdb8]" : "bg-[#D7DCCB]"}`}>
-        <div className="flex-1">
+<div className={`rounded-[35px] p-8 flex flex-col gap-4 ${faded ? "opacity-60 bg-[#c8cdb8]" : "bg-[#D7DCCB]"}`}>        <div className="flex-1">
           <p className="text-[#55614A]"><b>Name:</b> {o.name}</p>
           <div className="mt-3">
             <p className="text-[#55614A] font-bold mb-2">Items:</p>
@@ -129,20 +128,20 @@ export default function AdminPage() {
           <p className="mt-3 text-[#55614A]"><b>Phone:</b> {o.contact}</p>
           <p className="mt-2 text-[#55614A]"><b>Address:</b> {o.address}</p>
         {(o as any).discount_code && (
-  <p className="mt-2 text-[#55614A]">
-    <b>Discount:</b> {(o as any).discount_code}
-  </p>
-)}
+        <p className="mt-2 text-[#55614A]">
+        <b>Discount:</b> {(o as any).discount_code}
+        </p>
+           )}
           <p className="mt-2 text-[#66705D] text-sm opacity-60">
             {new Date(o.created_at).toLocaleString("en-EG")}
           </p>
         </div>
-        <button
-          onClick={() => toggleStatus(o.id, o.status, type)}
-          className={`shrink-0 px-6 py-3 rounded-full text-sm uppercase tracking-[0.1em] hover:scale-105 duration-300 ${
-            faded ? "border border-[#55614A] text-[#55614A]" : "bg-[#55614A] text-white"
-          }`}
-        >
+<button
+  onClick={() => toggleStatus(o.id, o.status, type)}
+  className={`w-full py-3 rounded-full text-sm uppercase tracking-[0.1em] hover:scale-105 duration-300 ${
+    faded ? "border border-[#55614A] text-[#55614A]" : "bg-[#55614A] text-white"
+  }`}
+>
           {faded ? "Undo" : "Mark Done ✓"}
         </button>
       </div>
