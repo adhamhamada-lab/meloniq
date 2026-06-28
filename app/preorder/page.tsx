@@ -25,6 +25,12 @@ function PreorderContent() {
   const [done, setDone] = useState(false);
   const [message, setMessage] = useState("");
 
+  // Discount
+  const [discountCode, setDiscountCode] = useState("");
+  const [discountStatus, setDiscountStatus] = useState<"idle" | "valid" | "invalid">("idle");
+  const [discountInfo, setDiscountInfo] = useState<{ type: string; value: number } | null>(null);
+  const [validating, setValidating] = useState(false);
+
   function updateItem(index: number, field: keyof Item, value: string | number) {
     setItems((prev) =>
       prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
@@ -37,6 +43,25 @@ function PreorderContent() {
 
   function removeItem(index: number) {
     setItems((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  async function validateDiscount() {
+    if (!discountCode.trim()) return;
+    setValidating(true);
+    const res = await fetch("/api/discount/validate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code: discountCode }),
+    });
+    const data = await res.json();
+    setValidating(false);
+    if (data.valid) {
+      setDiscountStatus("valid");
+      setDiscountInfo({ type: data.type, value: data.value });
+    } else {
+      setDiscountStatus("invalid");
+      setDiscountInfo(null);
+    }
   }
 
   async function send(e: any) {
@@ -53,6 +78,7 @@ function PreorderContent() {
         contact: form.get("contact"),
         address: form.get("address"),
         items,
+        discount_code: discountStatus === "valid" ? discountCode : null,
       }),
     });
 
@@ -84,7 +110,7 @@ function PreorderContent() {
               Pre-Order
             </h1>
             <p className="mt-6 text-[#66705D] text-[17px] md:text-[20px] leading-relaxed max-w-[480px] font-semibold">
-             ⏳ Please note: Every MELONIQ product is handcrafted after your order is confirmed. Preparation takes up to 7 business days before shipping.
+              ⏳ Please note: Every MELONIQ product is handcrafted after your order is confirmed. Preparation takes up to 7 business days before shipping.
             </p>
 
             <div className="mt-8 flex flex-col gap-3">
@@ -181,6 +207,41 @@ function PreorderContent() {
                 rows={4}
                 className="bg-white text-[#55614A] placeholder:text-[#7C8572] rounded-[32px] px-7 py-5 outline-none border border-transparent focus:border-[#55614A] resize-none duration-300 text-lg"
               />
+
+              {/* DISCOUNT CODE */}
+              <div className="flex flex-col gap-2">
+                <p className="text-[#66705D] tracking-[0.15em] uppercase text-sm px-2">Discount Code</p>
+                <div className="flex gap-3">
+                  <input
+                    type="text"
+                    value={discountCode}
+                    onChange={(e) => {
+                      setDiscountCode(e.target.value);
+                      setDiscountStatus("idle");
+                      setDiscountInfo(null);
+                    }}
+                    placeholder="Enter code"
+                    className="bg-white text-[#55614A] placeholder:text-[#7C8572] rounded-full px-7 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-lg flex-1"
+                  />
+                  <button
+                    type="button"
+                    onClick={validateDiscount}
+                    disabled={validating || !discountCode.trim()}
+                    className="px-6 py-4 rounded-full border border-[#55614A] text-[#55614A] text-sm uppercase tracking-[0.1em] hover:bg-[#55614A] hover:text-white duration-300 disabled:opacity-50 shrink-0"
+                  >
+                    {validating ? "..." : "Apply"}
+                  </button>
+                </div>
+
+                {discountStatus === "valid" && discountInfo && (
+                  <p className="text-[#55614A] text-sm px-2">
+                    ✓ Code applied — {discountInfo.value}{discountInfo.type === "percentage" ? "% off" : " EGP off"}
+                  </p>
+                )}
+                {discountStatus === "invalid" && (
+                  <p className="text-red-500 text-sm px-2">Invalid or expired code</p>
+                )}
+              </div>
 
               {message && (
                 <div className="rounded-[24px] bg-[#55614A] text-white py-4 px-6 text-center">
