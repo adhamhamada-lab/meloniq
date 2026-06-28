@@ -14,7 +14,7 @@ const products = [
     category: "For Oily & Acne-Prone Skin",
     use: "Purifies Oily Skin, Helps Reduce Breakouts & Leaves the Skin Fresh, Balanced, and Healthy-Looking.",
     image: "/images/teatreeoilsoap.jpeg",
-    price: "150 EGP",
+    price: "115 EGP",
     ingredients: [
       { name: "Sweet Almond Oil", desc: "Nourishes & Softens Skin" },
       { name: "Tea Tree Essential Oil", desc: "Helps Reduce Acne-Causing Bacteria" },
@@ -34,7 +34,7 @@ const products = [
     category: "Anti-Wrinkle & Skin Nourishing Soap",
     use: "Helps Improve Skin Elasticity While Nourishing & Hydrating for a Smoother, More Youthful Appearance.",
     image: "/images/Argan & Frankincense Soap.jpeg",
-    price: "120",
+    price: "115 EGP",
     ingredients: [
       { name: "Argan Oil", desc: "Deeply Nourishes the Skin" },
       { name: "Frankincense", desc: "Improves Skin Elasticity" },
@@ -55,7 +55,7 @@ const products = [
     category: "Brightening & Even Skin Tone",
     use: "Helps Brighten, Nourish & Restore a Smooth, Healthy-Looking Complexion.",
     image: "/images/licoriceoilsoap.jpeg",
-    price: "",
+    price: "140 EGP",
     ingredients: [
      { name: "Licorice Root Oil", desc: "Helps Brighten Skin Tone" },
      { name: "Lavender Essential Oil", desc: "Soothes & Calms Skin" },
@@ -77,7 +77,7 @@ const products = [
     category: "Nourishing & Skin Softening",
     use: "Deeply Nourishes, Softens & Helps Maintain Smooth, Healthy-Looking Skin.",
     image: "/images/saadoilsoap.jpeg",
-    price: "",
+    price: "160 EGP",
     ingredients: [
     { name: "Cyperus Rotundus (Saad) Oil", desc: "Helps Soothe & Condition Skin" },
     { name: "Shea Butter", desc: "Deeply Moisturizes Skin" },

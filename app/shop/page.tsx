@@ -9,25 +9,25 @@ const products = [
   {
     image: "/images/teatreeoilsoap.jpeg",
     title: "Tea Tree Oil Soap",
-    price: "150 EGP",
+    price: "115 EGP",
     slug: "teatreeoilsoap",
   },
   {
     image: "/images/Argan & Frankincense Soap.jpeg",
     title: "Argan & Frankincense Soap",
-    price: "220 EGP",
+    price: "115 EGP",
     slug: "argan-frankincense-soap",
   },
   {
     image: "/images/licoriceoilsoap.jpeg",
     title: "Licorice Oil Soap",
-    price: "180 EGP",
+    price: "140 EGP",
     slug: "licoriceoilsoap",
   },
   {
     image: "/images/saadoilsoap.jpeg",
     title: "Saad Oil Soap",
-    price: "140 EGP",
+    price: "160 EGP",
     slug: "saadoilsoap",
   },
 
