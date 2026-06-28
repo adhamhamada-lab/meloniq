@@ -209,6 +209,21 @@ export default function ProductPage({
 
   </div>
 )}
+{product.recommendedFor && product.recommendedFor.length > 0 && (
+  <div>
+    <p className="tracking-[0.25em] text-[#55614A] text-sm uppercase mb-4 font-medium">
+      Recommended For
+    </p>
+    <div className="flex flex-col gap-2">
+      {product.recommendedFor.map((item) => (
+        <div key={item} className="flex items-center gap-3">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#55614A] shrink-0" />
+          <p className="text-[#55614A] text-base">{item}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
 
 
             <div className="flex flex-col gap-4">
