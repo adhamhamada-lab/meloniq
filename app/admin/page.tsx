@@ -128,6 +128,11 @@ export default function AdminPage() {
           </div>
           <p className="mt-3 text-[#55614A]"><b>Phone:</b> {o.contact}</p>
           <p className="mt-2 text-[#55614A]"><b>Address:</b> {o.address}</p>
+        {(o as any).discount_code && (
+  <p className="mt-2 text-[#55614A]">
+    <b>Discount:</b> {(o as any).discount_code}
+  </p>
+)}
           <p className="mt-2 text-[#66705D] text-sm opacity-60">
             {new Date(o.created_at).toLocaleString("en-EG")}
           </p>
