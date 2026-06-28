@@ -17,19 +17,37 @@ type Order = {
   items: Item[];
 };
 
+type DiscountCode = {
+  id: number;
+  code: string;
+  type: string;
+  value: number;
+  active: boolean;
+  created_at: string;
+};
+
 export default function AdminPage() {
-  const [tab, setTab] = useState<"orders" | "preorders">("orders");
+  const [tab, setTab] = useState<"orders" | "preorders" | "discounts">("orders");
   const [orders, setOrders] = useState<Order[]>([]);
   const [preorders, setPreorders] = useState<Order[]>([]);
+  const [discounts, setDiscounts] = useState<DiscountCode[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // New discount form
+  const [newCode, setNewCode] = useState("");
+  const [newType, setNewType] = useState("percentage");
+  const [newValue, setNewValue] = useState("");
+  const [addingCode, setAddingCode] = useState(false);
 
   useEffect(() => {
     Promise.all([
       fetch("/api/admin/orders").then((r) => r.json()),
       fetch("/api/admin/preorders").then((r) => r.json()),
-    ]).then(([ordersData, preordersData]) => {
+      fetch("/api/discount").then((r) => r.json()),
+    ]).then(([ordersData, preordersData, discountsData]) => {
       setOrders(ordersData.data || []);
       setPreorders(preordersData.data || []);
+      setDiscounts(discountsData.data || []);
       setLoading(false);
     });
   }, []);
@@ -51,7 +69,34 @@ export default function AdminPage() {
     });
   }
 
-  // حساب إجمالي كل منتج في الـ preorders
+  async function toggleDiscountActive(id: number, current: boolean) {
+    setDiscounts((prev) =>
+      prev.map((d) => (d.id === id ? { ...d, active: !current } : d))
+    );
+    await fetch(`/api/discount/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ active: !current }),
+    });
+  }
+
+  async function addDiscountCode() {
+    if (!newCode.trim() || !newValue) return;
+    setAddingCode(true);
+    const res = await fetch("/api/discount", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code: newCode, type: newType, value: Number(newValue) }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      setDiscounts((prev) => [data.data[0], ...prev]);
+      setNewCode("");
+      setNewValue("");
+    }
+    setAddingCode(false);
+  }
+
   const productTotals = preorders
     .filter((o) => o.status !== "done")
     .flatMap((o) => o.items || [])
@@ -109,7 +154,7 @@ export default function AdminPage() {
       <h1 className="text-[50px] md:text-[90px] text-[#55614A]">Dashboard</h1>
 
       {/* TABS */}
-      <div className="mt-6 flex gap-4">
+      <div className="mt-6 flex gap-4 flex-wrap">
         <button
           onClick={() => setTab("orders")}
           className={`px-8 py-3 rounded-full text-sm uppercase tracking-[0.1em] duration-300 ${
@@ -126,17 +171,89 @@ export default function AdminPage() {
         >
           Pre-Orders ({preorders.filter((o) => o.status !== "done").length})
         </button>
+        <button
+          onClick={() => setTab("discounts")}
+          className={`px-8 py-3 rounded-full text-sm uppercase tracking-[0.1em] duration-300 ${
+            tab === "discounts" ? "bg-[#55614A] text-white" : "border border-[#55614A] text-[#55614A]"
+          }`}
+        >
+          Discount Codes ({discounts.filter((d) => d.active).length})
+        </button>
       </div>
 
-      {/* PRODUCTION SUMMARY - بس في تبويب الـ preorders */}
+      {/* DISCOUNT CODES TAB */}
+      {tab === "discounts" && (
+        <div className="mt-10">
+
+          {/* Add new code */}
+          <div className="bg-[#D7DCCB] rounded-[30px] p-8 mb-8">
+            <p className="text-[#66705D] tracking-[0.2em] uppercase text-sm mb-6">Add New Code</p>
+            <div className="flex flex-wrap gap-4">
+              <input
+                type="text"
+                value={newCode}
+                onChange={(e) => setNewCode(e.target.value.toUpperCase())}
+                placeholder="Code (e.g. SUMMER20)"
+                className="bg-white text-[#55614A] placeholder:text-[#7C8572] rounded-full px-6 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-base flex-1 min-w-[200px]"
+              />
+              <select
+                value={newType}
+                onChange={(e) => setNewType(e.target.value)}
+                className="bg-white text-[#55614A] rounded-full px-6 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-base"
+              >
+                <option value="percentage">Percentage %</option>
+                <option value="fixed">Fixed EGP</option>
+              </select>
+              <input
+                type="number"
+                value={newValue}
+                onChange={(e) => setNewValue(e.target.value)}
+                placeholder={newType === "percentage" ? "e.g. 10" : "e.g. 50"}
+                className="bg-white text-[#55614A] placeholder:text-[#7C8572] rounded-full px-6 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-base w-[140px]"
+              />
+              <button
+                onClick={addDiscountCode}
+                disabled={addingCode || !newCode.trim() || !newValue}
+                className="px-8 py-4 rounded-full bg-[#55614A] text-white text-sm uppercase tracking-[0.1em] hover:scale-105 duration-300 disabled:opacity-50"
+              >
+                {addingCode ? "Adding..." : "+ Add Code"}
+              </button>
+            </div>
+          </div>
+
+          {/* Codes list */}
+          <div className="grid gap-4">
+            {discounts.length === 0 ? (
+              <p className="text-[#66705D]">No discount codes yet.</p>
+            ) : (
+              discounts.map((d) => (
+                <div key={d.id} className={`rounded-[25px] p-6 flex justify-between items-center gap-6 ${d.active ? "bg-[#D7DCCB]" : "bg-[#c8cdb8] opacity-60"}`}>
+                  <div>
+                    <p className="text-[#55614A] text-xl font-medium tracking-widest">{d.code}</p>
+                    <p className="text-[#66705D] text-sm mt-1">
+                      {d.value}{d.type === "percentage" ? "% off" : " EGP off"} · {d.active ? "Active" : "Inactive"}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => toggleDiscountActive(d.id, d.active)}
+                    className={`px-6 py-3 rounded-full text-sm uppercase tracking-[0.1em] hover:scale-105 duration-300 ${
+                      d.active ? "border border-[#55614A] text-[#55614A]" : "bg-[#55614A] text-white"
+                    }`}
+                  >
+                    {d.active ? "Deactivate" : "Activate"}
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* PRODUCTION SUMMARY */}
       {tab === "preorders" && Object.keys(productTotals).length > 0 && (
         <div className="mt-8 bg-[#D7DCCB] rounded-[30px] p-8">
-          <p className="text-[#66705D] tracking-[0.2em] uppercase text-sm mb-4">
-            Production Summary
-          </p>
-          <p className="text-[#66705D] text-sm mb-4 opacity-70">
-            Total units needed from pending pre-orders:
-          </p>
+          <p className="text-[#66705D] tracking-[0.2em] uppercase text-sm mb-4">Production Summary</p>
+          <p className="text-[#66705D] text-sm mb-4 opacity-70">Total units needed from pending pre-orders:</p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {Object.entries(productTotals).map(([product, total]) => (
               <div key={product} className="bg-[#E4E7D6] rounded-[20px] px-5 py-4">
@@ -149,40 +266,44 @@ export default function AdminPage() {
       )}
 
       {/* COUNTERS */}
-      <div className="mt-6 flex gap-6 text-[#66705D] text-lg">
-        <span className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[#C4A35A] inline-block" />
-          Pending: <b>{pending.length}</b>
-        </span>
-        <span className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[#55614A] inline-block" />
-          Done: <b>{done.length}</b>
-        </span>
-      </div>
-
-      {loading ? (
-        <p className="mt-10 text-[#66705D]">Loading...</p>
-      ) : currentList.length === 0 ? (
-        <p className="mt-10 text-[#66705D]">No {tab === "orders" ? "orders" : "pre-orders"} yet.</p>
-      ) : (
-        <div className="mt-10 grid gap-6">
-          {pending.length > 0 && (
-            <div>
-              <p className="text-[#66705D] tracking-[0.2em] uppercase text-sm mb-4">Pending</p>
-              <div className="grid gap-4">
-                {pending.map((o) => <OrderCard key={o.id} o={o} type={tab} />)}
-              </div>
-            </div>
-          )}
-          {done.length > 0 && (
-            <div className="mt-6">
-              <p className="text-[#66705D] tracking-[0.2em] uppercase text-sm mb-4">Completed</p>
-              <div className="grid gap-4">
-                {done.map((o) => <OrderCard key={o.id} o={o} faded type={tab} />)}
-              </div>
-            </div>
-          )}
+      {tab !== "discounts" && (
+        <div className="mt-6 flex gap-6 text-[#66705D] text-lg">
+          <span className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#C4A35A] inline-block" />
+            Pending: <b>{pending.length}</b>
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#55614A] inline-block" />
+            Done: <b>{done.length}</b>
+          </span>
         </div>
+      )}
+
+      {tab !== "discounts" && (
+        loading ? (
+          <p className="mt-10 text-[#66705D]">Loading...</p>
+        ) : currentList.length === 0 ? (
+          <p className="mt-10 text-[#66705D]">No {tab === "orders" ? "orders" : "pre-orders"} yet.</p>
+        ) : (
+          <div className="mt-10 grid gap-6">
+            {pending.length > 0 && (
+              <div>
+                <p className="text-[#66705D] tracking-[0.2em] uppercase text-sm mb-4">Pending</p>
+                <div className="grid gap-4">
+                  {pending.map((o) => <OrderCard key={o.id} o={o} type={tab as "orders" | "preorders"} />)}
+                </div>
+              </div>
+            )}
+            {done.length > 0 && (
+              <div className="mt-6">
+                <p className="text-[#66705D] tracking-[0.2em] uppercase text-sm mb-4">Completed</p>
+                <div className="grid gap-4">
+                  {done.map((o) => <OrderCard key={o.id} o={o} faded type={tab as "orders" | "preorders"} />)}
+                </div>
+              </div>
+            )}
+          </div>
+        )
       )}
     </main>
   );
