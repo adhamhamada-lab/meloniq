@@ -241,19 +241,20 @@ export default function ProductPage({
                 </div>
               </div>
 
-              <button
-                onClick={handleAddToCart}
-                className={`px-12 py-5 rounded-full text-xl text-center duration-300 ${added ? "bg-[#D7DCCB] text-[#55614A]" : "border border-[#55614A] text-[#55614A] hover:bg-[#55614A] hover:text-white"}`}
-              >
-                {added ? "Added to Cart ✓" : "Add to Cart"}
-              </button>
+             
+              {/* <button
+  onClick={handleAddToCart}
+  className={`px-12 py-5 rounded-full text-xl text-center duration-300 ${added ? "bg-[#D7DCCB] text-[#55614A]" : "border border-[#55614A] text-[#55614A] hover:bg-[#55614A] hover:text-white"}`}
+>
+  {added ? "Added to Cart ✓" : "Add to Cart"}
+</button> */}
 
               <Link
-                href="/checkout"
+                href="/preorder"
                 onClick={handleAddToCart}
                 className="px-12 py-5 rounded-full bg-[#55614A] text-white text-xl text-center hover:scale-[1.02] duration-300"
               >
-                Buy Now
+                 Pre-Order Now
               </Link>
 
               <Link href="/shop" className="text-center text-[#66705D] text-sm tracking-[0.15em] uppercase hover:opacity-60 duration-300">
