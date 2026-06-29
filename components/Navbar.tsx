@@ -217,12 +217,11 @@ items-center
 gap-5
 "
 >
-
-<Link
+{false && (
+    <Link
 href="/cart"
 className="relative text-[#55614A]"
 >
-
 <svg
 width="22"
 height="22"
@@ -231,17 +230,12 @@ fill="none"
 stroke="currentColor"
 strokeWidth="1.6"
 >
-
 <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-
 <line x1="3" y1="6" x2="21" y2="6"/>
-
 <path d="M16 10a4 4 0 0 1-8 0"/>
-
 </svg>
 {
 cartCount > 0 && (
-
 <span
 className="
 absolute
@@ -258,14 +252,12 @@ items-center
 justify-center
 "
 >
-
 {cartCount}
-
 </span>
-
 )
 }
-</Link>
+</Link>)}
+
 
 
 <button
@@ -443,7 +435,7 @@ className="hover:opacity-60 duration-300"
 >
 Contact
 </a>
-
+{false && (
 <Link
 href="/cart"
 onClick={()=>setIsMenuOpen(false)}
@@ -451,7 +443,7 @@ className="hover:opacity-60 duration-300"
 >
 Cart {cartCount > 0 && `(${cartCount})`}
 </Link>
-
+)}
 </div>
 
 </>
