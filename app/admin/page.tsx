@@ -15,6 +15,7 @@ type Order = {
   status: string;
   created_at: string;
   items: Item[];
+  discount_code?: string;
 };
 
 type DiscountCode = {
@@ -26,6 +27,20 @@ type DiscountCode = {
   created_at: string;
 };
 
+const PRODUCT_PRICES: Record<string, number> = {
+  "Tea Tree Oil Soap": 150,
+  "Argan & Frankincense Soap": 115,
+  "Licorice Oil Soap": 140,
+  "Saad Oil Soap": 160,
+};
+
+const DISCOUNTED_PRICES: Record<string, number> = {
+  "Tea Tree Oil Soap": 105,
+  "Argan & Frankincense Soap": 105,
+  "Licorice Oil Soap": 125,
+  "Saad Oil Soap": 145,
+};
+
 export default function AdminPage() {
   const [tab, setTab] = useState<"orders" | "preorders" | "discounts">("orders");
   const [orders, setOrders] = useState<Order[]>([]);
@@ -33,7 +48,6 @@ export default function AdminPage() {
   const [discounts, setDiscounts] = useState<DiscountCode[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // New discount form
   const [newCode, setNewCode] = useState("");
   const [newType, setNewType] = useState("percentage");
   const [newValue, setNewValue] = useState("");
@@ -106,8 +120,22 @@ export default function AdminPage() {
     }, {} as Record<string, number>);
 
   function OrderCard({ o, faded, type }: { o: Order; faded?: boolean; type: "orders" | "preorders" }) {
+    const hasDiscount = type === "preorders" && o.discount_code;
+
+    const originalTotal = (o.items || []).reduce((sum, item) => {
+      return sum + (PRODUCT_PRICES[item.product] || 0) * item.quantity;
+    }, 0);
+
+    const discountedTotal = (o.items || []).reduce((sum, item) => {
+      const price = hasDiscount && DISCOUNTED_PRICES[item.product]
+        ? DISCOUNTED_PRICES[item.product]
+        : PRODUCT_PRICES[item.product] || 0;
+      return sum + price * item.quantity;
+    }, 0);
+
     return (
-<div className={`rounded-[35px] p-8 flex flex-col gap-4 ${faded ? "opacity-60 bg-[#c8cdb8]" : "bg-[#D7DCCB]"}`}>        <div className="flex-1">
+      <div className={`rounded-[35px] p-8 flex flex-col gap-4 ${faded ? "opacity-60 bg-[#c8cdb8]" : "bg-[#D7DCCB]"}`}>
+        <div className="flex-1">
           <p className="text-[#55614A]"><b>Name:</b> {o.name}</p>
           <div className="mt-3">
             <p className="text-[#55614A] font-bold mb-2">Items:</p>
@@ -127,21 +155,33 @@ export default function AdminPage() {
           </div>
           <p className="mt-3 text-[#55614A]"><b>Phone:</b> {o.contact}</p>
           <p className="mt-2 text-[#55614A]"><b>Address:</b> {o.address}</p>
-        {(o as any).discount_code && (
-        <p className="mt-2 text-[#55614A]">
-        <b>Discount:</b> {(o as any).discount_code}
-        </p>
-           )}
+
+          {/* TOTAL */}
+          {type === "preorders" && originalTotal > 0 && (
+            <div className="mt-3 flex items-center gap-2">
+              <b className="text-[#55614A]">Total:</b>
+              {hasDiscount ? (
+                <>
+                  <span className="text-[#66705D] line-through opacity-60">{originalTotal} EGP</span>
+                  <span className="text-[#55614A] font-medium">{discountedTotal} EGP</span>
+                  <span className="text-[#66705D] text-sm opacity-70">({o.discount_code})</span>
+                </>
+              ) : (
+                <span className="text-[#55614A]">{originalTotal} EGP</span>
+              )}
+            </div>
+          )}
+
           <p className="mt-2 text-[#66705D] text-sm opacity-60">
             {new Date(o.created_at).toLocaleString("en-EG")}
           </p>
         </div>
-<button
-  onClick={() => toggleStatus(o.id, o.status, type)}
-  className={`w-full py-3 rounded-full text-sm uppercase tracking-[0.1em] hover:scale-105 duration-300 ${
-    faded ? "border border-[#55614A] text-[#55614A]" : "bg-[#55614A] text-white"
-  }`}
->
+        <button
+          onClick={() => toggleStatus(o.id, o.status, type)}
+          className={`w-full py-3 rounded-full text-sm uppercase tracking-[0.1em] hover:scale-105 duration-300 ${
+            faded ? "border border-[#55614A] text-[#55614A]" : "bg-[#55614A] text-white"
+          }`}
+        >
           {faded ? "Undo" : "Mark Done ✓"}
         </button>
       </div>
@@ -188,34 +228,16 @@ export default function AdminPage() {
       {/* DISCOUNT CODES TAB */}
       {tab === "discounts" && (
         <div className="mt-10">
-
-          {/* Add new code */}
           <div className="bg-[#D7DCCB] rounded-[30px] p-8 mb-8">
             <p className="text-[#66705D] tracking-[0.2em] uppercase text-sm mb-6">Add New Code</p>
             <div className="flex flex-wrap gap-4">
               <input
-  type="text"
-  value={newCode}
-  onChange={(e) => setNewCode(e.target.value)}
-  placeholder="Code (e.g. SUMMER20)"
-  className="
-    bg-white
-    text-[#55614A]
-    placeholder:text-[#7C8572]
-    rounded-full
-    px-6
-    py-4
-    outline-none
-    border
-    border-transparent
-    focus:border-[#55614A]
-    duration-300
-    text-base
-    flex-1
-    min-w-[200px]
-    normal-case
-  "
-/>
+                type="text"
+                value={newCode}
+                onChange={(e) => setNewCode(e.target.value)}
+                placeholder="Code (e.g. SUMMER20)"
+                className="bg-white text-[#55614A] placeholder:text-[#7C8572] rounded-full px-6 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-base flex-1 min-w-[200px]"
+              />
               <select
                 value={newType}
                 onChange={(e) => setNewType(e.target.value)}
@@ -241,7 +263,6 @@ export default function AdminPage() {
             </div>
           </div>
 
-          {/* Codes list */}
           <div className="grid gap-4">
             {discounts.length === 0 ? (
               <p className="text-[#66705D]">No discount codes yet.</p>
