@@ -196,7 +196,7 @@ export default function AdminPage() {
               <input
                 type="text"
                 value={newCode}
-                onChange={(e) => setNewCode(e.target.value.toUpperCase())}
+                /*onChange={(e) => setNewCode(e.target.value.toUpperCase())}*/
                 placeholder="Code (e.g. SUMMER20)"
                 className="bg-white text-[#55614A] placeholder:text-[#7C8572] rounded-full px-6 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-base flex-1 min-w-[200px]"
               />
