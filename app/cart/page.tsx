@@ -108,7 +108,7 @@ export default function CartPage() {
                   Continue Shopping
                 </Link>
                 <Link
-                  href="/checkout"
+                  href="/preorder"
                   className="px-8 py-4 rounded-full bg-[#55614A] text-white text-sm uppercase tracking-[0.1em] hover:scale-105 duration-300"
                 >
                   Checkout →
