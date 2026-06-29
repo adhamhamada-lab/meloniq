@@ -364,6 +364,7 @@ function PreorderContent() {
 }
 
 export default function PreorderPage() {
+ const { items } = useCart();
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <PreorderContent />
