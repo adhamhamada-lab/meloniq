@@ -4,6 +4,8 @@ import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
+import { useCart } from "@/app/context/CartContext";
+
 
 const PRODUCTS = [
   { name: "Tea Tree Oil Soap", price: 150 },
@@ -25,6 +27,7 @@ type Item = {
 };
 
 function PreorderContent() {
+  const { items: cartItems } = useCart();
   const params = useSearchParams();
   const initialProduct = params.get("product") || "";
   const [items, setItems] = useState<Item[]>([{ product: initialProduct, quantity: 1 }]);
