@@ -12,7 +12,7 @@ const { data, error } = await supabase
   .from("discount_codes")
   .select("*")
   .ilike("code", code)
-  .eq("active", true)
+  .eq("code", code)
   .single();
 
   if (error || !data) {
