@@ -161,7 +161,7 @@ className="hover:opacity-60 duration-300"
 >
 Contact
 </a>
-{false && (
+
 <Link
 href="/cart"
 className="relative hover:opacity-60 duration-300"
@@ -202,7 +202,6 @@ justify-center
 }
 
 </Link>
-)}
 
 </div>
 
@@ -217,7 +216,7 @@ items-center
 gap-5
 "
 >
-{false && (
+
     <Link
 href="/cart"
 className="relative text-[#55614A]"
@@ -256,7 +255,7 @@ justify-center
 </span>
 )
 }
-</Link>)}
+</Link>
 
 
 
@@ -435,7 +434,7 @@ className="hover:opacity-60 duration-300"
 >
 Contact
 </a>
-{false && (
+
 <Link
 href="/cart"
 onClick={()=>setIsMenuOpen(false)}
@@ -443,7 +442,7 @@ className="hover:opacity-60 duration-300"
 >
 Cart {cartCount > 0 && `(${cartCount})`}
 </Link>
-)}
+
 </div>
 
 </>

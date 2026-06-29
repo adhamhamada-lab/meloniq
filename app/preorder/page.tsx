@@ -30,8 +30,11 @@ function PreorderContent() {
   const { items: cartItems } = useCart();
   const params = useSearchParams();
   const initialProduct = params.get("product") || "";
-  const [items, setItems] = useState<Item[]>([{ product: initialProduct, quantity: 1 }]);
-  const [loading, setLoading] = useState(false);
+const initialQuantity = Number(params.get("quantity")) || 1;
+const initialItems = cartItems.length > 0
+  ? cartItems.map((i) => ({ product: i.title, quantity: i.quantity }))
+  : [{ product: initialProduct, quantity: initialQuantity }];
+const [items, setItems] = useState<Item[]>(initialItems);  const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [message, setMessage] = useState("");
 
