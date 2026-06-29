@@ -18,14 +18,14 @@ export async function GET() {
 export async function POST(req: Request) {
   const body = await req.json();
 
-  const { data, error } = await supabase
-    .from("discount_codes")
-    .insert([{
-      code: body.code.toUpperCase(),
-      type: body.type,
-      value: body.value,
-      active: true,
-    }])
+const { data, error } = await supabase
+  .from("discount_codes")
+  .insert([{
+    code: body.code,
+    type: body.type,
+    value: body.value,
+    active: true,
+  }])
     .select();
 
   if (error) return Response.json({ error: error.message }, { status: 500 });

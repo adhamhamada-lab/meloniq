@@ -8,12 +8,12 @@ const supabase = createClient(
 export async function POST(req: Request) {
   const { code } = await req.json();
 
-  const { data, error } = await supabase
-    .from("discount_codes")
-    .select("*")
-    .eq("code", code.toUpperCase())
-    .eq("active", true)
-    .single();
+const { data, error } = await supabase
+  .from("discount_codes")
+  .select("*")
+  .ilike("code", code)
+  .eq("active", true)
+  .single();
 
   if (error || !data) {
     return Response.json({ valid: false, message: "Invalid or expired code" });
