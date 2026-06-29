@@ -22,35 +22,43 @@ export async function POST(req: Request) {
     }
 
     // Google Sheets
-    await fetch(process.env.GOOGLE_SHEET_WEBHOOK!, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        secret: "meloniq-secret-2026",
-        name: body.name,
-        contact: body.contact,
-        address: body.address,
-        items: body.items,
-        type: "order",
-      }),
-    });
+    try {
+      await fetch(process.env.GOOGLE_SHEET_WEBHOOK!, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          secret: "meloniq-secret-2026",
+          name: body.name,
+          contact: body.contact,
+          address: body.address,
+          items: body.items,
+          type: "order",
+        }),
+      });
+    } catch (sheetError) {
+      console.log("Google Sheets error:", sheetError);
+    }
 
     // Resend Email
-    await resend.emails.send({
-      from: "Meloniq <onboarding@resend.dev>",
-      to: "yusefmgaber@gmail.com",
-      subject: "🛍️ New Order - Meloniq",
-      html: `
-        <h2>New Order Received</h2>
-        <p><b>Name:</b> ${body.name}</p>
-        <p><b>Phone:</b> ${body.contact}</p>
-        <p><b>Address:</b> ${body.address}</p>
-        <h3>Items:</h3>
-        <ul>
-          ${body.items.map((i: any) => `<li>${i.product} × ${i.quantity}</li>`).join("")}
-        </ul>
-      `,
-    });
+    try {
+      await resend.emails.send({
+        from: "Meloniq <onboarding@resend.dev>",
+        to: "yusefmgaber@gmail.com",
+        subject: "🛍️ New Order - Meloniq",
+        html: `
+          <h2>New Order Received</h2>
+          <p><b>Name:</b> ${body.name}</p>
+          <p><b>Phone:</b> ${body.contact}</p>
+          <p><b>Address:</b> ${body.address}</p>
+          <h3>Items:</h3>
+          <ul>
+            ${body.items.map((i: any) => `<li>${i.product} × ${i.quantity}</li>`).join("")}
+          </ul>
+        `,
+      });
+    } catch (emailError) {
+      console.log("Email error:", emailError);
+    }
 
     return Response.json({ success: true, data });
   } catch (e) {

@@ -27,7 +27,7 @@ type Item = {
 };
 
 function PreorderContent() {
-  const { items: cartItems } = useCart();
+  const { items: cartItems, clearCart } = useCart();
   const params = useSearchParams();
   const initialProduct = params.get("product") || "";
 const initialQuantity = Number(params.get("quantity")) || 1;
@@ -111,9 +111,11 @@ const [items, setItems] = useState<Item[]>(initialItems);  const [loading, setLo
 
     setLoading(false);
 
-    if (res.ok) {
-      setDone(true);
-    } else {
+if (res.ok) {
+  clearCart();
+  setDone(true);
+
+  } else {
       setMessage("Something went wrong. Please try again.");
     }
   }
