@@ -28,7 +28,7 @@ type DiscountCode = {
 };
 
 const PRODUCT_PRICES: Record<string, number> = {
-  "Tea Tree Oil Soap": 150,
+  "Tea Tree Oil Soap": 115,
   "Argan & Frankincense Soap": 115,
   "Licorice Oil Soap": 140,
   "Saad Oil Soap": 160,

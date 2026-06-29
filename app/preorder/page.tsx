@@ -8,7 +8,7 @@ import { useCart } from "@/app/context/CartContext";
 
 
 const PRODUCTS = [
-  { name: "Tea Tree Oil Soap", price: 150 },
+  { name: "Tea Tree Oil Soap", price: 115 },
   { name: "Argan & Frankincense Soap", price: 115 },
   { name: "Licorice Oil Soap", price: 140 },
   { name: "Saad Oil Soap", price: 160 },
