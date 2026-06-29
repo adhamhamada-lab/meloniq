@@ -6,11 +6,18 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 
 const PRODUCTS = [
-  "Tea Tree Oil Soap",
-  "Argan & Frankincense Soap",
-  "Licorice Oil Soap",
-  "Saad Oil Soap",
+  { name: "Tea Tree Oil Soap", price: 150 },
+  { name: "Argan & Frankincense Soap", price: 115 },
+  { name: "Licorice Oil Soap", price: 140 },
+  { name: "Saad Oil Soap", price: 160 },
 ];
+
+const DISCOUNTED_PRICES: Record<string, number> = {
+  "Tea Tree Oil Soap": 105,
+  "Argan & Frankincense Soap": 105,
+  "Licorice Oil Soap": 125,
+  "Saad Oil Soap": 145,
+};
 
 type Item = {
   product: string;
@@ -25,7 +32,6 @@ function PreorderContent() {
   const [done, setDone] = useState(false);
   const [message, setMessage] = useState("");
 
-  // Discount
   const [discountCode, setDiscountCode] = useState("");
   const [discountStatus, setDiscountStatus] = useState<"idle" | "valid" | "invalid">("idle");
   const [discountInfo, setDiscountInfo] = useState<{ type: string; value: number } | null>(null);
@@ -63,6 +69,21 @@ function PreorderContent() {
       setDiscountInfo(null);
     }
   }
+
+  // حساب الإجمالي
+  const validItems = items.filter((i) => i.product);
+
+  const originalTotal = validItems.reduce((sum, item) => {
+    const product = PRODUCTS.find((p) => p.name === item.product);
+    return sum + (product ? product.price * item.quantity : 0);
+  }, 0);
+
+  const discountedTotal = validItems.reduce((sum, item) => {
+    const discountedPrice = DISCOUNTED_PRICES[item.product];
+    const originalPrice = PRODUCTS.find((p) => p.name === item.product)?.price || 0;
+    const price = discountStatus === "valid" && discountedPrice ? discountedPrice : originalPrice;
+    return sum + price * item.quantity;
+  }, 0);
 
   async function send(e: any) {
     e.preventDefault();
@@ -164,7 +185,7 @@ function PreorderContent() {
                     >
                       <option value="" disabled>Select product</option>
                       {PRODUCTS.map((p) => (
-                        <option key={p} value={p}>{p}</option>
+                        <option key={p.name} value={p.name}>{p.name}</option>
                       ))}
                     </select>
 
@@ -208,39 +229,87 @@ function PreorderContent() {
                 className="bg-white text-[#55614A] placeholder:text-[#7C8572] rounded-[32px] px-7 py-5 outline-none border border-transparent focus:border-[#55614A] resize-none duration-300 text-lg"
               />
 
-             {/* DISCOUNT CODE */}
-<div className="flex flex-col gap-2">
-  <p className="text-[#66705D] tracking-[0.15em] uppercase text-sm px-2">Discount Code</p>
-  <div className="flex flex-col sm:flex-row gap-3">
-    <input
-      type="text"
-      value={discountCode}
-      onChange={(e) => {
-        setDiscountCode(e.target.value);
-        setDiscountStatus("idle");
-        setDiscountInfo(null);
-      }}
-      placeholder="Enter code"
-      className="bg-white text-[#55614A] placeholder:text-[#7C8572] rounded-full px-7 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-lg w-full"
-    />
-    <button
-      type="button"
-      onClick={validateDiscount}
-      disabled={validating || !discountCode.trim()}
-      className="px-6 py-4 rounded-full border border-[#55614A] text-[#55614A] text-sm uppercase tracking-[0.1em] hover:bg-[#55614A] hover:text-white duration-300 disabled:opacity-50"
-    >
-      {validating ? "..." : "Apply"}
-    </button>
-  </div>
-  {discountStatus === "valid" && discountInfo && (
-    <p className="text-[#55614A] text-sm px-2">
-      ✓ Code applied — {discountInfo.value}{discountInfo.type === "percentage" ? "% off" : " EGP off"}
-    </p>
-  )}
-  {discountStatus === "invalid" && (
-    <p className="text-red-500 text-sm px-2">Invalid or expired code</p>
-  )}
-</div>
+              {/* DISCOUNT CODE */}
+              <div className="flex flex-col gap-2">
+                <p className="text-[#66705D] tracking-[0.15em] uppercase text-sm px-2">Discount Code</p>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <input
+                    type="text"
+                    value={discountCode}
+                    onChange={(e) => {
+                      setDiscountCode(e.target.value);
+                      setDiscountStatus("idle");
+                      setDiscountInfo(null);
+                    }}
+                    placeholder="Enter code"
+                    className="bg-white text-[#55614A] placeholder:text-[#7C8572] rounded-full px-7 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-lg w-full"
+                  />
+                  <button
+                    type="button"
+                    onClick={validateDiscount}
+                    disabled={validating || !discountCode.trim()}
+                    className="px-6 py-4 rounded-full border border-[#55614A] text-[#55614A] text-sm uppercase tracking-[0.1em] hover:bg-[#55614A] hover:text-white duration-300 disabled:opacity-50"
+                  >
+                    {validating ? "..." : "Apply"}
+                  </button>
+                </div>
+                {discountStatus === "valid" && discountInfo && (
+                  <p className="text-[#55614A] text-sm px-2">
+                    ✓ Code applied — {discountInfo.value}{discountInfo.type === "percentage" ? "% off" : " EGP off"}
+                  </p>
+                )}
+                {discountStatus === "invalid" && (
+                  <p className="text-red-500 text-sm px-2">Invalid or expired code</p>
+                )}
+              </div>
+
+              {/* ORDER SUMMARY */}
+              {validItems.length > 0 && (
+                <div className="bg-white rounded-[24px] p-6 flex flex-col gap-3">
+                  <p className="text-[#66705D] tracking-[0.15em] uppercase text-sm">Order Summary</p>
+
+                  {validItems.map((item, i) => {
+                    const product = PRODUCTS.find((p) => p.name === item.product);
+                    const discountedPrice = DISCOUNTED_PRICES[item.product];
+                    const hasDiscount = discountStatus === "valid" && discountedPrice;
+                    return (
+                      <div key={i} className="flex justify-between items-center">
+                        <p className="text-[#55614A] text-sm">{item.product} × {item.quantity}</p>
+                        <div className="text-right">
+                          {hasDiscount ? (
+                            <div className="flex items-center gap-2">
+                              <span className="text-[#66705D] text-sm line-through opacity-60">
+                                {product!.price * item.quantity} EGP
+                              </span>
+                              <span className="text-[#55614A] font-medium">
+                                {discountedPrice * item.quantity} EGP
+                              </span>
+                            </div>
+                          ) : (
+                            <span className="text-[#55614A]">
+                              {product ? product.price * item.quantity : 0} EGP
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  <div className="border-t border-[#D7DCCB] pt-3 flex justify-between items-center">
+                    <p className="text-[#55614A] font-medium">Total</p>
+                    <div className="text-right">
+                      {discountStatus === "valid" ? (
+                        <div className="flex items-center gap-2">
+                          <span className="text-[#66705D] text-sm line-through opacity-60">{originalTotal} EGP</span>
+                          <span className="text-[#55614A] text-xl font-medium">{discountedTotal} EGP</span>
+                        </div>
+                      ) : (
+                        <span className="text-[#55614A] text-xl font-medium">{originalTotal} EGP</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {message && (
                 <div className="rounded-[24px] bg-[#55614A] text-white py-4 px-6 text-center">
