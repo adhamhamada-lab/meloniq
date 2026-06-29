@@ -21,7 +21,21 @@ export async function POST(req: Request) {
       return Response.json({ error: error.message }, { status: 500 });
     }
 
-    // بعت الإيميل
+    // Google Sheets
+    await fetch(process.env.GOOGLE_SHEET_WEBHOOK!, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        secret: "meloniq-secret-2026",
+        name: body.name,
+        contact: body.contact,
+        address: body.address,
+        items: body.items,
+        type: "order",
+      }),
+    });
+
+    // Resend Email
     await resend.emails.send({
       from: "Meloniq <onboarding@resend.dev>",
       to: "yusefmgaber@gmail.com",

@@ -8,20 +8,36 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const { data, error } = await supabase
-  .from("preorders")
-  .insert([{
-    name: body.name,
-    contact: body.contact,
-    address: body.address,
-    items: body.items,
-    discount_code: body.discount_code || null,  // ← ضيف السطر ده
-  }])
-  .select();
+      .from("preorders")
+      .insert([{
+        name: body.name,
+        contact: body.contact,
+        address: body.address,
+        items: body.items,
+        discount_code: body.discount_code || null,
+      }])
+      .select();
 
     if (error) {
       return Response.json({ error: error.message }, { status: 500 });
     }
 
+    // Google Sheets
+    await fetch(process.env.GOOGLE_SHEET_WEBHOOK!, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        secret: "meloniq-secret-2026",
+        name: body.name,
+        contact: body.contact,
+        address: body.address,
+        items: body.items,
+        discount_code: body.discount_code || "",
+        type: "preorder",
+      }),
+    });
+
+    // Resend Email
     await resend.emails.send({
       from: "Meloniq <onboarding@resend.dev>",
       to: "yusefmgaber@gmail.com",
@@ -35,6 +51,7 @@ export async function POST(req: Request) {
         <ul>
           ${body.items.map((i: any) => `<li>${i.product} × ${i.quantity}</li>`).join("")}
         </ul>
+        ${body.discount_code ? `<p><b>Discount Code:</b> ${body.discount_code}</p>` : ""}
       `,
     });
 
