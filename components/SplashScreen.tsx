@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { fallbackModeToFallbackField } from "next/dist/lib/fallback";
 
 export default function SplashScreen({
 children,
@@ -65,3 +66,4 @@ priority
 return <>{children}</>;
 
 }
+

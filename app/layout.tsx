@@ -4,6 +4,7 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { CartProvider } from "./context/CartContext";
 import SplashScreen from "@/components/SplashScreen";
+import Script from "next/script";
 
 const seasons = localFont({
   src: [
@@ -46,24 +47,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-<html lang="en" className="h-full antialiased">
+    <html lang="en" className="h-full antialiased">
+      <body className={`${seasons.className} min-h-full flex flex-col`}>
+        <SplashScreen>
+          <CartProvider>
+            {children}
+          </CartProvider>
 
-<body className={`${seasons.className} min-h-full flex flex-col`}>
+          <Analytics />
 
-<SplashScreen>
-
-<CartProvider>
-
-{children}
-
-</CartProvider>
-
-<Analytics />
-
-</SplashScreen>
-
-</body>
-
-</html>
+          <Script id="clarity" strategy="afterInteractive">
+            {`
+              (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;
+                t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];
+                y.parentNode.insertBefore(t,y);
+              })(window, document, "clarity", "script", "xn5h82p6o5");
+            `}
+          </Script>
+        </SplashScreen>
+      </body>
+    </html>
   );
 }
