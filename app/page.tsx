@@ -110,40 +110,131 @@ return (
   </section>
 
   {/* PRODUCTS */}
-  <section className="px-8 md:px-16 py-24">
-    <h2 className="text-center text-[40px] md:text-[70px] text-[#55614A] reveal">
-      Featured Collection
-    </h2>
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-10 mt-20">
-      {[
-        { image: "/images/teatreeoilsoap.jpeg", title: "Tea Tree Oil Soap", slug: "teatreeoilsoap" },
-        { image: "/images/Argan & Frankincense Soap.jpeg", title: "Argan & Frankincense Soap", slug: "argan-frankincense-soap" },
-        { image: "/images/licoriceoilsoap.jpeg", title: "Licorice Oil Soap", slug: "licoriceoilsoap" },
-        { image: "/images/saadoilsoap.jpeg", title: "Saad Oil Soap", slug: "saadoilsoap" },
-      ].map((item) => (
-        <a
-          href={item.slug ? `/shop/${item.slug}` : "/shop"}
-          key={item.title}
-          className="block bg-[#D7DCCB] rounded-[40px] overflow-hidden hover:-translate-y-2 hover:shadow-2xl duration-500 reveal"
-        >
-          <Image
-            src={item.image}
-            alt={item.title}
-            width={700}
-            height={700}
-            className="w-full h-[260px] md:h-[420px] object-cover hover:scale-[1.03] duration-700"
-          />
-          <div className="p-8">
-            <h3 className="text-2xl md:text-4xl text-[#55614A]">{item.title}</h3>
-            <p className="mt-4 text-[#66705D] text-lg reveal">Crafted with clean ingredients.</p>
-            <p className="mt-10 uppercase tracking-[0.15em] text-[#55614A] text-sm reveal">
-              View Collection →
-            </p>
-          </div>
-        </a>
-      ))}
-    </div>
-  </section>
+{/* SUMMER COLLECTION */}
+<section className="px-8 md:px-16 py-24">
+  <h2 className="text-center text-[40px] md:text-[70px] text-[#55614A] reveal">
+    Summer Collection
+  </h2>
+
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-10 mt-20">
+    {[
+      {
+        image: "/images/watermelon-soap.jpg",
+        title: "Watermelon Soap",
+        slug: "watermelon-soap",
+      },
+      {
+        image: "/images/pink-lemonade-soap.jpg",
+        title: "Pink Lemonade Soap",
+        slug: "pink-lemonade-soap",
+      },
+      {
+        image: "/images/pina-colada-soap.jpg",
+        title: "Piña Colada Soap",
+        slug: "pina-colada-soap",
+      },
+      {
+        image: "/images/aloe-cucumber-soap.jpg",
+        title: "Aloe & Cucumber Soap",
+        slug: "aloe-cucumber-soap",
+      },
+      {
+        image: "/images/tropical-fruit-soap.jpg",
+        title: "Tropical Fruit Soap",
+        slug: "tropical-fruit-soap",
+      },
+    ].map((item) => (
+      <a
+        href={`/shop/${item.slug}`}
+        key={item.title}
+        className="block bg-[#D7DCCB] rounded-[40px] overflow-hidden hover:-translate-y-2 hover:shadow-2xl duration-500 reveal"
+      >
+        <Image
+          src={item.image}
+          alt={item.title}
+          width={700}
+          height={700}
+          className="w-full h-[260px] md:h-[420px] object-cover hover:scale-[1.03] duration-700"
+        />
+
+        <div className="p-8">
+          <h3 className="text-2xl md:text-4xl text-[#55614A]">
+            {item.title}
+          </h3>
+
+          <p className="mt-4 text-[#66705D] text-lg reveal">
+            Crafted with clean ingredients.
+          </p>
+
+          <p className="mt-10 uppercase tracking-[0.15em] text-[#55614A] text-sm reveal">
+            View Collection →
+          </p>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
+
+
+{/* FEATURED COLLECTION */}
+<section className="px-8 md:px-16 py-24">
+  <h2 className="text-center text-[40px] md:text-[70px] text-[#55614A] reveal">
+    Featured Collection
+  </h2>
+
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-10 mt-20">
+    {[
+      {
+        image: "/images/teatreeoilsoap.jpeg",
+        title: "Tea Tree Oil Soap",
+        slug: "teatreeoilsoap",
+      },
+      {
+        image: "/images/Argan & Frankincense Soap.jpeg",
+        title: "Argan & Frankincense Soap",
+        slug: "argan-frankincense-soap",
+      },
+      {
+        image: "/images/licoriceoilsoap.jpeg",
+        title: "Licorice Oil Soap",
+        slug: "licoriceoilsoap",
+      },
+      {
+        image: "/images/saadoilsoap.jpeg",
+        title: "Saad Oil Soap",
+        slug: "saadoilsoap",
+      },
+    ].map((item) => (
+      <a
+        href={`/shop/${item.slug}`}
+        key={item.title}
+        className="block bg-[#D7DCCB] rounded-[40px] overflow-hidden hover:-translate-y-2 hover:shadow-2xl duration-500 reveal"
+      >
+        <Image
+          src={item.image}
+          alt={item.title}
+          width={700}
+          height={700}
+          className="w-full h-[260px] md:h-[420px] object-cover hover:scale-[1.03] duration-700"
+        />
+
+        <div className="p-8">
+          <h3 className="text-2xl md:text-4xl text-[#55614A]">
+            {item.title}
+          </h3>
+
+          <p className="mt-4 text-[#66705D] text-lg reveal">
+            Crafted with clean ingredients.
+          </p>
+
+          <p className="mt-10 uppercase tracking-[0.15em] text-[#55614A] text-sm reveal">
+            View Collection →
+          </p>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
 
   <Reviews />
 

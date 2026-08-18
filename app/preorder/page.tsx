@@ -9,10 +9,10 @@ import { useCart } from "@/app/context/CartContext";
 
 const PRODUCTS = [
   { name: "Watermelon Soap", price: 100 },
-  { name: "Pink Lemonade", price: 100 },
+  { name: "Pink Lemonade Soap", price: 100 },
   { name: "Pina Colada Soap", price: 100 },
-  { name: "Aloe and Cucumber", price: 100 },
-  { name: "Tropical Fruit", price: 100 },
+  { name: "Aloe and Cucumber Soap", price: 100 },
+  { name: "Tropical Fruit Soap", price: 100 },
 
   { name: "Tea Tree Oil Soap", price: 115 },
   { name: "Argan & Frankincense Soap", price: 115 },
