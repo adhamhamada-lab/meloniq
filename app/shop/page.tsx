@@ -8,7 +8,7 @@ import Navbar from "@/components/Navbar";
 const products = [
   // ── New Collection ──
   {
-    image: "/images/watermelon-soap.jpeg",
+    image: "/images/watermelon-soap.jpg",
     title: "Watermelon Soap",
     price: "100 EGP",
     slug: "watermelon-soap",
