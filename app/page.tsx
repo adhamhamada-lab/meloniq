@@ -122,26 +122,31 @@ return (
         image: "/images/watermelon-soap.jpg",
         title: "Watermelon Soap",
         slug: "watermelon-soap",
+        badge: "New",
       },
       {
         image: "/images/pink-lemonade-soap.jpg",
         title: "Pink Lemonade Soap",
         slug: "pink-lemonade-soap",
+        badge: "New",
       },
       {
         image: "/images/pina-colada-soap.jpg",
         title: "Piña Colada Soap",
         slug: "pina-colada-soap",
+        badge: "New",
       },
       {
         image: "/images/aloe-cucumber-soap.jpg",
         title: "Aloe & Cucumber Soap",
         slug: "aloe-cucumber-soap",
+        badge: "New",
       },
       {
         image: "/images/tropical-fruit-soap.jpg",
         title: "Tropical Fruit Soap",
         slug: "tropical-fruit-soap",
+        badge: "New",
       },
     ].map((item) => (
       <a
