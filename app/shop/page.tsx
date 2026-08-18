@@ -30,7 +30,42 @@ const products = [
     price: "160 EGP",
     slug: "saadoilsoap",
   },
-
+  // ── New Collection ──
+  {
+    image: "/images/watermelon-soap.jpeg",
+    title: "Watermelon Soap",
+    price: "100 EGP",
+    slug: "watermelon-soap",
+    badge: "New",
+  },
+  {
+    image: "/images/pink-lemonade-soap.jpeg",
+    title: "Pink Lemonade Soap",
+    price: "100 EGP",
+    slug: "pink-lemonade-soap",
+    badge: "New",
+  },
+  {
+    image: "/images/pina-colada-soap.jpeg",
+    title: "Piña Colada Soap",
+    price: "100 EGP",
+    slug: "pina-colada-soap",
+    badge: "New",
+  },
+  {
+    image: "/images/aloe-cucumber-soap.jpeg",
+    title: "Aloe & Cucumber Soap",
+    price: "100 EGP",
+    slug: "aloe-cucumber-soap",
+    badge: "New",
+  },
+  {
+    image: "/images/tropical-fruit-soap.jpeg",
+    title: "Tropical Fruit Soap",
+    price: "100 EGP",
+    slug: "tropical-fruit-soap",
+    badge: "New",
+  },
 ];
 
 export default function Shop() {
@@ -56,8 +91,13 @@ export default function Shop() {
           {products.map((item, index) => (
             <div
               key={`${item.title}-${index}`}
-              className="bg-[#D7DCCB] rounded-[40px] overflow-hidden hover:-translate-y-3 hover:shadow-2xl hover:scale-[1.01] duration-500"
+              className="relative bg-[#D7DCCB] rounded-[40px] overflow-hidden hover:-translate-y-3 hover:shadow-2xl hover:scale-[1.01] duration-500"
             >
+              {item.badge && (
+                <span className="absolute top-4 left-4 z-10 bg-[#55614A] text-white text-xs uppercase tracking-[0.15em] px-4 py-1.5 rounded-full">
+                  {item.badge}
+                </span>
+              )}
               <Link href={item.slug ? `/shop/${item.slug}` : "#"}>
                 <Image
                   src={item.image}
