@@ -6,30 +6,6 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 
 const products = [
-  {
-    image: "/images/teatreeoilsoap.jpeg",
-    title: "Tea Tree Oil Soap",
-    price: "115 EGP",
-    slug: "teatreeoilsoap",
-  },
-  {
-    image: "/images/Argan & Frankincense Soap.jpeg",
-    title: "Argan & Frankincense Soap",
-    price: "115 EGP",
-    slug: "argan-frankincense-soap",
-  },
-  {
-    image: "/images/licoriceoilsoap.jpeg",
-    title: "Licorice Oil Soap",
-    price: "140 EGP",
-    slug: "licoriceoilsoap",
-  },
-  {
-    image: "/images/saadoilsoap.jpeg",
-    title: "Saad Oil Soap",
-    price: "160 EGP",
-    slug: "saadoilsoap",
-  },
   // ── New Collection ──
   {
     image: "/images/watermelon-soap.jpeg",
@@ -66,6 +42,31 @@ const products = [
     slug: "tropical-fruit-soap",
     badge: "New",
   },
+  {
+    image: "/images/teatreeoilsoap.jpeg",
+    title: "Tea Tree Oil Soap",
+    price: "115 EGP",
+    slug: "teatreeoilsoap",
+  },
+  {
+    image: "/images/Argan & Frankincense Soap.jpeg",
+    title: "Argan & Frankincense Soap",
+    price: "115 EGP",
+    slug: "argan-frankincense-soap",
+  },
+  {
+    image: "/images/licoriceoilsoap.jpeg",
+    title: "Licorice Oil Soap",
+    price: "140 EGP",
+    slug: "licoriceoilsoap",
+  },
+  {
+    image: "/images/saadoilsoap.jpeg",
+    title: "Saad Oil Soap",
+    price: "160 EGP",
+    slug: "saadoilsoap",
+  },
+  
 ];
 
 export default function Shop() {
