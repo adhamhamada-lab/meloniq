@@ -100,7 +100,7 @@ const products = [
     name: "Watermelon Soap",
     category: "New Collection",
     use: "Helps refresh, soften & hydrate the skin while giving it a fresh, healthy-looking glow.",
-    image: "/images/watermelon-soap.jpeg",
+    image: "/images/watermelon-soap.jpg",
     price: "100 EGP",
     ingredients: [
       { name: "Watermelon Seed Oil", desc: "Lightweight nourishment that helps leave skin feeling soft, smooth and refreshed." },
@@ -119,7 +119,7 @@ const products = [
     name: "Pink Lemonade Soap",
     category: "New Collection",
     use: "Helps cleanse, refresh and improve the appearance of dull, uneven-looking skin while leaving it soft and hydrated.",
-    image: "/images/pink-lemonade-soap.jpeg",
+    image: "/images/pink-lemonade-soap.jpg",
     price: "100 EGP",
     ingredients: [
       { name: "Licorice Extract", desc: "Helps improve the appearance of uneven skin tone and gives the skin a brighter-looking appearance." },
@@ -140,7 +140,7 @@ const products = [
     name: "Piña Colada Soap",
     category: "New Collection",
     use: "Helps cleanse, soften & nourish the skin while delivering a smooth, tropical-inspired bathing experience.",
-    image: "/images/pina-colada-soap.jpeg",
+    image: "/images/pina-colada-soap.jpg",
     price: "100 EGP",
     ingredients: [
       { name: "Pineapple Extract", desc: "Helps leave the skin feeling smooth and refreshed while providing a naturally tropical sensory experience." },
@@ -161,7 +161,7 @@ const products = [
     name: "Aloe & Cucumber Soap",
     category: "New Collection",
     use: "Helps refresh, soothe & hydrate the skin, making it an ideal choice for a fresh post-sun and summer cleansing experience.",
-    image: "/images/aloe-cucumber-soap.jpeg",
+    image: "/images/aloe-cucumber-soap.jpg",
     price: "100 EGP",
     ingredients: [
       { name: "Cucumber Extract", desc: "Helps refresh and soothe the skin while leaving a cool, clean feeling." },
@@ -180,7 +180,7 @@ const products = [
     name: "Tropical Fruit Soap",
     category: "New Collection",
     use: "Helps cleanse and soften the skin while providing a gentle, nourishing feel with a tropical sensory experience.",
-    image: "/images/tropical-fruit-soap.jpeg",
+    image: "/images/tropical-fruit-soap.jpg",
     price: "100 EGP",
     ingredients: [
       { name: "Sweet Almond Oil", desc: "Helps nourish and soften the skin while supporting a comfortable skin feel." },
