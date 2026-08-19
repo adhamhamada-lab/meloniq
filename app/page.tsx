@@ -156,11 +156,15 @@ return (
       >
 
         {/* NEW BADGE */}
-        {item.badge && (
-          <span className="absolute top-6 left-6 z-10 bg-[#55614A] text-white px-7 py-3 rounded-full text-sm uppercase tracking-[0.15em]">
-            {item.badge}
-          </span>
-        )}
+         {item.badge && (
+           <span className="absolute top-5 left-5 z-10 bg-[#55614A] text-white px-5 py-2 rounded-full text-xs uppercase tracking-[0.12em]">
+          {item.badge}
+            </span>
+          )}
+          
+           
+          
+       
 
         <Image
           src={item.image}
