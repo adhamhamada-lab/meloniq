@@ -152,8 +152,16 @@ return (
       <a
         href={`/shop/${item.slug}`}
         key={item.title}
-        className="block bg-[#D7DCCB] rounded-[40px] overflow-hidden hover:-translate-y-2 hover:shadow-2xl duration-500 reveal"
+        className="relative block bg-[#D7DCCB] rounded-[40px] overflow-hidden hover:-translate-y-2 hover:shadow-2xl duration-500 reveal"
       >
+
+        {/* NEW BADGE */}
+        {item.badge && (
+          <span className="absolute top-6 left-6 z-10 bg-[#55614A] text-white px-7 py-3 rounded-full text-sm uppercase tracking-[0.15em]">
+            {item.badge}
+          </span>
+        )}
+
         <Image
           src={item.image}
           alt={item.title}
