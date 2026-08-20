@@ -6,6 +6,42 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 
 const products = [
+  // ── New Collection ──
+  {
+    image: "/images/watermelon-soap.jpg",
+    title: "Watermelon Soap",
+    price: "100 EGP",
+    slug: "watermelon-soap",
+    badge: "New",
+  },
+  {
+    image: "/images/pink-lemonade-soap.jpg",
+    title: "Pink Lemonade Soap",
+    price: "100 EGP",
+    slug: "pink-lemonade-soap",
+    badge: "New",
+  },
+  {
+    image: "/images/pina-colada-soap.jpg",
+    title: "Piña Colada Soap",
+    price: "100 EGP",
+    slug: "pina-colada-soap",
+    badge: "New",
+  },
+  {
+    image: "/images/aloe-cucumber-soap.jpg",
+    title: "Aloe & Cucumber Soap",
+    price: "100 EGP",
+    slug: "aloe-cucumber-soap",
+    badge: "New",
+  },
+  {
+    image: "/images/tropical-fruit-soap.jpg",
+    title: "Tropical Fruit Soap",
+    price: "100 EGP",
+    slug: "tropical-fruit-soap",
+    badge: "New",
+  },
   {
     image: "/images/teatreeoilsoap.jpeg",
     title: "Tea Tree Oil Soap",
@@ -30,42 +66,7 @@ const products = [
     price: "160 EGP",
     slug: "saadoilsoap",
   },
-  // ── New Collection ──
-  {
-    image: "/images/watermelon-soap.jpeg",
-    title: "Watermelon Soap",
-    price: "100 EGP",
-    slug: "watermelon-soap",
-    badge: "New",
-  },
-  {
-    image: "/images/pink-lemonade-soap.jpeg",
-    title: "Pink Lemonade Soap",
-    price: "100 EGP",
-    slug: "pink-lemonade-soap",
-    badge: "New",
-  },
-  {
-    image: "/images/pina-colada-soap.jpeg",
-    title: "Piña Colada Soap",
-    price: "100 EGP",
-    slug: "pina-colada-soap",
-    badge: "New",
-  },
-  {
-    image: "/images/aloe-cucumber-soap.jpeg",
-    title: "Aloe & Cucumber Soap",
-    price: "100 EGP",
-    slug: "aloe-cucumber-soap",
-    badge: "New",
-  },
-  {
-    image: "/images/tropical-fruit-soap.jpeg",
-    title: "Tropical Fruit Soap",
-    price: "100 EGP",
-    slug: "tropical-fruit-soap",
-    badge: "New",
-  },
+  
 ];
 
 export default function Shop() {
@@ -87,11 +88,11 @@ export default function Shop() {
 
       {/* PRODUCTS GRID */}
       <section className="px-8 md:px-16 pb-32">
-        <div className="grid grid-cols-2 gap-4 md:gap-6 mt-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-10 mt-20">
           {products.map((item, index) => (
             <div
               key={`${item.title}-${index}`}
-              className="relative bg-[#D7DCCB] rounded-[24px] overflow-hidden hover:-translate-y-2 hover:shadow-xl hover:scale-[1.01] duration-500"
+              className="relative bg-[#D7DCCB] rounded-[40px] overflow-hidden hover:-translate-y-3 hover:shadow-2xl hover:scale-[1.01] duration-500"
             >
               {item.badge && (
                 <span className="absolute top-4 left-4 z-10 bg-[#55614A] text-white text-xs uppercase tracking-[0.15em] px-4 py-1.5 rounded-full">
@@ -104,31 +105,33 @@ export default function Shop() {
                   alt={item.title}
                   width={700}
                   height={700}
-                  className="w-full h-[260px] md:h-[380px] object-cover hover:scale-[1.03] duration-700"
+                  className="w-full h-[420px] object-cover hover:scale-[1.03] duration-700"
                 />
               </Link>
 
-              <div className="p-4 md:p-6">
+              <div className="p-8">
                 <Link href={item.slug ? `/shop/${item.slug}` : "#"}>
-                  <h3 className="text-xl md:text-3xl text-[#55614A] hover:opacity-70 duration-300 leading-tight">
+                  <h3 className="text-4xl text-[#55614A] hover:opacity-70 duration-300">
                     {item.title}
                   </h3>
                 </Link>
 
-                <div className="mt-4 flex items-center justify-between">
-                  <p className="text-[#55614A] text-base md:text-lg">{item.price}</p>
+                <p className="mt-4 text-[#66705D] text-lg">Crafted with clean ingredients.</p>
+
+                <div className="mt-10 flex items-center justify-between">
+                  <p className="text-[#55614A] text-xl">{item.price}</p>
 
                   {item.slug ? (
                     <Link
                       href={`/shop/${item.slug}`}
-                      className="px-4 py-2 md:px-6 md:py-2.5 rounded-full border border-[#55614A] text-[#55614A] text-xs uppercase tracking-[0.1em] hover:bg-[#55614A] hover:text-white duration-300"
+                      className="px-8 py-3 rounded-full border border-[#55614A] text-[#55614A] text-sm uppercase tracking-[0.1em] hover:bg-[#55614A] hover:text-white duration-300"
                     >
                       View →
                     </Link>
                   ) : (
                     <Link
                       href={`/order?product=${encodeURIComponent(item.title)}`}
-                      className="px-4 py-2 rounded-full bg-[#55614A] text-white text-xs uppercase tracking-[0.1em] hover:scale-105 duration-300 inline-block"
+                      className="px-8 py-3 rounded-full bg-[#55614A] text-white text-sm uppercase tracking-[0.1em] hover:scale-105 duration-300 inline-block"
                     >
                       Order Now
                     </Link>
