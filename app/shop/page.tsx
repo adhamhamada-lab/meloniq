@@ -87,53 +87,44 @@ export default function Shop() {
       <section className="px-4 md:px-16 pb-32">
         <div className="grid grid-cols-2 gap-4 md:gap-6 mt-12">
           {products.map((item, index) => (
-            <div
+            <Link
               key={`${item.title}-${index}`}
-              className="relative bg-[#D7DCCB] rounded-[24px] overflow-hidden hover:-translate-y-2 hover:shadow-xl hover:scale-[1.01] duration-500"
+              href={`/shop/${item.slug}`}
+              className="group relative rounded-[24px] overflow-hidden hover:-translate-y-2 hover:shadow-xl duration-500 block"
             >
-              {item.badge && (
-                <span className="absolute top-3 left-3 z-10 bg-[#55614A] text-white text-[10px] uppercase tracking-[0.15em] px-3 py-1 rounded-full">
-                  {item.badge}
-                </span>
-              )}
-              <Link href={item.slug ? `/shop/${item.slug}` : "#"}>
+              {/* IMAGE fills the whole card */}
+              <div className="relative aspect-[3/4] w-full">
                 <Image
                   src={item.image}
                   alt={item.title}
-                  width={700}
-                  height={700}
-                  className="w-full h-[200px] md:h-[380px] object-cover hover:scale-[1.03] duration-700"
+                  fill
+                  className="object-cover group-hover:scale-[1.04] duration-700"
+                  sizes="(max-width: 768px) 50vw, 33vw"
                 />
-              </Link>
+                {/* dark gradient at bottom */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-              <div className="p-4 md:p-6">
-                <Link href={item.slug ? `/shop/${item.slug}` : "#"}>
-                  <h3 className="text-base md:text-3xl text-[#55614A] hover:opacity-70 duration-300 leading-tight">
+                {/* NEW badge */}
+                {item.badge && (
+                  <span className="absolute top-3 left-3 z-10 bg-[#55614A] text-white text-[10px] uppercase tracking-[0.15em] px-3 py-1 rounded-full">
+                    {item.badge}
+                  </span>
+                )}
+
+                {/* text over image at bottom */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 z-10">
+                  <h3 className="text-sm md:text-2xl text-white font-medium leading-tight">
                     {item.title}
                   </h3>
-                </Link>
-
-                <div className="mt-3 md:mt-6 flex items-center justify-between">
-                  <p className="text-[#55614A] text-sm md:text-lg">{item.price}</p>
-
-                  {item.slug ? (
-                    <Link
-                      href={`/shop/${item.slug}`}
-                      className="px-3 py-1.5 md:px-6 md:py-2.5 rounded-full border border-[#55614A] text-[#55614A] text-[10px] md:text-sm uppercase tracking-[0.1em] hover:bg-[#55614A] hover:text-white duration-300"
-                    >
+                  <div className="mt-2 flex items-center justify-between">
+                    <p className="text-white/80 text-xs md:text-base">{item.price}</p>
+                    <span className="text-white/80 text-[10px] md:text-sm uppercase tracking-[0.1em]">
                       View →
-                    </Link>
-                  ) : (
-                    <Link
-                      href={`/order?product=${encodeURIComponent(item.title)}`}
-                      className="px-3 py-1.5 rounded-full bg-[#55614A] text-white text-[10px] uppercase tracking-[0.1em] hover:scale-105 duration-300 inline-block"
-                    >
-                      Order Now
-                    </Link>
-                  )}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
