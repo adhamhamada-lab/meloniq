@@ -66,16 +66,13 @@ const products = [
     price: "160 EGP",
     slug: "saadoilsoap",
   },
-  
 ];
 
 export default function Shop() {
-
-
   return (
     <main className="bg-[#E4E7D6] min-h-screen">
 
-<Navbar />
+      <Navbar />
 
       {/* PAGE HEADER */}
       <section className="px-8 md:px-16 pt-10 pb-16 text-center">
@@ -87,15 +84,15 @@ export default function Shop() {
       </section>
 
       {/* PRODUCTS GRID */}
-      <section className="px-8 md:px-16 pb-32">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-10 mt-20">
+      <section className="px-4 md:px-16 pb-32">
+        <div className="grid grid-cols-2 gap-4 md:gap-6 mt-12">
           {products.map((item, index) => (
             <div
               key={`${item.title}-${index}`}
-              className="relative bg-[#D7DCCB] rounded-[40px] overflow-hidden hover:-translate-y-3 hover:shadow-2xl hover:scale-[1.01] duration-500"
+              className="relative bg-[#D7DCCB] rounded-[24px] overflow-hidden hover:-translate-y-2 hover:shadow-xl hover:scale-[1.01] duration-500"
             >
               {item.badge && (
-                <span className="absolute top-4 left-4 z-10 bg-[#55614A] text-white text-xs uppercase tracking-[0.15em] px-4 py-1.5 rounded-full">
+                <span className="absolute top-3 left-3 z-10 bg-[#55614A] text-white text-[10px] uppercase tracking-[0.15em] px-3 py-1 rounded-full">
                   {item.badge}
                 </span>
               )}
@@ -105,33 +102,31 @@ export default function Shop() {
                   alt={item.title}
                   width={700}
                   height={700}
-                  className="w-full h-[420px] object-cover hover:scale-[1.03] duration-700"
+                  className="w-full h-[200px] md:h-[380px] object-cover hover:scale-[1.03] duration-700"
                 />
               </Link>
 
-              <div className="p-8">
+              <div className="p-4 md:p-6">
                 <Link href={item.slug ? `/shop/${item.slug}` : "#"}>
-                  <h3 className="text-4xl text-[#55614A] hover:opacity-70 duration-300">
+                  <h3 className="text-base md:text-3xl text-[#55614A] hover:opacity-70 duration-300 leading-tight">
                     {item.title}
                   </h3>
                 </Link>
 
-                <p className="mt-4 text-[#66705D] text-lg">Crafted with clean ingredients.</p>
-
-                <div className="mt-10 flex items-center justify-between">
-                  <p className="text-[#55614A] text-xl">{item.price}</p>
+                <div className="mt-3 md:mt-6 flex items-center justify-between">
+                  <p className="text-[#55614A] text-sm md:text-lg">{item.price}</p>
 
                   {item.slug ? (
                     <Link
                       href={`/shop/${item.slug}`}
-                      className="px-8 py-3 rounded-full border border-[#55614A] text-[#55614A] text-sm uppercase tracking-[0.1em] hover:bg-[#55614A] hover:text-white duration-300"
+                      className="px-3 py-1.5 md:px-6 md:py-2.5 rounded-full border border-[#55614A] text-[#55614A] text-[10px] md:text-sm uppercase tracking-[0.1em] hover:bg-[#55614A] hover:text-white duration-300"
                     >
                       View →
                     </Link>
                   ) : (
                     <Link
                       href={`/order?product=${encodeURIComponent(item.title)}`}
-                      className="px-8 py-3 rounded-full bg-[#55614A] text-white text-sm uppercase tracking-[0.1em] hover:scale-105 duration-300 inline-block"
+                      className="px-3 py-1.5 rounded-full bg-[#55614A] text-white text-[10px] uppercase tracking-[0.1em] hover:scale-105 duration-300 inline-block"
                     >
                       Order Now
                     </Link>
@@ -142,32 +137,34 @@ export default function Shop() {
           ))}
         </div>
       </section>
-{/* PRE-ORDER BANNER */}
-<section className="px-8 md:px-16 pb-24">
-  <div className="bg-[#D7DCCB] rounded-[40px] p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8">
-    <div>
-      <p className="tracking-[0.35em] text-[#66705D] text-sm uppercase">Can't find what you're looking for?</p>
-      <h2 className="mt-4 text-[36px] md:text-[56px] leading-[1] text-[#55614A]">
-        Reserve Before It's Made
-      </h2>
-      <p className="mt-4 text-[#66705D] text-lg max-w-[500px] leading-relaxed">
-        Place a pre-order and we'll craft your products fresh. Pay on delivery, no upfront payment needed.
-      </p>
-    </div>
-    <Link
-      href="/preorder"
-      className="shrink-0 px-10 py-5 rounded-full bg-[#55614A] text-white text-lg uppercase tracking-[0.1em] hover:scale-105 duration-300"
-    >
-      Pre-Order Now →
-    </Link>
-  </div>
-</section>
+
+      {/* PRE-ORDER BANNER */}
+      <section className="px-8 md:px-16 pb-24">
+        <div className="bg-[#D7DCCB] rounded-[40px] p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div>
+            <p className="tracking-[0.35em] text-[#66705D] text-sm uppercase">Can't find what you're looking for?</p>
+            <h2 className="mt-4 text-[36px] md:text-[56px] leading-[1] text-[#55614A]">
+              Reserve Before It's Made
+            </h2>
+            <p className="mt-4 text-[#66705D] text-lg max-w-[500px] leading-relaxed">
+              Place a pre-order and we'll craft your products fresh. Pay on delivery, no upfront payment needed.
+            </p>
+          </div>
+          <Link
+            href="/preorder"
+            className="shrink-0 px-10 py-5 rounded-full bg-[#55614A] text-white text-lg uppercase tracking-[0.1em] hover:scale-105 duration-300"
+          >
+            Pre-Order Now →
+          </Link>
+        </div>
+      </section>
+
       {/* FOOTER */}
-  <footer id="footer" className="py-16 border-t border-[#C7CDB6] text-center text-[#55614A]">
-    <div className="space-y-8">
-      <h1 className="text-6xl tracking-[-0.1em]">
-  <em>m</em>eloniq
-</h1>
+      <footer id="footer" className="py-16 border-t border-[#C7CDB6] text-center text-[#55614A]">
+        <div className="space-y-8">
+          <h1 className="text-6xl tracking-[-0.1em]">
+            <em>m</em>eloniq
+          </h1>
           <p className="text-sm opacity-70 max-w-[400px] mx-auto">Handmade botanical care inspired by calm rituals.</p>
           <div className="flex justify-center items-center gap-8 pt-2">
             <a href="https://wa.me/201221851545" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="text-[#55614A] opacity-80 hover:opacity-100 hover:scale-110 duration-300">
