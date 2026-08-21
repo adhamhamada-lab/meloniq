@@ -82,13 +82,18 @@ export default function CartPage() {
       </p>
 
       {/* Remove Button */}
-      <button
-        onClick={() => removeItem(item.slug)}
-        className="text-[#55614A] opacity-40 hover:opacity-100 duration-300 text-2xl absolute top-6 right-6 md:static"
-        aria-label="Remove item"
-      >
-        ×
-      </button>
+<button
+  onClick={() => removeItem(item.slug)}
+  className="text-[#55614A] opacity-40 hover:opacity-100 duration-300"
+>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="3 6 5 6 21 6" />
+    <path d="M19 6l-1 14H6L5 6" />
+    <path d="M10 11v6" />
+    <path d="M14 11v6" />
+    <path d="M9 6V4h6v2" />
+  </svg>
+</button>
     </div>
   </div>
 ))}
