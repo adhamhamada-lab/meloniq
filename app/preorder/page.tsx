@@ -6,26 +6,17 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { useCart } from "@/app/context/CartContext";
 
-
 const PRODUCTS = [
-  { name: "Watermelon Soap", price: 100 },
-  { name: "Pink Lemonade Soap", price: 100 },
-  { name: "Pina Colada Soap", price: 100 },
-  { name: "Aloe and Cucumber Soap", price: 100 },
-  { name: "Tropical Fruit Soap", price: 100 },
-
-  { name: "Tea Tree Oil Soap", price: 115 },
+  { name: "Tea Tree Oil Soap", price: 150 },
   { name: "Argan & Frankincense Soap", price: 115 },
   { name: "Licorice Oil Soap", price: 140 },
   { name: "Saad Oil Soap", price: 160 },
+  { name: "Watermelon Soap", price: 100 },
+  { name: "Pink Lemonade Soap", price: 100 },
+  { name: "Pina Colada Soap", price: 100 },
+  { name: "Aloe & Cucumber Soap", price: 100 },
+  { name: "Tropical Fruit Soap", price: 100 },
 ];
-
-const DISCOUNTED_PRICES: Record<string, number> = {
-  "Tea Tree Oil Soap": 105,
-  "Argan & Frankincense Soap": 105,
-  "Licorice Oil Soap": 125,
-  "Saad Oil Soap": 145,
-};
 
 type Item = {
   product: string;
@@ -36,11 +27,13 @@ function PreorderContent() {
   const { items: cartItems, clearCart } = useCart();
   const params = useSearchParams();
   const initialProduct = params.get("product") || "";
-const initialQuantity = Number(params.get("quantity")) || 1;
-const initialItems = cartItems.length > 0
-  ? cartItems.map((i) => ({ product: i.title, quantity: i.quantity }))
-  : [{ product: initialProduct, quantity: initialQuantity }];
-const [items, setItems] = useState<Item[]>(initialItems);  const [loading, setLoading] = useState(false);
+  const initialQuantity = Number(params.get("quantity")) || 1;
+  const initialItems = cartItems.length > 0
+    ? cartItems.map((i) => ({ product: i.title, quantity: i.quantity }))
+    : [{ product: initialProduct, quantity: initialQuantity }];
+
+  const [items, setItems] = useState<Item[]>(initialItems);
+  const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -50,9 +43,7 @@ const [items, setItems] = useState<Item[]>(initialItems);  const [loading, setLo
   const [validating, setValidating] = useState(false);
 
   function updateItem(index: number, field: keyof Item, value: string | number) {
-    setItems((prev) =>
-      prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
-    );
+    setItems((prev) => prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)));
   }
 
   function addItem() {
@@ -82,19 +73,11 @@ const [items, setItems] = useState<Item[]>(initialItems);  const [loading, setLo
     }
   }
 
-  // حساب الإجمالي
   const validItems = items.filter((i) => i.product);
 
-  const originalTotal = validItems.reduce((sum, item) => {
+  const total = validItems.reduce((sum, item) => {
     const product = PRODUCTS.find((p) => p.name === item.product);
     return sum + (product ? product.price * item.quantity : 0);
-  }, 0);
-
-  const discountedTotal = validItems.reduce((sum, item) => {
-    const discountedPrice = DISCOUNTED_PRICES[item.product];
-    const originalPrice = PRODUCTS.find((p) => p.name === item.product)?.price || 0;
-    const price = discountStatus === "valid" && discountedPrice ? discountedPrice : originalPrice;
-    return sum + price * item.quantity;
   }, 0);
 
   async function send(e: any) {
@@ -117,11 +100,10 @@ const [items, setItems] = useState<Item[]>(initialItems);  const [loading, setLo
 
     setLoading(false);
 
-if (res.ok) {
-  clearCart();
-  setDone(true);
-
-  } else {
+    if (res.ok) {
+      clearCart();
+      setDone(true);
+    } else {
       setMessage("Something went wrong. Please try again.");
     }
   }
@@ -141,17 +123,18 @@ if (res.ok) {
 
           {/* LEFT */}
           <div className="lg:sticky lg:top-32">
+            <p className="tracking-[0.35em] text-[#66705D] text-sm uppercase">Place Your Order</p>
             <h1 className="mt-6 text-[48px] sm:text-[70px] md:text-[120px] leading-[0.9] text-[#55614A]">
-              Pre-Order
+              Order
             </h1>
-            <p className="mt-6 text-[#66705D] text-[17px] md:text-[20px] leading-relaxed max-w-[480px] font-semibold">
-              ⏳ Please note: Every MELONIQ product is handcrafted after your order is confirmed. Preparation takes up to 7 business days before shipping.
+            <p className="mt-6 text-[#66705D] text-[17px] md:text-[20px] leading-relaxed max-w-[480px]">
+              Enter your details and we'll take care of the rest.
             </p>
 
             <div className="mt-8 flex flex-col gap-3">
               <div className="flex items-start gap-3">
                 <span className="text-[#55614A] text-lg mt-1">✦</span>
-                <p className="text-[#66705D]">Handcrafted fresh after your order</p>
+                <p className="text-[#66705D]">Handcrafted with natural ingredients</p>
               </div>
               <div className="flex items-start gap-3">
                 <span className="text-[#55614A] text-lg mt-1">✦</span>
@@ -159,7 +142,7 @@ if (res.ok) {
               </div>
               <div className="flex items-start gap-3">
                 <span className="text-[#55614A] text-lg mt-1">✦</span>
-                <p className="text-[#66705D]">We'll contact you to confirm your order</p>
+                <p className="text-[#66705D]">We'll contact you to confirm delivery</p>
               </div>
             </div>
           </div>
@@ -168,14 +151,11 @@ if (res.ok) {
           {done ? (
             <div className="bg-[#D7DCCB] rounded-[40px] p-10 text-center shadow-2xl mt-10">
               <div className="text-[60px]">✓</div>
-              <h2 className="text-[40px] text-[#55614A]">Pre-Order Received</h2>
+              <h2 className="text-[40px] text-[#55614A]">Order Received</h2>
               <p className="mt-4 text-[#66705D]">
-                We'll reach out soon to confirm your order. Thank you for choosing Meloniq.
+                Thank you for choosing Meloniq. We'll be in touch shortly.
               </p>
-              <Link
-                href="/shop"
-                className="inline-block mt-8 px-8 py-4 rounded-full bg-[#55614A] text-white hover:scale-105 duration-300"
-              >
+              <Link href="/shop" className="inline-block mt-8 px-8 py-4 rounded-full bg-[#55614A] text-white hover:scale-105 duration-300">
                 Back to Shop
               </Link>
             </div>
@@ -281,61 +261,31 @@ if (res.ok) {
               {validItems.length > 0 && (
                 <div className="bg-white rounded-[24px] p-6 flex flex-col gap-3">
                   <p className="text-[#66705D] tracking-[0.15em] uppercase text-sm">Order Summary</p>
-
                   {validItems.map((item, i) => {
                     const product = PRODUCTS.find((p) => p.name === item.product);
-                    const discountedPrice = DISCOUNTED_PRICES[item.product];
-                    const hasDiscount = discountStatus === "valid" && discountedPrice;
                     return (
                       <div key={i} className="flex justify-between items-center">
                         <p className="text-[#55614A] text-sm">{item.product} × {item.quantity}</p>
-                        <div className="text-right">
-                          {hasDiscount ? (
-                            <div className="flex items-center gap-2">
-                              <span className="text-[#66705D] text-sm line-through opacity-60">
-                                {product!.price * item.quantity} EGP
-                              </span>
-                              <span className="text-[#55614A] font-medium">
-                                {discountedPrice * item.quantity} EGP
-                              </span>
-                            </div>
-                          ) : (
-                            <span className="text-[#55614A]">
-                              {product ? product.price * item.quantity : 0} EGP
-                            </span>
-                          )}
-                        </div>
+                        <span className="text-[#55614A]">{product ? product.price * item.quantity : 0} EGP</span>
                       </div>
                     );
                   })}
-
                   <div className="border-t border-[#D7DCCB] pt-3 flex justify-between items-center">
                     <p className="text-[#55614A] font-medium">Total</p>
-                    <div className="text-right">
-                      {discountStatus === "valid" ? (
-                        <div className="flex items-center gap-2">
-                          <span className="text-[#66705D] text-sm line-through opacity-60">{originalTotal} EGP</span>
-                          <span className="text-[#55614A] text-xl font-medium">{discountedTotal} EGP</span>
-                        </div>
-                      ) : (
-                        <span className="text-[#55614A] text-xl font-medium">{originalTotal} EGP</span>
-                      )}
-                    </div>
+                    <span className="text-[#55614A] text-xl font-medium">{total} EGP</span>
                   </div>
                 </div>
               )}
 
               {message && (
-                <div className="rounded-[24px] bg-[#55614A] text-white py-4 px-6 text-center">
-                  {message}
-                </div>
+                <div className="rounded-[24px] bg-[#55614A] text-white py-4 px-6 text-center">{message}</div>
               )}
 
               <button
                 disabled={loading}
                 className="mt-2 bg-[#55614A] text-white rounded-full py-6 text-xl uppercase tracking-[0.12em] hover:scale-[1.02] hover:opacity-95 duration-300 disabled:opacity-70"
               >
-                {loading ? "Submitting..." : "Submit Pre-Order"}
+                {loading ? "Placing Order..." : "Place Order"}
               </button>
             </form>
           )}
@@ -344,9 +294,7 @@ if (res.ok) {
 
       <footer id="footer" className="py-16 border-t border-[#C7CDB6] text-center text-[#55614A]">
         <div className="space-y-8">
-          <h1 className="text-6xl tracking-[-0.1em]">
-            <em>m</em>eloniq
-          </h1>
+          <h1 className="text-6xl tracking-[-0.1em]"><em>m</em>eloniq</h1>
           <p className="text-sm opacity-70 max-w-[400px] mx-auto">Handmade botanical care inspired by calm rituals.</p>
           <div className="flex justify-center items-center gap-8 pt-2">
             <a href="https://wa.me/201221851545" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="text-[#55614A] opacity-80 hover:opacity-100 hover:scale-110 duration-300">
@@ -375,7 +323,6 @@ if (res.ok) {
 }
 
 export default function PreorderPage() {
- const { items } = useCart();
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <PreorderContent />
