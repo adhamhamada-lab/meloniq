@@ -130,7 +130,7 @@ export default function Shop() {
       </section>
 
       {/* PRE-ORDER BANNER */}
-      <section className="px-8 md:px-16 pb-24">
+      {/* <section className="px-8 md:px-16 pb-24">
         <div className="bg-[#D7DCCB] rounded-[40px] p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8">
           <div>
             <p className="tracking-[0.35em] text-[#66705D] text-sm uppercase">Can't find what you're looking for?</p>
@@ -148,7 +148,7 @@ export default function Shop() {
             Pre-Order Now →
           </Link>
         </div>
-      </section>
+      </section> */}
 
       {/* FOOTER */}
       <footer id="footer" className="py-16 border-t border-[#C7CDB6] text-center text-[#55614A]">
