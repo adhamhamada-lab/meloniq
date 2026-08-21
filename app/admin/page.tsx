@@ -28,32 +28,25 @@ type DiscountCode = {
 };
 
 const PRODUCT_PRICES: Record<string, number> = {
-  "Tea Tree Oil Soap": 115,
+  "Tea Tree Oil Soap": 150,
   "Argan & Frankincense Soap": 115,
   "Licorice Oil Soap": 140,
   "Saad Oil Soap": 160,
-};
-
-const DISCOUNTED_PRICES: Record<string, number> = {
-  "Tea Tree Oil Soap": 105,
-  "Argan & Frankincense Soap": 105,
-  "Licorice Oil Soap": 125,
-  "Saad Oil Soap": 145,
+  "Watermelon Soap": 100,
+  "Pink Lemonade Soap": 100,
+  "Pina Colada Soap": 100,
+  "Aloe & Cucumber Soap": 100,
+  "Tropical Fruit Soap": 100,
 };
 
 function calcOrderTotal(o: Order) {
-  const hasDiscount = !!o.discount_code;
   return (o.items || []).reduce((sum, item) => {
-    const price = hasDiscount && DISCOUNTED_PRICES[item.product]
-      ? DISCOUNTED_PRICES[item.product]
-      : PRODUCT_PRICES[item.product] || 0;
-    return sum + price * item.quantity;
+    return sum + (PRODUCT_PRICES[item.product] || 0) * item.quantity;
   }, 0);
 }
 
 export default function AdminPage() {
-  const [tab, setTab] = useState<"orders" | "preorders" | "discounts">("orders");
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [tab, setTab] = useState<"preorders" | "discounts">("preorders");
   const [preorders, setPreorders] = useState<Order[]>([]);
   const [discounts, setDiscounts] = useState<DiscountCode[]>([]);
   const [loading, setLoading] = useState(true);
@@ -65,26 +58,19 @@ export default function AdminPage() {
 
   useEffect(() => {
     Promise.all([
-      fetch("/api/admin/orders").then((r) => r.json()),
       fetch("/api/admin/preorders").then((r) => r.json()),
       fetch("/api/discount").then((r) => r.json()),
-    ]).then(([ordersData, preordersData, discountsData]) => {
-      setOrders(ordersData.data || []);
+    ]).then(([preordersData, discountsData]) => {
       setPreorders(preordersData.data || []);
       setDiscounts(discountsData.data || []);
       setLoading(false);
     });
   }, []);
 
-  async function toggleStatus(id: number, current: string, type: "orders" | "preorders") {
+  async function toggleStatus(id: number, current: string) {
     const next = current === "done" ? "pending" : "done";
-    const endpoint = type === "orders" ? `/api/order/${id}` : `/api/preorder/${id}`;
-    if (type === "orders") {
-      setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status: next } : o)));
-    } else {
-      setPreorders((prev) => prev.map((o) => (o.id === id ? { ...o, status: next } : o)));
-    }
-    await fetch(endpoint, {
+    setPreorders((prev) => prev.map((o) => (o.id === id ? { ...o, status: next } : o)));
+    await fetch(`/api/preorder/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: next }),
@@ -125,19 +111,15 @@ export default function AdminPage() {
       return acc;
     }, {} as Record<string, number>);
 
-  // Revenue calculations
   const totalRevenue = preorders.reduce((sum, o) => sum + calcOrderTotal(o), 0);
-  const collectedRevenue = preorders
-    .filter((o) => o.status === "done")
-    .reduce((sum, o) => sum + calcOrderTotal(o), 0);
-  const pendingRevenue = preorders
-    .filter((o) => o.status !== "done")
-    .reduce((sum, o) => sum + calcOrderTotal(o), 0);
+  const collectedRevenue = preorders.filter((o) => o.status === "done").reduce((sum, o) => sum + calcOrderTotal(o), 0);
+  const pendingRevenue = preorders.filter((o) => o.status !== "done").reduce((sum, o) => sum + calcOrderTotal(o), 0);
 
-  function OrderCard({ o, faded, type }: { o: Order; faded?: boolean; type: "orders" | "preorders" }) {
-    const hasDiscount = type === "preorders" && o.discount_code;
-    const originalTotal = (o.items || []).reduce((sum, item) => sum + (PRODUCT_PRICES[item.product] || 0) * item.quantity, 0);
-    const discountedTotal = calcOrderTotal(o);
+  const pending = preorders.filter((o) => o.status !== "done");
+  const done = preorders.filter((o) => o.status === "done");
+
+  function OrderCard({ o, faded }: { o: Order; faded?: boolean }) {
+    const total = calcOrderTotal(o);
 
     return (
       <div className={`rounded-[35px] p-8 flex flex-col gap-4 ${faded ? "opacity-60 bg-[#c8cdb8]" : "bg-[#D7DCCB]"}`}>
@@ -162,17 +144,12 @@ export default function AdminPage() {
           <p className="mt-3 text-[#55614A]"><b>Phone:</b> {o.contact}</p>
           <p className="mt-2 text-[#55614A]"><b>Address:</b> {o.address}</p>
 
-          {type === "preorders" && originalTotal > 0 && (
+          {total > 0 && (
             <div className="mt-3 flex items-center gap-2">
               <b className="text-[#55614A]">Total:</b>
-              {hasDiscount ? (
-                <>
-                  <span className="text-[#66705D] line-through opacity-60">{originalTotal} EGP</span>
-                  <span className="text-[#55614A] font-medium">{discountedTotal} EGP</span>
-                  <span className="text-[#66705D] text-sm opacity-70">({o.discount_code})</span>
-                </>
-              ) : (
-                <span className="text-[#55614A]">{originalTotal} EGP</span>
+              <span className="text-[#55614A]">{total} EGP</span>
+              {o.discount_code && (
+                <span className="text-[#66705D] text-sm opacity-70">({o.discount_code})</span>
               )}
             </div>
           )}
@@ -182,7 +159,7 @@ export default function AdminPage() {
           </p>
         </div>
         <button
-          onClick={() => toggleStatus(o.id, o.status, type)}
+          onClick={() => toggleStatus(o.id, o.status)}
           className={`w-full py-3 rounded-full text-sm uppercase tracking-[0.1em] hover:scale-105 duration-300 ${
             faded ? "border border-[#55614A] text-[#55614A]" : "bg-[#55614A] text-white"
           }`}
@@ -192,10 +169,6 @@ export default function AdminPage() {
       </div>
     );
   }
-
-  const currentList = tab === "orders" ? orders : preorders;
-  const pending = currentList.filter((o) => o.status !== "done");
-  const done = currentList.filter((o) => o.status === "done");
 
   return (
     <main className="bg-[#E4E7D6] min-h-screen p-6 md:p-16">
@@ -208,7 +181,7 @@ export default function AdminPage() {
           <div className="bg-[#55614A] rounded-[25px] p-6">
             <p className="text-white/70 text-xs uppercase tracking-[0.2em]">Total Revenue</p>
             <p className="text-white text-4xl mt-2 font-medium">{totalRevenue.toLocaleString()} <span className="text-xl opacity-70">EGP</span></p>
-            <p className="text-white/50 text-xs mt-1">{preorders.length} pre-orders</p>
+            <p className="text-white/50 text-xs mt-1">{preorders.length} orders</p>
           </div>
           <div className="bg-[#D7DCCB] rounded-[25px] p-6">
             <p className="text-[#66705D] text-xs uppercase tracking-[0.2em]">Collected</p>
@@ -225,13 +198,16 @@ export default function AdminPage() {
 
       {/* TABS */}
       <div className="mt-8 flex gap-4 flex-wrap">
-        <button onClick={() => setTab("orders")} className={`px-8 py-3 rounded-full text-sm uppercase tracking-[0.1em] duration-300 ${tab === "orders" ? "bg-[#55614A] text-white" : "border border-[#55614A] text-[#55614A]"}`}>
-          Orders ({orders.filter((o) => o.status !== "done").length})
+        <button
+          onClick={() => setTab("preorders")}
+          className={`px-8 py-3 rounded-full text-sm uppercase tracking-[0.1em] duration-300 ${tab === "preorders" ? "bg-[#55614A] text-white" : "border border-[#55614A] text-[#55614A]"}`}
+        >
+          Orders ({pending.length})
         </button>
-        <button onClick={() => setTab("preorders")} className={`px-8 py-3 rounded-full text-sm uppercase tracking-[0.1em] duration-300 ${tab === "preorders" ? "bg-[#55614A] text-white" : "border border-[#55614A] text-[#55614A]"}`}>
-          Pre-Orders ({preorders.filter((o) => o.status !== "done").length})
-        </button>
-        <button onClick={() => setTab("discounts")} className={`px-8 py-3 rounded-full text-sm uppercase tracking-[0.1em] duration-300 ${tab === "discounts" ? "bg-[#55614A] text-white" : "border border-[#55614A] text-[#55614A]"}`}>
+        <button
+          onClick={() => setTab("discounts")}
+          className={`px-8 py-3 rounded-full text-sm uppercase tracking-[0.1em] duration-300 ${tab === "discounts" ? "bg-[#55614A] text-white" : "border border-[#55614A] text-[#55614A]"}`}
+        >
           Discount Codes ({discounts.filter((d) => d.active).length})
         </button>
       </div>
@@ -273,61 +249,61 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* PRODUCTION SUMMARY */}
-      {tab === "preorders" && Object.keys(productTotals).length > 0 && (
-        <div className="mt-8 bg-[#D7DCCB] rounded-[30px] p-8">
-          <p className="text-[#66705D] tracking-[0.2em] uppercase text-sm mb-4">Production Summary</p>
-          <p className="text-[#66705D] text-sm mb-4 opacity-70">Total units needed from pending pre-orders:</p>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {Object.entries(productTotals).map(([product, total]) => (
-              <div key={product} className="bg-[#E4E7D6] rounded-[20px] px-5 py-4">
-                <p className="text-[#55614A] font-medium">{product}</p>
-                <p className="text-[#55614A] text-3xl mt-1">{total} <span className="text-lg opacity-60">units</span></p>
+      {/* ORDERS TAB */}
+      {tab === "preorders" && (
+        <>
+          {/* PRODUCTION SUMMARY */}
+          {Object.keys(productTotals).length > 0 && (
+            <div className="mt-8 bg-[#D7DCCB] rounded-[30px] p-8">
+              <p className="text-[#66705D] tracking-[0.2em] uppercase text-sm mb-4">Production Summary</p>
+              <p className="text-[#66705D] text-sm mb-4 opacity-70">Total units needed from pending orders:</p>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {Object.entries(productTotals).map(([product, total]) => (
+                  <div key={product} className="bg-[#E4E7D6] rounded-[20px] px-5 py-4">
+                    <p className="text-[#55614A] font-medium">{product}</p>
+                    <p className="text-[#55614A] text-3xl mt-1">{total} <span className="text-lg opacity-60">units</span></p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+            </div>
+          )}
 
-      {/* COUNTERS */}
-      {tab !== "discounts" && (
-        <div className="mt-6 flex gap-6 text-[#66705D] text-lg">
-          <span className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#C4A35A] inline-block" />
-            Pending: <b>{pending.length}</b>
-          </span>
-          <span className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#55614A] inline-block" />
-            Done: <b>{done.length}</b>
-          </span>
-        </div>
-      )}
-
-      {tab !== "discounts" && (
-        loading ? (
-          <p className="mt-10 text-[#66705D]">Loading...</p>
-        ) : currentList.length === 0 ? (
-          <p className="mt-10 text-[#66705D]">No {tab === "orders" ? "orders" : "pre-orders"} yet.</p>
-        ) : (
-          <div className="mt-10 grid gap-6">
-            {pending.length > 0 && (
-              <div>
-                <p className="text-[#66705D] tracking-[0.2em] uppercase text-sm mb-4">Pending</p>
-                <div className="grid gap-4">
-                  {pending.map((o) => <OrderCard key={o.id} o={o} type={tab as "orders" | "preorders"} />)}
-                </div>
-              </div>
-            )}
-            {done.length > 0 && (
-              <div className="mt-6">
-                <p className="text-[#66705D] tracking-[0.2em] uppercase text-sm mb-4">Completed</p>
-                <div className="grid gap-4">
-                  {done.map((o) => <OrderCard key={o.id} o={o} faded type={tab as "orders" | "preorders"} />)}
-                </div>
-              </div>
-            )}
+          <div className="mt-6 flex gap-6 text-[#66705D] text-lg">
+            <span className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#C4A35A] inline-block" />
+              Pending: <b>{pending.length}</b>
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#55614A] inline-block" />
+              Done: <b>{done.length}</b>
+            </span>
           </div>
-        )
+
+          {loading ? (
+            <p className="mt-10 text-[#66705D]">Loading...</p>
+          ) : preorders.length === 0 ? (
+            <p className="mt-10 text-[#66705D]">No orders yet.</p>
+          ) : (
+            <div className="mt-10 grid gap-6">
+              {pending.length > 0 && (
+                <div>
+                  <p className="text-[#66705D] tracking-[0.2em] uppercase text-sm mb-4">Pending</p>
+                  <div className="grid gap-4">
+                    {pending.map((o) => <OrderCard key={o.id} o={o} />)}
+                  </div>
+                </div>
+              )}
+              {done.length > 0 && (
+                <div className="mt-6">
+                  <p className="text-[#66705D] tracking-[0.2em] uppercase text-sm mb-4">Completed</p>
+                  <div className="grid gap-4">
+                    {done.map((o) => <OrderCard key={o.id} o={o} faded />)}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </>
       )}
     </main>
   );
