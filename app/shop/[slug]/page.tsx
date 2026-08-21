@@ -285,7 +285,7 @@ export default function ProductPage({
 
               {/* Buy Now */}
               <Link
-                href="/checkout"
+                href="/preorder"
                 onClick={handleAddToCart}
                 className="px-12 py-5 rounded-full bg-[#55614A] text-white text-xl text-center hover:scale-[1.02] duration-300"
               >
