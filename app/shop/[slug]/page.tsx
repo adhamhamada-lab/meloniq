@@ -161,7 +161,7 @@ const products = [
     name: "Tropical Fruit Soap",
     category: "Nourishing & Energizing",
     use: "Nourishes & Energizes Skin with Tropical Fruit Extracts for a Vibrant, Healthy Glow.",
-    image: "/images/tropical-fruit-soap.jpeg",
+    image: "/images/tropical-fruit-soap.jpg",
     price: "100 EGP",
     ingredients: [
       { name: "Sweet Almond Oil", desc: "Nourishes & Softens Skin" },
