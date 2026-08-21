@@ -193,14 +193,20 @@ function PreorderContent() {
                       className="bg-white text-[#55614A] rounded-full px-3 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-base w-[60px] text-center shrink-0"
                     />
 
-                    {items.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => removeItem(index)}
-                        className="w-9 h-9 rounded-full bg-white text-[#55614A] hover:bg-[#55614A] hover:text-white duration-300 text-xl flex items-center justify-center shrink-0"
-                      >
-                        ×
-                      </button>
+                    {items.length >= 1 && (
+                   <button
+  type="button"
+  onClick={() => removeItem(index)}
+  className="w-9 h-9 rounded-full bg-white text-[#55614A] hover:bg-[#55614A] hover:text-white duration-300 flex items-center justify-center shrink-0"
+>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="3 6 5 6 21 6" />
+    <path d="M19 6l-1 14H6L5 6" />
+    <path d="M10 11v6" />
+    <path d="M14 11v6" />
+    <path d="M9 6V4h6v2" />
+  </svg>
+</button>
                     )}
                   </div>
                 ))}
