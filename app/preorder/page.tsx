@@ -3,19 +3,20 @@
 import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import { useCart } from "@/app/context/CartContext";
 
 const PRODUCTS = [
-  { name: "Tea Tree Oil Soap", price: 150 },
-  { name: "Argan & Frankincense Soap", price: 115 },
-  { name: "Licorice Oil Soap", price: 140 },
-  { name: "Saad Oil Soap", price: 160 },
-  { name: "Watermelon Soap", price: 100 },
-  { name: "Pink Lemonade Soap", price: 100 },
-  { name: "Pina Colada Soap", price: 100 },
-  { name: "Aloe & Cucumber Soap", price: 100 },
-  { name: "Tropical Fruit Soap", price: 100 },
+  { name: "Tea Tree Oil Soap", price: 115, image: "/images/teatreeoilsoap.jpeg" },
+  { name: "Argan & Frankincense Soap", price: 115, image: "/images/Argan & Frankincense Soap.jpeg" },
+  { name: "Licorice Oil Soap", price: 140, image: "/images/licoriceoilsoap.jpeg" },
+  { name: "Saad Oil Soap", price: 160, image: "/images/saadoilsoap.jpeg" },
+  { name: "Watermelon Soap", price: 100, image: "/images/watermelon-soap.jpg" },
+  { name: "Pink Lemonade Soap", price: 100, image: "/images/pink-lemonade-soap.jpg" },
+  { name: "Pina Colada Soap", price: 100, image: "/images/pina-colada-soap.jpg" },
+  { name: "Aloe & Cucumber Soap", price: 100, image: "/images/aloe-cucumber-soap.jpg" },
+  { name: "Tropical Fruit Soap", price: 100, image: "/images/tropical-fruit-soap.jpg" },
 ];
 
 type Item = {
@@ -259,14 +260,26 @@ function PreorderContent() {
 
               {/* ORDER SUMMARY */}
               {validItems.length > 0 && (
-                <div className="bg-white rounded-[24px] p-6 flex flex-col gap-3">
+                <div className="bg-white rounded-[24px] p-6 flex flex-col gap-4">
                   <p className="text-[#66705D] tracking-[0.15em] uppercase text-sm">Order Summary</p>
                   {validItems.map((item, i) => {
                     const product = PRODUCTS.find((p) => p.name === item.product);
                     return (
-                      <div key={i} className="flex justify-between items-center">
-                        <p className="text-[#55614A] text-sm">{item.product} × {item.quantity}</p>
-                        <span className="text-[#55614A]">{product ? product.price * item.quantity : 0} EGP</span>
+                      <div key={i} className="flex items-center gap-4">
+                        {product?.image && (
+                          <Image
+                            src={product.image}
+                            alt={item.product}
+                            width={60}
+                            height={60}
+                            className="w-[60px] h-[60px] rounded-[12px] object-cover shrink-0"
+                          />
+                        )}
+                        <div className="flex-1">
+                          <p className="text-[#55614A] text-sm font-medium">{item.product}</p>
+                          <p className="text-[#66705D] text-xs">× {item.quantity}</p>
+                        </div>
+                        <span className="text-[#55614A] text-sm">{product ? product.price * item.quantity : 0} EGP</span>
                       </div>
                     );
                   })}
