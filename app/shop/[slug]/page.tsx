@@ -14,40 +14,39 @@ const products = [
     category: "For Oily & Acne-Prone Skin",
     use: "Purifies Oily Skin, Helps Reduce Breakouts & Leaves the Skin Fresh, Balanced, and Healthy-Looking.",
     image: "/images/teatreeoilsoap.jpeg",
-    price: "115 EGP",
+    price: "150 EGP",
     ingredients: [
       { name: "Sweet Almond Oil", desc: "Nourishes & Softens Skin" },
       { name: "Tea Tree Essential Oil", desc: "Helps Reduce Acne-Causing Bacteria" },
       { name: "Peppermint", desc: "Refreshes & Soothes Skin" },
       { name: "Lemon Essential Oil", desc: "Helps Control Excess Oil" },
     ],
-  recommendedFor: [
-      "Oily Skin",
-      "Combination Skin",
-      "Acne-Prone Skin",
-    ], 
-  
+    recommendedFor: [
+      "Oily Skin — البشرة الدهنية",
+      "Combination Skin — البشرة المختلطة",
+      "Acne-Prone Skin — البشرة المعرضة للحبوب",
+    ],
   },
   {
     slug: "argan-frankincense-soap",
     name: "Argan & Frankincense Soap",
     category: "Anti-Wrinkle & Skin Nourishing Soap",
     use: "Helps Improve Skin Elasticity While Nourishing & Hydrating for a Smoother, More Youthful Appearance.",
-    image: "/images/Argan & Frankincense Soap.jpeg",
+    image: "/images/argan-frankincense-soap.jpeg",
     price: "115 EGP",
     ingredients: [
       { name: "Argan Oil", desc: "Deeply Nourishes the Skin" },
       { name: "Frankincense", desc: "Improves Skin Elasticity" },
       { name: "Jasmine", desc: "Softens & Revitalizes Skin" },
       { name: "Beeswax", desc: "Locks in Moisture" },
-     ],
-     recommendedFor: [
-  "Dry Skin",
-  "Normal Skin",
-  "Combination Skin",
-  "Mature Skin",
-  "Aging Skin",
-],
+    ],
+    recommendedFor: [
+      "Dry Skin",
+      "Normal Skin",
+      "Combination Skin",
+      "Mature Skin",
+      "Aging Skin",
+    ],
   },
   {
     slug: "licoriceoilsoap",
@@ -57,19 +56,18 @@ const products = [
     image: "/images/licoriceoilsoap.jpeg",
     price: "140 EGP",
     ingredients: [
-     { name: "Licorice Root Oil", desc: "Helps Brighten Skin Tone" },
-     { name: "Lavender Essential Oil", desc: "Soothes & Calms Skin" },
-     { name: "Sweet Almond Oil", desc: "Nourishes & Softens Skin" },
-     { name: "Beeswax", desc: "Locks in Moisture" }, 
+      { name: "Licorice Root Oil", desc: "Helps Brighten Skin Tone" },
+      { name: "Lavender Essential Oil", desc: "Soothes & Calms Skin" },
+      { name: "Sweet Almond Oil", desc: "Nourishes & Softens Skin" },
+      { name: "Beeswax", desc: "Locks in Moisture" },
     ],
-  recommendedFor: [
-  "Normal Skin",
-  "Dry Skin",
-  "Combination Skin",
-  "Dull Skin",
-  "Uneven Skin Tone",
-],
-  
+    recommendedFor: [
+      "Normal Skin",
+      "Dry Skin",
+      "Combination Skin",
+      "Dull Skin",
+      "Uneven Skin Tone",
+    ],
   },
   {
     slug: "saadoilsoap",
@@ -79,120 +77,99 @@ const products = [
     image: "/images/saadoilsoap.jpeg",
     price: "160 EGP",
     ingredients: [
-    { name: "Cyperus Rotundus (Saad) Oil", desc: "Helps Soothe & Condition Skin" },
-    { name: "Shea Butter", desc: "Deeply Moisturizes Skin" },
-    { name: "Lavender Essential Oil", desc: "Calms & Soothes Skin" },
-    { name: "Frankincense", desc: "Helps Improve Skin Elasticity" },
-    { name: "Sweet Almond Oil", desc: "Nourishes & Softens Skin" },
-    { name: "Goat Milk", desc: "Gently Exfoliates & Smooths Skin" },
+      { name: "Cyperus Rotundus (Saad) Oil", desc: "Helps Soothe & Condition Skin" },
+      { name: "Shea Butter", desc: "Deeply Moisturizes Skin" },
+      { name: "Lavender Essential Oil", desc: "Calms & Soothes Skin" },
+      { name: "Frankincense", desc: "Helps Improve Skin Elasticity" },
+      { name: "Sweet Almond Oil", desc: "Nourishes & Softens Skin" },
+      { name: "Goat Milk", desc: "Gently Exfoliates & Smooths Skin" },
     ],
     recommendedFor: [
-  "Dry Skin",
-  "Sensitive Skin",
-  "Normal Skin",
-  "Combination Skin",
-  "All Skin Types",
-],
+      "Dry Skin",
+      "Sensitive Skin",
+      "Normal Skin",
+      "Combination Skin",
+      "All Skin Types",
+    ],
   },
-  // ── New Collection ──
   {
     slug: "watermelon-soap",
     name: "Watermelon Soap",
-    category: "New Collection",
-    use: "Helps refresh, soften & hydrate the skin while giving it a fresh, healthy-looking glow.",
-    image: "/images/watermelon-soap.jpg",
+    category: "Hydrating & Refreshing",
+    use: "Deeply Hydrates & Refreshes Skin with the Power of Natural Fruit Extracts.",
+    image: "/images/watermelon-soap.jpeg",
     price: "100 EGP",
     ingredients: [
-      { name: "Watermelon Seed Oil", desc: "Lightweight nourishment that helps leave skin feeling soft, smooth and refreshed." },
-      { name: "Sweet Almond Oil", desc: "Helps nourish and soften the skin while maintaining a comfortable, moisturized feel." },
-      { name: "Honey", desc: "Helps attract and retain moisture, leaving the skin feeling smooth and supple." },
-      { name: "Vitamin E", desc: "Provides antioxidant support and helps protect the formula's oils from oxidation." },
+      { name: "Watermelon Oil", desc: "Hydrates & Refreshes Skin" },
+      { name: "Sweet Almond Oil", desc: "Nourishes & Softens Skin" },
+      { name: "Honey", desc: "Moisturizes & Soothes Skin" },
+      { name: "Vitamin E", desc: "Protects & Nourishes Skin" },
     ],
-    recommendedFor: [
-      "Normal Skin",
-      "Combination Skin",
-      "Dull & Tired-Looking Skin",
-    ],
+    recommendedFor: [],
   },
   {
     slug: "pink-lemonade-soap",
     name: "Pink Lemonade Soap",
-    category: "New Collection",
-    use: "Helps cleanse, refresh and improve the appearance of dull, uneven-looking skin while leaving it soft and hydrated.",
-    image: "/images/pink-lemonade-soap.jpg",
+    category: "Brightening & Refreshing",
+    use: "Brightens & Refreshes Skin with Natural Fruit Extracts for a Glowing Complexion.",
+    image: "/images/pink-lemonade-soap.jpeg",
     price: "100 EGP",
     ingredients: [
-      { name: "Licorice Extract", desc: "Helps improve the appearance of uneven skin tone and gives the skin a brighter-looking appearance." },
-      { name: "Strawberry Extract", desc: "Provides antioxidant support and helps leave the skin looking fresh and revitalized." },
-      { name: "Aloe Vera Extract", desc: "Helps soothe and hydrate the skin, leaving it feeling comfortable after cleansing." },
-      { name: "Sweet Almond Oil", desc: "Helps nourish and soften the skin." },
-      { name: "Lemon Essential Oil", desc: "Adds a fresh citrus sensory experience to the formula." },
-      { name: "Vitamin E", desc: "Provides antioxidant support." },
+      { name: "Licorice Extract", desc: "Helps Brighten Skin Tone" },
+      { name: "Strawberry Extract", desc: "Antioxidant & Skin Brightening" },
+      { name: "Aloe Vera Extract", desc: "Soothes & Hydrates Skin" },
+      { name: "Sweet Almond Oil", desc: "Nourishes & Softens Skin" },
+      { name: "Lemon Essential Oil", desc: "Helps Control Excess Oil" },
+      { name: "Vitamin E", desc: "Protects & Nourishes Skin" },
     ],
-    recommendedFor: [
-      "Dull & Uneven-Looking Skin",
-      "Normal Skin",
-      "Combination Skin",
-    ],
+    recommendedFor: [],
   },
   {
     slug: "pina-colada-soap",
-    name: "Piña Colada Soap",
-    category: "New Collection",
-    use: "Helps cleanse, soften & nourish the skin while delivering a smooth, tropical-inspired bathing experience.",
-    image: "/images/pina-colada-soap.jpg",
+    name: "Pina Colada Soap",
+    category: "Deep Nourishing & Moisturizing",
+    use: "Deeply Nourishes & Moisturizes Skin with Tropical Fruit Extracts for Soft, Healthy Skin.",
+    image: "/images/pina-colada-soap.jpeg",
     price: "100 EGP",
     ingredients: [
-      { name: "Pineapple Extract", desc: "Helps leave the skin feeling smooth and refreshed while providing a naturally tropical sensory experience." },
-      { name: "Aloe Vera Extract", desc: "Helps soothe and hydrate the skin after cleansing." },
-      { name: "Jojoba Oil", desc: "Helps soften the skin while providing lightweight nourishment." },
-      { name: "Shea Butter", desc: "Helps support a soft, nourished and comfortable skin feel." },
-      { name: "Coconut Oil", desc: "Helps condition and soften the skin." },
-      { name: "Vitamin E", desc: "Provides antioxidant support." },
+      { name: "Pineapple Extract", desc: "Exfoliates & Brightens Skin" },
+      { name: "Aloe Vera Extract", desc: "Soothes & Hydrates Skin" },
+      { name: "Jojoba Oil", desc: "Balances & Moisturizes Skin" },
+      { name: "Shea Butter", desc: "Deeply Moisturizes Skin" },
+      { name: "Coconut Oil", desc: "Nourishes & Softens Skin" },
+      { name: "Vitamin E", desc: "Protects & Nourishes Skin" },
     ],
-    recommendedFor: [
-      "Dry Skin",
-      "Normal Skin",
-      "Skin Needing Nourishment",
-    ],
+    recommendedFor: [],
   },
   {
     slug: "aloe-cucumber-soap",
     name: "Aloe & Cucumber Soap",
-    category: "New Collection",
-    use: "Helps refresh, soothe & hydrate the skin, making it an ideal choice for a fresh post-sun and summer cleansing experience.",
-    image: "/images/aloe-cucumber-soap.jpg",
+    category: "Soothing & Cooling",
+    use: "Soothes & Cools Skin with Natural Aloe & Cucumber Extracts for a Fresh, Calm Complexion.",
+    image: "/images/aloe-cucumber-soap.jpeg",
     price: "100 EGP",
     ingredients: [
-      { name: "Cucumber Extract", desc: "Helps refresh and soothe the skin while leaving a cool, clean feeling." },
-      { name: "Aloe Vera Extract", desc: "Helps hydrate and calm the skin, making it especially suitable for a refreshing post-sun cleansing routine." },
-      { name: "Jojoba Oil", desc: "Helps soften the skin without leaving a heavy after-feel." },
-      { name: "Vitamin E", desc: "Provides antioxidant support." },
+      { name: "Cucumber Extract", desc: "Cools & Soothes Skin" },
+      { name: "Aloe Vera Extract", desc: "Hydrates & Calms Skin" },
+      { name: "Jojoba Oil", desc: "Balances & Moisturizes Skin" },
+      { name: "Vitamin E", desc: "Protects & Nourishes Skin" },
     ],
-    recommendedFor: [
-      "Sensitive Skin",
-      "Normal Skin",
-      "Skin Exposed to Heat & Sun",
-    ],
+    recommendedFor: [],
   },
   {
     slug: "tropical-fruit-soap",
     name: "Tropical Fruit Soap",
-    category: "New Collection",
-    use: "Helps cleanse and soften the skin while providing a gentle, nourishing feel with a tropical sensory experience.",
-    image: "/images/tropical-fruit-soap.jpg",
+    category: "Nourishing & Energizing",
+    use: "Nourishes & Energizes Skin with Tropical Fruit Extracts for a Vibrant, Healthy Glow.",
+    image: "/images/tropical-fruit-soap.jpeg",
     price: "100 EGP",
     ingredients: [
-      { name: "Sweet Almond Oil", desc: "Helps nourish and soften the skin while supporting a comfortable skin feel." },
-      { name: "Oat Protein", desc: "Helps condition the skin and supports a soft, smooth after-feel." },
-      { name: "Vitamin E", desc: "Provides antioxidant support." },
-      { name: "Tropical Fruit Fragrance Oil", desc: "Creates a bright, fruity and refreshing tropical bathing experience." },
+      { name: "Sweet Almond Oil", desc: "Nourishes & Softens Skin" },
+      { name: "Oat Protein", desc: "Soothes & Strengthens Skin" },
+      { name: "Vitamin E", desc: "Protects & Nourishes Skin" },
+      { name: "Tropical Fruit Essential Oil", desc: "Energizes & Refreshes Skin" },
     ],
-    recommendedFor: [
-      "Dry Skin",
-      "Normal Skin",
-      "Sensitive Skin",
-    ],
+    recommendedFor: [],
   },
 ];
 
@@ -252,80 +229,37 @@ export default function ProductPage({
               <p className="mt-4 text-[#66705D] text-lg md:text-xl leading-relaxed">{product.use}</p>
             </div>
 
-{product.ingredients.length > 0 && (
+            {/* INGREDIENTS */}
+            {product.ingredients.length > 0 && (
+              <div>
+                <p className="tracking-[0.25em] text-[#55614A] text-sm uppercase mb-5 font-medium">Key Ingredients</p>
+                <div className="grid grid-cols-2 gap-4">
+                  {product.ingredients.map((ing) => (
+                    <div key={ing.name} className="bg-[#D7DCCB] rounded-[22px] px-6 py-5 border border-[#C7CDB6] shadow-sm">
+                      <p className="text-[#4B5642] text-[18px] font-semibold leading-tight">{ing.name}</p>
+                      <p className="text-[#55614A] text-[14px] leading-7 mt-3 opacity-90">{ing.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
-  <div>
-    <p className="tracking-[0.25em] text-[#55614A] text-sm uppercase mb-5 font-medium">
-      Key Ingredients
-    </p>
+            {/* RECOMMENDED FOR */}
+            {product.recommendedFor && product.recommendedFor.length > 0 && (
+              <div>
+                <p className="tracking-[0.25em] text-[#55614A] text-sm uppercase mb-4 font-medium">Recommended For</p>
+                <div className="flex flex-col gap-2">
+                  {product.recommendedFor.map((item) => (
+                    <div key={item} className="flex items-center gap-3">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#55614A] shrink-0" />
+                      <p className="text-[#55614A] text-base">{item}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
-```
-<div className="grid grid-cols-2 gap-4">
-
-  {product.ingredients.map((ing) => (
-
-    <div
-      key={ing.name}
-      className="
-      bg-[#D7DCCB]
-      rounded-[22px]
-      px-6
-      py-5
-      border
-      border-[#C7CDB6]
-      shadow-sm
-      "
-    >
-
-      <p
-        className="
-        text-[#4B5642]
-        text-[18px]
-        font-semibold
-        leading-tight
-        "
-      >
-        {ing.name}
-      </p>
-
-      <p
-        className="
-        text-[#55614A]
-        text-[14px]
-        leading-7
-        mt-3
-        opacity-90
-        "
-      >
-        {ing.desc}
-      </p>
-
-    </div>
-
-  ))}
-
-</div>
-```
-
-  </div>
-)}
-{product.recommendedFor && product.recommendedFor.length > 0 && (
-  <div>
-    <p className="tracking-[0.25em] text-[#55614A] text-sm uppercase mb-4 font-medium">
-      Recommended For
-    </p>
-    <div className="flex flex-col gap-2">
-      {product.recommendedFor.map((item) => (
-        <div key={item} className="flex items-center gap-3">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#55614A] shrink-0" />
-          <p className="text-[#55614A] text-base">{item}</p>
-        </div>
-      ))}
-    </div>
-  </div>
-)}
-
-
+            {/* PRICE + QTY + BUTTONS */}
             <div className="flex flex-col gap-4">
 
               {product.price && (
@@ -341,20 +275,21 @@ export default function ProductPage({
                 </div>
               </div>
 
-             
-              {/* <button
-  onClick={handleAddToCart}
-  className={`px-12 py-5 rounded-full text-xl text-center duration-300 ${added ? "bg-[#D7DCCB] text-[#55614A]" : "border border-[#55614A] text-[#55614A] hover:bg-[#55614A] hover:text-white"}`}
->
-  {added ? "Added to Cart ✓" : "Add to Cart"}
-</button> */}
+              {/* Add to Cart */}
+              <button
+                onClick={handleAddToCart}
+                className={`px-12 py-5 rounded-full text-xl text-center duration-300 ${added ? "bg-[#D7DCCB] text-[#55614A]" : "border border-[#55614A] text-[#55614A] hover:bg-[#55614A] hover:text-white"}`}
+              >
+                {added ? "Added to Cart ✓" : "Add to Cart"}
+              </button>
 
+              {/* Buy Now */}
               <Link
-                href={`/preorder?product=${encodeURIComponent(product.name)}`}
+                href="/checkout"
                 onClick={handleAddToCart}
                 className="px-12 py-5 rounded-full bg-[#55614A] text-white text-xl text-center hover:scale-[1.02] duration-300"
               >
-                 Pre-Order Now
+                Buy Now
               </Link>
 
               <Link href="/shop" className="text-center text-[#66705D] text-sm tracking-[0.15em] uppercase hover:opacity-60 duration-300">
@@ -366,11 +301,9 @@ export default function ProductPage({
         </div>
       </section>
 
- <footer id="footer" className="py-16 border-t border-[#C7CDB6] text-center text-[#55614A]">
-    <div className="space-y-8">
-      <h1 className="text-6xl tracking-[-0.1em]">
-  <em>m</em>eloniq
-</h1>
+      <footer id="footer" className="py-16 border-t border-[#C7CDB6] text-center text-[#55614A]">
+        <div className="space-y-8">
+          <h1 className="text-6xl tracking-[-0.1em]"><em>m</em>eloniq</h1>
           <p className="text-sm opacity-70 max-w-[400px] mx-auto">Handmade botanical care inspired by calm rituals.</p>
           <div className="flex justify-center items-center gap-8 pt-2">
             <a href="https://wa.me/201221851545" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="text-[#55614A] opacity-80 hover:opacity-100 hover:scale-110 duration-300">
