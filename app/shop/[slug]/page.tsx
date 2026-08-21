@@ -97,7 +97,7 @@ const products = [
     name: "Watermelon Soap",
     category: "Hydrating & Refreshing",
     use: "Deeply Hydrates & Refreshes Skin with the Power of Natural Fruit Extracts.",
-    image: "/images/watermelon-soap.jpeg",
+    image: "/images/watermelon-soap.jpg",
     price: "100 EGP",
     ingredients: [
       { name: "Watermelon Oil", desc: "Hydrates & Refreshes Skin" },
@@ -112,7 +112,7 @@ const products = [
     name: "Pink Lemonade Soap",
     category: "Brightening & Refreshing",
     use: "Brightens & Refreshes Skin with Natural Fruit Extracts for a Glowing Complexion.",
-    image: "/images/pink-lemonade-soap.jpeg",
+    image: "/images/pink-lemonade-soap.jpg",
     price: "100 EGP",
     ingredients: [
       { name: "Licorice Extract", desc: "Helps Brighten Skin Tone" },
@@ -129,7 +129,7 @@ const products = [
     name: "Pina Colada Soap",
     category: "Deep Nourishing & Moisturizing",
     use: "Deeply Nourishes & Moisturizes Skin with Tropical Fruit Extracts for Soft, Healthy Skin.",
-    image: "/images/pina-colada-soap.jpeg",
+    image: "/images/pina-colada-soap.jpg",
     price: "100 EGP",
     ingredients: [
       { name: "Pineapple Extract", desc: "Exfoliates & Brightens Skin" },
@@ -146,7 +146,7 @@ const products = [
     name: "Aloe & Cucumber Soap",
     category: "Soothing & Cooling",
     use: "Soothes & Cools Skin with Natural Aloe & Cucumber Extracts for a Fresh, Calm Complexion.",
-    image: "/images/aloe-cucumber-soap.jpeg",
+    image: "/images/aloe-cucumber-soap.jpg",
     price: "100 EGP",
     ingredients: [
       { name: "Cucumber Extract", desc: "Cools & Soothes Skin" },
