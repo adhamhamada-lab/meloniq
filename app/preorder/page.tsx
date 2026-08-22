@@ -193,7 +193,7 @@ function PreorderContent() {
                       className="bg-white text-[#55614A] rounded-full px-3 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-base w-[60px] text-center shrink-0"
                     />
 
-                    {items.length >= 1 && (
+                    {items.length > 1 && (
                    <button
   type="button"
   onClick={() => removeItem(index)}
