@@ -182,12 +182,44 @@ return (
   </section>
 
   {/* FEATURED COLLECTION */}
-  <section className="px-8 md:px-16 py-24">
-    <h2 className="text-center text-[40px] md:text-[70px] text-[#55614A] reveal">
+  <section className="py-24">
+    <h2 className="text-center text-[40px] md:text-[70px] text-[#55614A] reveal px-8">
       Featured Collection
     </h2>
 
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-10 mt-20">
+    {/* Mobile: horizontal scroll */}
+    <div className="mt-12 flex md:hidden gap-4 overflow-x-auto px-6 pb-4 snap-x snap-mandatory scrollbar-hide">
+      {[
+        { image: "/images/teatreeoilsoap.jpeg", title: "Tea Tree Oil Soap", slug: "teatreeoilsoap" },
+        { image: "/images/Argan & Frankincense Soap.jpeg", title: "Argan & Frankincense Soap", slug: "argan-frankincense-soap" },
+        { image: "/images/licoriceoilsoap.jpeg", title: "Licorice Oil Soap", slug: "licoriceoilsoap" },
+        { image: "/images/saadoilsoap.jpeg", title: "Saad Oil Soap", slug: "saadoilsoap" },
+      ].map((item) => (
+        <a
+          href={`/shop/${item.slug}`}
+          key={item.title}
+          className="relative flex-shrink-0 w-[72vw] snap-start rounded-[28px] overflow-hidden block"
+        >
+          <div className="relative aspect-[3/4] w-full">
+            <Image
+              src={item.image}
+              alt={item.title}
+              fill
+              className="object-cover"
+              sizes="72vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-5 z-10">
+              <h3 className="text-xl text-white font-medium leading-tight">{item.title}</h3>
+              <p className="mt-2 text-white/70 text-xs uppercase tracking-[0.1em]">View →</p>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    {/* Desktop: grid */}
+    <div className="hidden md:grid md:grid-cols-3 gap-10 mt-20 px-16">
       {[
         { image: "/images/teatreeoilsoap.jpeg", title: "Tea Tree Oil Soap", slug: "teatreeoilsoap" },
         { image: "/images/Argan & Frankincense Soap.jpeg", title: "Argan & Frankincense Soap", slug: "argan-frankincense-soap" },
