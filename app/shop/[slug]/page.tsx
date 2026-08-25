@@ -5,6 +5,7 @@ import Link from "next/link";
 import { use, useState } from "react";
 import { useCart } from "@/app/context/CartContext";
 import Navbar from "@/components/Navbar";
+import { useLang } from "@/app/context/LanguageContext";
 import { notFound } from "next/navigation";
 
 const products = [
@@ -21,11 +22,7 @@ const products = [
       { name: "Peppermint", desc: "Refreshes & Soothes Skin" },
       { name: "Lemon Essential Oil", desc: "Helps Control Excess Oil" },
     ],
-    recommendedFor: [
-      "Oily Skin — البشرة الدهنية",
-      "Combination Skin — البشرة المختلطة",
-      "Acne-Prone Skin — البشرة المعرضة للحبوب",
-    ],
+    recommendedFor: ["Oily Skin — البشرة الدهنية", "Combination Skin — البشرة المختلطة", "Acne-Prone Skin — البشرة المعرضة للحبوب"],
   },
   {
     slug: "argan-frankincense-soap",
@@ -40,13 +37,7 @@ const products = [
       { name: "Jasmine", desc: "Softens & Revitalizes Skin" },
       { name: "Beeswax", desc: "Locks in Moisture" },
     ],
-    recommendedFor: [
-      "Dry Skin",
-      "Normal Skin",
-      "Combination Skin",
-      "Mature Skin",
-      "Aging Skin",
-    ],
+    recommendedFor: ["Dry Skin", "Normal Skin", "Combination Skin", "Mature Skin", "Aging Skin"],
   },
   {
     slug: "licoriceoilsoap",
@@ -61,13 +52,7 @@ const products = [
       { name: "Sweet Almond Oil", desc: "Nourishes & Softens Skin" },
       { name: "Beeswax", desc: "Locks in Moisture" },
     ],
-    recommendedFor: [
-      "Normal Skin",
-      "Dry Skin",
-      "Combination Skin",
-      "Dull Skin",
-      "Uneven Skin Tone",
-    ],
+    recommendedFor: ["Normal Skin", "Dry Skin", "Combination Skin", "Dull Skin", "Uneven Skin Tone"],
   },
   {
     slug: "saadoilsoap",
@@ -84,13 +69,7 @@ const products = [
       { name: "Sweet Almond Oil", desc: "Nourishes & Softens Skin" },
       { name: "Goat Milk", desc: "Gently Exfoliates & Smooths Skin" },
     ],
-    recommendedFor: [
-      "Dry Skin",
-      "Sensitive Skin",
-      "Normal Skin",
-      "Combination Skin",
-      "All Skin Types",
-    ],
+    recommendedFor: ["Dry Skin", "Sensitive Skin", "Normal Skin", "Combination Skin", "All Skin Types"],
   },
   {
     slug: "watermelon-soap",
@@ -173,11 +152,7 @@ const products = [
   },
 ];
 
-export default function ProductPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
   const product = products.find((p) => p.slug === slug);
   if (!product) return notFound();
@@ -185,15 +160,11 @@ export default function ProductPage({
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
   const { addItem } = useCart();
+  const { t } = useLang();
 
   function handleAddToCart() {
     for (let i = 0; i < qty; i++) {
-      addItem({
-        slug: product!.slug,
-        title: product!.name,
-        price: product!.price || "0 EGP",
-        image: product!.image,
-      });
+      addItem({ slug: product!.slug, title: product!.name, price: product!.price || "0 EGP", image: product!.image });
     }
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
@@ -201,7 +172,6 @@ export default function ProductPage({
 
   return (
     <main className="bg-[#E4E7D6] min-h-screen">
-
       <Navbar />
 
       <section className="px-8 md:px-16 pt-10 pb-24">
@@ -210,19 +180,11 @@ export default function ProductPage({
           {/* IMAGE */}
           <div className="relative">
             <div className="absolute inset-0 bg-[#D9DECB] rounded-[50px] translate-x-4 translate-y-4" />
-            <Image
-              src={product.image}
-              alt={product.name}
-              width={800}
-              height={800}
-              priority
-              className="relative z-10 w-full rounded-[40px] object-cover shadow-2xl"
-            />
+            <Image src={product.image} alt={product.name} width={800} height={800} priority className="relative z-10 w-full rounded-[40px] object-cover shadow-2xl" />
           </div>
 
           {/* DETAILS */}
           <div className="flex flex-col gap-8">
-
             <div>
               <p className="tracking-[0.35em] text-[#66705D] text-sm uppercase">{product.category}</p>
               <h1 className="mt-4 text-[60px] md:text-[90px] leading-[0.9] text-[#55614A]">{product.name}</h1>
@@ -232,7 +194,7 @@ export default function ProductPage({
             {/* INGREDIENTS */}
             {product.ingredients.length > 0 && (
               <div>
-                <p className="tracking-[0.25em] text-[#55614A] text-sm uppercase mb-5 font-medium">Key Ingredients</p>
+                <p className="tracking-[0.25em] text-[#55614A] text-sm uppercase mb-5 font-medium">{t.ingredients}</p>
                 <div className="grid grid-cols-2 gap-4">
                   {product.ingredients.map((ing) => (
                     <div key={ing.name} className="bg-[#D7DCCB] rounded-[22px] px-6 py-5 border border-[#C7CDB6] shadow-sm">
@@ -247,7 +209,7 @@ export default function ProductPage({
             {/* RECOMMENDED FOR */}
             {product.recommendedFor && product.recommendedFor.length > 0 && (
               <div>
-                <p className="tracking-[0.25em] text-[#55614A] text-sm uppercase mb-4 font-medium">Recommended For</p>
+                <p className="tracking-[0.25em] text-[#55614A] text-sm uppercase mb-4 font-medium">{t.recommendedFor}</p>
                 <div className="flex flex-col gap-2">
                   {product.recommendedFor.map((item) => (
                     <div key={item} className="flex items-center gap-3">
@@ -261,13 +223,10 @@ export default function ProductPage({
 
             {/* PRICE + QTY + BUTTONS */}
             <div className="flex flex-col gap-4">
-
-              {product.price && (
-                <p className="text-[#55614A] text-3xl">{product.price}</p>
-              )}
+              {product.price && <p className="text-[#55614A] text-3xl">{product.price}</p>}
 
               <div className="flex items-center gap-4">
-                <p className="text-[#66705D] tracking-[0.15em] uppercase text-sm">Qty</p>
+                <p className="text-[#66705D] tracking-[0.15em] uppercase text-sm">{t.quantity}</p>
                 <div className="flex items-center gap-3 bg-[#D7DCCB] rounded-full px-4 py-2">
                   <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="w-8 h-8 rounded-full text-[#55614A] hover:bg-[#55614A] hover:text-white duration-300 text-xl flex items-center justify-center">−</button>
                   <span className="text-[#55614A] text-lg w-6 text-center">{qty}</span>
@@ -275,27 +234,24 @@ export default function ProductPage({
                 </div>
               </div>
 
-              {/* Add to Cart */}
               <button
                 onClick={handleAddToCart}
                 className={`px-12 py-5 rounded-full text-xl text-center duration-300 ${added ? "bg-[#D7DCCB] text-[#55614A]" : "border border-[#55614A] text-[#55614A] hover:bg-[#55614A] hover:text-white"}`}
               >
-                {added ? "Added to Cart ✓" : "Add to Cart"}
+                {added ? t.addedToCart : t.addToCart}
               </button>
 
-              {/* Buy Now */}
               <Link
                 href="/preorder"
                 onClick={handleAddToCart}
                 className="px-12 py-5 rounded-full bg-[#55614A] text-white text-xl text-center hover:scale-[1.02] duration-300"
               >
-                Buy Now
+                {t.buyNow}
               </Link>
 
               <Link href="/shop" className="text-center text-[#66705D] text-sm tracking-[0.15em] uppercase hover:opacity-60 duration-300">
-                ← Back to Shop
+                {t.backToShop}
               </Link>
-
             </div>
           </div>
         </div>
@@ -304,24 +260,16 @@ export default function ProductPage({
       <footer id="footer" className="py-16 border-t border-[#C7CDB6] text-center text-[#55614A]">
         <div className="space-y-8">
           <h1 className="text-6xl tracking-[-0.1em]"><em>m</em>eloniq</h1>
-          <p className="text-sm opacity-70 max-w-[400px] mx-auto">Handmade botanical care inspired by calm rituals.</p>
+          <p className="text-sm opacity-70 max-w-[400px] mx-auto">{t.footerTagline}</p>
           <div className="flex justify-center items-center gap-8 pt-2">
             <a href="https://wa.me/201221851545" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="text-[#55614A] opacity-80 hover:opacity-100 hover:scale-110 duration-300">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-              </svg>
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" /></svg>
             </a>
             <a href="https://www.instagram.com/meloniq23" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-[#55614A] opacity-80 hover:opacity-100 hover:scale-110 duration-300">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
-                <circle cx="12" cy="12" r="4" />
-                <circle cx="17.2" cy="6.8" r="0.9" fill="currentColor" stroke="none" />
-              </svg>
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><rect x="3.5" y="3.5" width="17" height="17" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.2" cy="6.8" r="0.9" fill="currentColor" stroke="none" /></svg>
             </a>
             <a href="https://www.facebook.com/profile.php?id=61580340421564" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="text-[#55614A] opacity-80 hover:opacity-100 hover:scale-110 duration-300">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                <path d="M14 21v-7h2.4l.4-3H14V9c0-.9.3-1.5 1.6-1.5H17V5c-.3 0-1.3-.1-2.4-.1-2.4 0-4.1 1.5-4.1 4.2V11H8v3h2.5v7" />
-              </svg>
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M14 21v-7h2.4l.4-3H14V9c0-.9.3-1.5 1.6-1.5H17V5c-.3 0-1.3-.1-2.4-.1-2.4 0-4.1 1.5-4.1 4.2V11H8v3h2.5v7" /></svg>
             </a>
           </div>
           <p className="text-sm opacity-60 pt-4">© 2026 Meloniq</p>

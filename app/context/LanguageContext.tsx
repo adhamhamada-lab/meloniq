@@ -122,7 +122,7 @@ const translations = {
     notes: "ملاحظات (اختياري)",
     placeOrder: "تأكيد الطلب",
     orderSuccess: "تم تقديم طلبك بنجاح! سنتواصل معك قريباً.",
-    // Preorder
+        // Preorder
     preorderLabel: "حجز مسبق",
     preorderTitle: "احجز نسختك",
     selectProduct: "اختر المنتج",
@@ -132,6 +132,12 @@ const translations = {
     apply: "تطبيق",
     submitPreorder: "تقديم الحجز المسبق",
     preorderSuccess: "تم تقديم حجزك! سنؤكد قريباً.",
+    orderDesc: "أدخل بياناتك وسنتولى الباقي.",
+    orderBullet1: "مصنوع يدوياً من مكونات طبيعية",
+    orderBullet2: "الدفع عند الاستلام — بدون دفع مسبق",
+    orderBullet3: "سنتواصل معك لتأكيد التوصيل",
+    orderReceivedTitle: "تم استلام طلبك",
+    orderReceivedDesc: "شكراً لاختيارك ميلونيك. سنتواصل معك قريباً.",
   },
 };
 
