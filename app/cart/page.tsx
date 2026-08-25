@@ -4,9 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { useCart } from "@/app/context/CartContext";
+import { useLang } from "@/app/context/LanguageContext";
 
 export default function CartPage() {
   const { items, removeItem, updateQty, total } = useCart();
+  const { t } = useLang();
 
   return (
     <main className="bg-[#E4E7D6] min-h-screen">
@@ -14,12 +16,12 @@ export default function CartPage() {
 
       <section className="px-8 md:px-16 pt-10 pb-32 max-w-[1000px] mx-auto">
 
-        <p className="tracking-[0.35em] text-[#66705D] text-sm">YOUR ORDER</p>
-        <h1 className="mt-4 text-[60px] md:text-[90px] leading-[0.9] text-[#55614A]">Cart</h1>
+        <p className="tracking-[0.35em] text-[#66705D] text-sm">{ t.yourOrder }</p>
+        <h1 className="mt-4 text-[60px] md:text-[90px] leading-[0.9] text-[#55614A]">{ t.cartTitle }</h1>
 
         {items.length === 0 ? (
           <div className="mt-20 text-center">
-            <p className="text-[#66705D] text-xl">Your cart is empty.</p>
+            <p className="text-[#66705D] text-xl">{ t.emptyCart }</p>
             <Link
               href="/shop"
               className="inline-block mt-8 px-10 py-4 rounded-full bg-[#55614A] text-white text-sm uppercase tracking-[0.1em] hover:scale-105 duration-300"
