@@ -2,40 +2,30 @@
 
 import { useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import Reviews from "@/components/Reviews";
 import Navbar from "@/components/Navbar";
 import { useLang } from "@/app/context/LanguageContext";
 
-export default function Home() {
+const summerProducts = [
+  { image: "/images/watermelon-soap.jpg", title: "Watermelon Soap", slug: "watermelon-soap" },
+  { image: "/images/pink-lemonade-soap.jpg", title: "Pink Lemonade Soap", slug: "pink-lemonade-soap" },
+  { image: "/images/pina-colada-soap.jpg", title: "Piña Colada Soap", slug: "pina-colada-soap" },
+  { image: "/images/aloe-cucumber-soap.jpg", title: "Aloe & Cucumber Soap", slug: "aloe-cucumber-soap" },
+  { image: "/images/tropical-fruit-soap.jpg", title: "Tropical Fruit Soap", slug: "tropical-fruit-soap" },
+];
+
+const featuredProducts = [
+  { image: "/images/teatreeoilsoap.jpeg", title: "Tea Tree Oil Soap", slug: "teatreeoilsoap" },
+  { image: "/images/Argan & Frankincense Soap.jpeg", title: "Argan & Frankincense Soap", slug: "argan-frankincense-soap" },
+  { image: "/images/licoriceoilsoap.jpeg", title: "Licorice Oil Soap", slug: "licoriceoilsoap" },
+  { image: "/images/saadoilsoap.jpeg", title: "Saad Oil Soap", slug: "saadoilsoap" },
+];
+
+type Product = { image: string; title: string; slug: string };
+
+function ScrollRow({ products, badge }: { products: Product[]; badge?: boolean }) {
   const { t } = useLang();
-
-  useEffect(() => {
-    const items = document.querySelectorAll(".reveal");
-    const observer = new IntersectionObserver(
-      (entries) => { entries.forEach((entry) => { if (entry.isIntersecting) entry.target.classList.add("active"); }); },
-      { threshold: 0.2 }
-    );
-    items.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
-  const summerProducts = [
-    { image: "/images/watermelon-soap.jpg", title: "Watermelon Soap", slug: "watermelon-soap" },
-    { image: "/images/pink-lemonade-soap.jpg", title: "Pink Lemonade Soap", slug: "pink-lemonade-soap" },
-    { image: "/images/pina-colada-soap.jpg", title: "Piña Colada Soap", slug: "pina-colada-soap" },
-    { image: "/images/aloe-cucumber-soap.jpg", title: "Aloe & Cucumber Soap", slug: "aloe-cucumber-soap" },
-    { image: "/images/tropical-fruit-soap.jpg", title: "Tropical Fruit Soap", slug: "tropical-fruit-soap" },
-  ];
-
-  const featuredProducts = [
-    { image: "/images/teatreeoilsoap.jpeg", title: "Tea Tree Oil Soap", slug: "teatreeoilsoap" },
-    { image: "/images/Argan & Frankincense Soap.jpeg", title: "Argan & Frankincense Soap", slug: "argan-frankincense-soap" },
-    { image: "/images/licoriceoilsoap.jpeg", title: "Licorice Oil Soap", slug: "licoriceoilsoap" },
-    { image: "/images/saadoilsoap.jpeg", title: "Saad Oil Soap", slug: "saadoilsoap" },
-  ];
-
-  const ScrollRow = ({ products, badge }: { products: typeof summerProducts; badge?: boolean }) => (
+  return (
     <>
       {/* Mobile: horizontal scroll */}
       <div className="mt-12 flex md:hidden gap-4 overflow-x-auto px-6 pb-4 snap-x snap-mandatory scrollbar-hide">
@@ -57,7 +47,7 @@ export default function Home() {
       {/* Desktop: grid */}
       <div className="hidden md:grid md:grid-cols-3 gap-10 mt-20 px-16">
         {products.map((item) => (
-          <a href={`/shop/${item.slug}`} key={item.title} className="relative block bg-[#D7DCCB] rounded-[40px] overflow-hidden hover:-translate-y-2 hover:shadow-2xl duration-500 reveal">
+          <a href={`/shop/${item.slug}`} key={item.title} className="relative block bg-[#D7DCCB] rounded-[40px] overflow-hidden hover:-translate-y-2 hover:shadow-2xl duration-500">
             {badge && <span className="absolute top-5 left-5 z-10 bg-[#55614A] text-white px-5 py-2 rounded-full text-xs uppercase tracking-[0.12em]">{t.newBadge}</span>}
             <Image src={item.image} alt={item.title} width={700} height={700} className="w-full h-[420px] object-cover hover:scale-[1.03] duration-700" />
             <div className="p-8">
@@ -70,6 +60,20 @@ export default function Home() {
       </div>
     </>
   );
+}
+
+export default function Home() {
+  const { t } = useLang();
+
+  useEffect(() => {
+    const items = document.querySelectorAll(".reveal");
+    const observer = new IntersectionObserver(
+      (entries) => { entries.forEach((entry) => { if (entry.isIntersecting) entry.target.classList.add("active"); }); },
+      { threshold: 0.2 }
+    );
+    items.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <main className="bg-[#E4E7D6] min-h-screen">
