@@ -77,7 +77,7 @@ orderReceivedDesc: "Thank you for choosing Meloniq. We'll be in touch shortly.",
   },
   ar: {
     // Navbar
-    shop: "المتجر",
+    shop: "تسوق",
     about: "من نحن",
     contact: "تواصل معنا",
     cart: "السلة",
