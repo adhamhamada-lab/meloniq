@@ -68,6 +68,12 @@ const translations = {
     apply: "Apply",
     submitPreorder: "Submit Pre-Order",
     preorderSuccess: "Pre-order submitted! We'll confirm soon.",
+    orderDesc: "Enter your details and we'll take care of the rest.",
+orderBullet1: "Handcrafted with natural ingredients",
+orderBullet2: "Pay on delivery — no upfront payment",
+orderBullet3: "We'll contact you to confirm delivery",
+orderReceivedTitle: "Order Received",
+orderReceivedDesc: "Thank you for choosing Meloniq. We'll be in touch shortly.",
   },
   ar: {
     // Navbar
