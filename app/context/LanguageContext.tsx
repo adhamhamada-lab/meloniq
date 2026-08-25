@@ -88,7 +88,7 @@ const translations = {
     stat4Val: "خالٍ", stat4Label: "من المواد الكيميائية",
     summerCollection: "كوليكشن الصيف",
     featuredCollection: "الكوليكشن المميز",
-    viewCollection: "عرض الكوليكشن ←",
+    viewCollection: "عرض المنتج ←",
     craftedWith: "مصنوع من مكونات نقية.",
     footerTagline: "عناية نباتية مصنوعة يدوياً مستوحاة من طقوس الهدوء.",
     newBadge: "جديد",
