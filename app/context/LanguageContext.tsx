@@ -74,6 +74,12 @@ orderBullet2: "Pay on delivery — no upfront payment",
 orderBullet3: "We'll contact you to confirm delivery",
 orderReceivedTitle: "Order Received",
 orderReceivedDesc: "Thank you for choosing Meloniq. We'll be in touch shortly.",
+customerLove: "Customer Love",
+reviews: "Reviews",
+yourName: "Your Name",
+tellUsExperience: "Tell us about your experience...",
+sending: "Sending...",
+submitReview: "Submit Review",
   },
   ar: {
     // Navbar
@@ -144,6 +150,14 @@ orderReceivedDesc: "Thank you for choosing Meloniq. We'll be in touch shortly.",
     orderBullet3: "سنتواصل معك لتأكيد التوصيل",
     orderReceivedTitle: "تم استلام طلبك",
     orderReceivedDesc: "شكراً لاختيارك ميلونيك. سنتواصل معك قريباً.",
+    customerLove: "آراء عملائنا",
+reviews: "التقييمات",
+yourName: "اسمك",
+tellUsExperience: "شاركنا تجربتك...",
+sending: "جاري الإرسال...",
+submitReview: "إرسال التقييم",
+ 
+ 
   },
 };
 
