@@ -5,7 +5,6 @@ import { Analytics } from "@vercel/analytics/react";
 import { CartProvider } from "./context/CartContext";
 import { LanguageProvider } from "./context/LanguageContext";
 import SplashScreen from "@/components/SplashScreen";
-import PageTransition from "@/components/PageTransition";
 import Script from "next/script";
 
 const seasons = localFont({
@@ -34,9 +33,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <SplashScreen>
           <CartProvider>
             <LanguageProvider>
-              <PageTransition>
+              
                 {children}
-              </PageTransition>
+              
             </LanguageProvider>
           </CartProvider>
           <Analytics />
