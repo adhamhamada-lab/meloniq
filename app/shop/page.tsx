@@ -28,7 +28,7 @@ export default function Shop() {
         <p className="mt-6 text-[18px] md:text-[22px] text-[#66705D] max-w-[600px] mx-auto">{t.shopDesc}</p>
       </section>
       <section className="px-4 md:px-16 pb-32">
-        <div className="grid grid-cols-2 gap-4 md:gap-6 mt-12">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mt-12">
           {products.map((item, index) => (
             <Link key={index} href={`/shop/${item.slug}`} className="group relative rounded-[24px] overflow-hidden hover:-translate-y-2 hover:shadow-xl duration-500 block">
               <div className="relative aspect-[3/4] w-full">
