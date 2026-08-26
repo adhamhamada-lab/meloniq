@@ -102,13 +102,34 @@ export default function Home() {
         </div>
       </section>
 
-      {/* MARQUEE */}
-      <div className="overflow-hidden border-y border-[#C7CDB6] py-5 bg-[#D7DCCB]">
-        <div className="flex animate-marquee whitespace-nowrap">
-          {marqueeItems.map((item, i) => (
-            <span key={i} className="mx-8 text-[#55614A] text-sm md:text-base uppercase tracking-[0.3em] flex items-center gap-8">
-              {item}
-              <span className="text-[#55614A] opacity-40">✦</span>
+            {/* MARQUEE */}
+      <div className="overflow-hidden border-y border-[#C7CDB6] py-4 bg-[#D7DCCB]">
+        <div className="flex animate-marquee whitespace-nowrap items-center">
+          {[
+            { text: "Handmade", img: "/images/teatreeoilsoap.jpeg" },
+            { text: "Botanical", img: "/images/watermelon-soap.jpg" },
+            { text: "Natural", img: "/images/licoriceoilsoap.jpeg" },
+            { text: "Pure", img: "/images/pina-colada-soap.jpg" },
+            { text: "Gentle", img: "/images/saadoilsoap.jpeg" },
+            { text: "Fresh", img: "/images/aloe-cucumber-soap.jpg" },
+            { text: "Handmade", img: "/images/teatreeoilsoap.jpeg" },
+            { text: "Botanical", img: "/images/watermelon-soap.jpg" },
+            { text: "Natural", img: "/images/licoriceoilsoap.jpeg" },
+            { text: "Pure", img: "/images/pina-colada-soap.jpg" },
+            { text: "Gentle", img: "/images/saadoilsoap.jpeg" },
+            { text: "Fresh", img: "/images/aloe-cucumber-soap.jpg" },
+          ].map((item, i) => (
+            <span key={i} className="mx-6 flex items-center gap-4 shrink-0">
+              <Image
+                src={item.img}
+                alt={item.text}
+                width={48}
+                height={48}
+                className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover"
+              />
+              <span className="text-[#55614A] text-sm md:text-base uppercase tracking-[0.3em]">
+                {item.text}
+              </span>
             </span>
           ))}
         </div>
