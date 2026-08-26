@@ -21,6 +21,11 @@ const featuredProducts = [
   { image: "/images/saadoilsoap.jpeg", title: "Saad Oil Soap", slug: "saadoilsoap" },
 ];
 
+const marqueeItems = [
+  "Handmade", "Botanical", "Natural", "Pure", "Gentle", "Fresh",
+  "Handmade", "Botanical", "Natural", "Pure", "Gentle", "Fresh",
+];
+
 type Product = { image: string; title: string; slug: string };
 
 function ScrollRow({ products, badge }: { products: Product[]; badge?: boolean }) {
@@ -96,6 +101,18 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* MARQUEE */}
+      <div className="overflow-hidden border-y border-[#C7CDB6] py-5 bg-[#D7DCCB]">
+        <div className="flex animate-marquee whitespace-nowrap">
+          {marqueeItems.map((item, i) => (
+            <span key={i} className="mx-8 text-[#55614A] text-sm md:text-base uppercase tracking-[0.3em] flex items-center gap-8">
+              {item}
+              <span className="text-[#55614A] opacity-40">✦</span>
+            </span>
+          ))}
+        </div>
+      </div>
 
       {/* ABOUT */}
       <section id="about" className="px-8 md:px-16 py-32">
