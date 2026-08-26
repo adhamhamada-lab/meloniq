@@ -15,11 +15,10 @@ export default function PageTransition({ children }: { children: React.ReactNode
 
   return (
     <div
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0px)" : "translateY(12px)",
-        transition: "opacity 0.4s ease, transform 0.4s ease",
-      }}
+style={{
+  opacity: visible ? 1 : 0,
+  transition: "opacity 0.5s ease",
+}}
     >
       {children}
     </div>
