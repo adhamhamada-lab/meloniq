@@ -30,7 +30,7 @@ const products = {
       name: "Argan & Frankincense Soap",
       category: "Anti-Wrinkle & Skin Nourishing Soap",
       use: "Helps Improve Skin Elasticity While Nourishing & Hydrating for a Smoother, More Youthful Appearance.",
-      image: "/images/argan-frankincense-soap.jpeg",
+      image: "/images/Argan & Frankincense Soap.jpeg",
       price: "115 EGP",
       ingredients: [
         { name: "Argan Oil", desc: "Deeply Nourishes the Skin" },
@@ -173,7 +173,7 @@ const products = {
       name: "صابون الأرغان واللبان",
       category: "صابون مضاد للتجاعيد ومغذي للبشرة",
       use: "يساعد في تحسين مرونة البشرة مع التغذية والترطيب لمظهر أكثر نعومة وشباباً.",
-      image: "/images/argan-frankincense-soap.jpeg",
+      image: "/images/Argan & Frankincense Soap.jpeg",
       price: "115 EGP",
       ingredients: [
         { name: "زيت الأرغان", desc: "يغذي البشرة بعمق" },
