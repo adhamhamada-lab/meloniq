@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Reviews from "@/components/Reviews";
 import Navbar from "@/components/Navbar";
@@ -21,15 +21,31 @@ const featuredProducts = [
   { image: "/images/saadoilsoap.jpeg", title: "Saad Oil Soap", slug: "saadoilsoap" },
 ];
 
-const marqueeItems = [
-  "Handmade", "Botanical", "Natural", "Pure", "Gentle", "Fresh",
-  "Handmade", "Botanical", "Natural", "Pure", "Gentle", "Fresh",
-];
-
 type Product = { image: string; title: string; slug: string };
 
 function ScrollRow({ products, badge }: { products: Product[]; badge?: boolean }) {
   const { t } = useLang();
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const cards = gridRef.current?.querySelectorAll(".stagger-card");
+    if (!cards) return;
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const idx = Array.from(cards).indexOf(entry.target as Element);
+          setTimeout(() => {
+            (entry.target as HTMLElement).style.opacity = "1";
+            (entry.target as HTMLElement).style.transform = "scale(1) translateY(0)";
+          }, idx * 80);
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    cards.forEach((c) => obs.observe(c));
+    return () => obs.disconnect();
+  }, []);
+
   return (
     <>
       {/* Mobile: horizontal scroll */}
@@ -49,10 +65,15 @@ function ScrollRow({ products, badge }: { products: Product[]; badge?: boolean }
         ))}
       </div>
 
-      {/* Desktop: grid */}
-      <div className="hidden md:grid md:grid-cols-3 gap-10 mt-20 px-16">
+      {/* Desktop: grid with stagger */}
+      <div ref={gridRef} className="hidden md:grid md:grid-cols-3 gap-10 mt-20 px-16">
         {products.map((item) => (
-          <a href={`/shop/${item.slug}`} key={item.title} className="relative block bg-[#D7DCCB] rounded-[40px] overflow-hidden hover:-translate-y-2 hover:shadow-2xl duration-500">
+          <a
+            href={`/shop/${item.slug}`}
+            key={item.title}
+            className="stagger-card relative block bg-[#D7DCCB] rounded-[40px] overflow-hidden hover:-translate-y-2 hover:shadow-2xl duration-500"
+            style={{ opacity: 0, transform: "scale(0.93) translateY(16px)", transition: "opacity 0.45s ease, transform 0.45s ease" }}
+          >
             {badge && <span className="absolute top-5 left-5 z-10 bg-[#55614A] text-white px-5 py-2 rounded-full text-xs uppercase tracking-[0.12em]">{t.newBadge}</span>}
             <Image src={item.image} alt={item.title} width={700} height={700} className="w-full h-[420px] object-cover hover:scale-[1.03] duration-700" />
             <div className="p-8">
@@ -102,7 +123,7 @@ export default function Home() {
         </div>
       </section>
 
-            {/* MARQUEE */}
+      {/* MARQUEE */}
       <div className="overflow-hidden border-y border-[#C7CDB6] py-4 bg-[#D7DCCB]">
         <div className="flex animate-marquee whitespace-nowrap items-center">
           {[
@@ -120,30 +141,22 @@ export default function Home() {
             { text: "Fresh", img: "/images/aloe-cucumber-soap.jpg" },
           ].map((item, i) => (
             <span key={i} className="mx-6 flex items-center gap-4 shrink-0">
-              <Image
-                src={item.img}
-                alt={item.text}
-                width={48}
-                height={48}
-                className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover"
-              />
-              <span className="text-[#55614A] text-sm md:text-base uppercase tracking-[0.3em]">
-                {item.text}
-              </span>
+              <Image src={item.img} alt={item.text} width={48} height={48} className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover" />
+              <span className="text-[#55614A] text-sm md:text-base uppercase tracking-[0.3em]">{item.text}</span>
             </span>
           ))}
         </div>
       </div>
 
-      {/* ABOUT */}
-      <section id="about" className="px-8 md:px-16 py-32">
-        <div className="max-w-[1400px] mx-auto">
-          <p className="tracking-[0.35em] text-[#66705D] text-sm">{t.ourPhilosophy}</p>
-          <div className="mt-10 grid md:grid-cols-[1.4fr_0.8fr] gap-20 items-start">
-            <h2 className="text-[48px] md:text-[80px] leading-[1] text-[#55614A]">{t.aboutHeading}</h2>
-            <p className="text-[20px] md:text-[28px] leading-[1.9] text-[#66705D]">{t.aboutDesc}</p>
+      {/* ABOUT — card layout */}
+      <section id="about" className="px-8 md:px-16 py-24">
+        <div className="max-w-[1400px] mx-auto bg-[#D7DCCB] rounded-[40px] p-10 md:p-16">
+          <p className="tracking-[0.35em] text-[#66705D] text-sm mb-8">{t.ourPhilosophy}</p>
+          <div className="grid md:grid-cols-[1.2fr_0.8fr] gap-16 items-start">
+            <h2 className="text-[40px] md:text-[64px] leading-[1.05] text-[#55614A]">{t.aboutHeading}</h2>
+            <p className="text-[18px] md:text-[22px] leading-[1.9] text-[#66705D]">{t.aboutDesc}</p>
           </div>
-          <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-10">
+          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-[#C0CCA0] pt-10">
             {[
               { val: t.stat1Val, label: t.stat1Label },
               { val: t.stat2Val, label: t.stat2Label },
@@ -151,8 +164,8 @@ export default function Home() {
               { val: t.stat4Val, label: t.stat4Label },
             ].map((s) => (
               <div key={s.label}>
-                <h3 className="text-[40px] md:text-[48px] text-[#55614A]">{s.val}</h3>
-                <p className="mt-2 text-[#66705D] text-base md:text-lg">{s.label}</p>
+                <h3 className="text-[36px] md:text-[44px] text-[#55614A]">{s.val}</h3>
+                <p className="mt-2 text-[#66705D] text-sm md:text-base">{s.label}</p>
               </div>
             ))}
           </div>
