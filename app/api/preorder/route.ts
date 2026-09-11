@@ -27,14 +27,21 @@ export async function POST(req: Request) {
 
     // منع استخدام نفس كود الخصم مرتين بنفس رقم التليفون
     if (body.discount_code && body.contact) {
-      const { data: existingUsage } = await supabase
+      const { data: existingUsage, error: usageCheckError } = await supabase
         .from("discount_usage")
         .select("id")
         .ilike("code", body.discount_code)
         .eq("phone", body.contact)
-        .maybeSingle();
+        .limit(1);
 
-      if (existingUsage) {
+      if (usageCheckError) {
+        return Response.json(
+          { error: "Could not verify discount code usage. Please try again." },
+          { status: 500 }
+        );
+      }
+
+      if (existingUsage && existingUsage.length > 0) {
         return Response.json(
           {
             error: "This discount code has already been used with this phone number. Please remove it and try again.",
