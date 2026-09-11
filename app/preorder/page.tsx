@@ -34,6 +34,7 @@ function PreorderContent() {
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [message, setMessage] = useState("");
+  const [contact, setContact] = useState("");
   const [discountCode, setDiscountCode] = useState("");
   const [discountStatus, setDiscountStatus] = useState<"idle" | "valid" | "invalid">("idle");
   const [discountInfo, setDiscountInfo] = useState<{ type: string; value: number } | null>(null);
@@ -51,7 +52,7 @@ function PreorderContent() {
     const res = await fetch("/api/discount/validate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: discountCode }),
+      body: JSON.stringify({ code: discountCode, phone: contact.trim() || undefined }),
     });
     const data = await res.json();
     setValidating(false);
@@ -61,6 +62,7 @@ function PreorderContent() {
     } else {
       setDiscountStatus("invalid");
       setDiscountInfo(null);
+      setMessage(data.message || "");
     }
   }
 
@@ -80,21 +82,31 @@ function PreorderContent() {
   async function send(e: any) {
     e.preventDefault();
     setLoading(true);
-    const form = new FormData(e.target);
     const res = await fetch("/api/preorder", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: form.get("name"),
-        contact: form.get("contact"),
-        address: form.get("address"),
+        name: e.target.name.value,
+        contact,
+        address: e.target.address.value,
         items,
         discount_code: discountStatus === "valid" ? discountCode : null,
       }),
     });
+    const data = await res.json().catch(() => ({}));
     setLoading(false);
-    if (res.ok) { clearCart(); setDone(true); }
-    else { setMessage("Something went wrong. Please try again."); }
+    if (res.ok) {
+      clearCart();
+      setDone(true);
+    } else if (res.status === 409 && data.code === "DISCOUNT_ALREADY_USED") {
+      // الكود اتستخدم قبل كده بنفس الرقم — نرفض الطلب ونطلب من اليوزر يشيل الكود
+      setDiscountStatus("invalid");
+      setDiscountInfo(null);
+      setDiscountCode("");
+      setMessage(data.error || "This discount code has already been used with this phone number. Please remove it and try again.");
+    } else {
+      setMessage(data.error || "Something went wrong. Please try again.");
+    }
   }
 
   const inputStyle = `bg-white text-[#55614A] placeholder:text-[#7C8572] rounded-full px-7 py-5 outline-none border border-transparent focus:border-[#55614A] duration-300 text-lg w-full`;
@@ -165,7 +177,11 @@ function PreorderContent() {
                 </button>
               </div>
 
-              <input required name="contact" placeholder="Phone Number" className={inputStyle} />
+              <input
+                required name="contact" placeholder="Phone Number" className={inputStyle}
+                value={contact}
+                onChange={(e) => setContact(e.target.value)}
+              />
               <textarea required name="address" placeholder="Delivery Address" rows={4} className="bg-white text-[#55614A] placeholder:text-[#7C8572] rounded-[32px] px-7 py-5 outline-none border border-transparent focus:border-[#55614A] resize-none duration-300 text-lg" />
 
               {/* DISCOUNT CODE */}

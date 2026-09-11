@@ -25,12 +25,33 @@ export async function POST(req: Request) {
       return sum + price * item.quantity;
     }, 0);
 
+    // منع استخدام نفس كود الخصم مرتين بنفس رقم التليفون
+    if (body.discount_code && body.contact) {
+      const { data: existingUsage } = await supabase
+        .from("discount_usage")
+        .select("id")
+        .ilike("code", body.discount_code)
+        .eq("phone", body.contact)
+        .maybeSingle();
+
+      if (existingUsage) {
+        return Response.json(
+          {
+            error: "This discount code has already been used with this phone number. Please remove it and try again.",
+            code: "DISCOUNT_ALREADY_USED",
+          },
+          { status: 409 }
+        );
+      }
+    }
+
     // حساب الـ total بعد الخصم
     let finalTotal = originalTotal;
     if (body.discount_code) {
       const { data: discountData } = await supabase
         .from("discount_codes")
         .select("type, value")
+        .eq("active", true)
         .ilike("code", body.discount_code)
         .single();
 
