@@ -18,8 +18,15 @@ export async function POST(req: Request) {
       }])
       .select();
 
-    if (error) {
+ if (error) {
       return Response.json({ error: error.message }, { status: 500 });
+    }
+
+    // ضيف هنا
+    if (body.discount_code && body.contact) {
+      await supabase
+        .from("discount_usage")
+        .insert([{ code: body.discount_code, phone: body.contact }]);
     }
 
     // Google Sheets - منفصل عشان لو فشل مش يأثر على الأوردر
@@ -67,4 +74,5 @@ export async function POST(req: Request) {
   } catch (e) {
     return Response.json({ error: "Server failed" }, { status: 500 });
   }
+    
 }

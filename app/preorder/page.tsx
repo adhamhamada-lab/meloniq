@@ -53,7 +53,10 @@ function PreorderContent() {
     const res = await fetch("/api/discount/validate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: discountCode }),
+      body: JSON.stringify({ 
+  code: discountCode, 
+  phone: (document.querySelector('input[name="contact"]') as HTMLInputElement)?.value 
+}),
     });
     const data = await res.json();
     setValidating(false);

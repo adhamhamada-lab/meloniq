@@ -6,17 +6,30 @@ const supabase = createClient(
 );
 
 export async function POST(req: Request) {
-  const { code } = await req.json();
+  const { code, phone } = await req.json();
 
-const { data, error } = await supabase
-  .from("discount_codes")
-  .select("*")
-  .ilike("code", code)
-  .eq("code", code)
-  .single();
+  const { data, error } = await supabase
+    .from("discount_codes")
+    .select("*")
+    .eq("code", code)
+    .eq("active", true)
+    .single();
 
   if (error || !data) {
     return Response.json({ valid: false, message: "Invalid or expired code" });
+  }
+
+  if (phone) {
+    const { data: usage } = await supabase
+      .from("discount_usage")
+      .select("id")
+      .eq("code", code)
+      .eq("phone", phone)
+      .single();
+
+    if (usage) {
+      return Response.json({ valid: false, message: "You have already used this code" });
+    }
   }
 
   return Response.json({ valid: true, type: data.type, value: data.value });
