@@ -16,6 +16,7 @@ type Order = {
   created_at: string;
   items: Item[];
   discount_code?: string;
+  total?: number;
 };
 
 type DiscountCode = {
@@ -39,10 +40,27 @@ const PRODUCT_PRICES: Record<string, number> = {
   "Tropical Fruit Soap": 100,
 };
 
-function calcOrderTotal(o: Order) {
-  return (o.items || []).reduce((sum, item) => {
+function calcOrderTotal(o: Order, discounts: DiscountCode[]) {
+  // لو الـ total محفوظ في الـ database استخدمه
+  if (o.total) return o.total;
+
+  // لو لأ احسبه من الـ items مع الخصم
+  const raw = (o.items || []).reduce((sum, item) => {
     return sum + (PRODUCT_PRICES[item.product] || 0) * item.quantity;
   }, 0);
+
+  if (!o.discount_code) return raw;
+
+  const discount = discounts.find(
+    (d) => d.code.toLowerCase() === o.discount_code?.toLowerCase()
+  );
+  if (!discount) return raw;
+
+  if (discount.type === "percentage") {
+    return Math.round(raw * (1 - discount.value / 100));
+  } else {
+    return raw - discount.value;
+  }
 }
 
 export default function AdminPage() {
@@ -111,15 +129,19 @@ export default function AdminPage() {
       return acc;
     }, {} as Record<string, number>);
 
-  const totalRevenue = preorders.reduce((sum, o) => sum + calcOrderTotal(o), 0);
-  const collectedRevenue = preorders.filter((o) => o.status === "done").reduce((sum, o) => sum + calcOrderTotal(o), 0);
-  const pendingRevenue = preorders.filter((o) => o.status !== "done").reduce((sum, o) => sum + calcOrderTotal(o), 0);
+  const totalRevenue = preorders.reduce((sum, o) => sum + calcOrderTotal(o, discounts), 0);
+  const collectedRevenue = preorders.filter((o) => o.status === "done").reduce((sum, o) => sum + calcOrderTotal(o, discounts), 0);
+  const pendingRevenue = preorders.filter((o) => o.status !== "done").reduce((sum, o) => sum + calcOrderTotal(o, discounts), 0);
 
   const pending = preorders.filter((o) => o.status !== "done");
   const done = preorders.filter((o) => o.status === "done");
 
   function OrderCard({ o, faded }: { o: Order; faded?: boolean }) {
-    const total = calcOrderTotal(o);
+    const total = calcOrderTotal(o, discounts);
+    const rawTotal = (o.items || []).reduce((sum, item) => {
+      return sum + (PRODUCT_PRICES[item.product] || 0) * item.quantity;
+    }, 0);
+    const hasDiscount = o.discount_code && total !== rawTotal;
 
     return (
       <div className={`rounded-[35px] p-8 flex flex-col gap-4 ${faded ? "opacity-60 bg-[#c8cdb8]" : "bg-[#D7DCCB]"}`}>
@@ -145,8 +167,11 @@ export default function AdminPage() {
           <p className="mt-2 text-[#55614A]"><b>Address:</b> {o.address}</p>
 
           {total > 0 && (
-            <div className="mt-3 flex items-center gap-2">
+            <div className="mt-3 flex items-center gap-2 flex-wrap">
               <b className="text-[#55614A]">Total:</b>
+              {hasDiscount && (
+                <span className="line-through text-[#66705D] text-sm opacity-60">{rawTotal} EGP</span>
+              )}
               <span className="text-[#55614A]">{total} EGP</span>
               {o.discount_code && (
                 <span className="text-[#66705D] text-sm opacity-70">({o.discount_code})</span>
@@ -175,7 +200,6 @@ export default function AdminPage() {
 
       <h1 className="text-[50px] md:text-[90px] text-[#55614A]">Dashboard</h1>
 
-      {/* REVENUE SUMMARY */}
       {!loading && (
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="bg-[#55614A] rounded-[25px] p-6">
@@ -196,23 +220,15 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* TABS */}
       <div className="mt-8 flex gap-4 flex-wrap">
-        <button
-          onClick={() => setTab("preorders")}
-          className={`px-8 py-3 rounded-full text-sm uppercase tracking-[0.1em] duration-300 ${tab === "preorders" ? "bg-[#55614A] text-white" : "border border-[#55614A] text-[#55614A]"}`}
-        >
+        <button onClick={() => setTab("preorders")} className={`px-8 py-3 rounded-full text-sm uppercase tracking-[0.1em] duration-300 ${tab === "preorders" ? "bg-[#55614A] text-white" : "border border-[#55614A] text-[#55614A]"}`}>
           Orders ({pending.length})
         </button>
-        <button
-          onClick={() => setTab("discounts")}
-          className={`px-8 py-3 rounded-full text-sm uppercase tracking-[0.1em] duration-300 ${tab === "discounts" ? "bg-[#55614A] text-white" : "border border-[#55614A] text-[#55614A]"}`}
-        >
+        <button onClick={() => setTab("discounts")} className={`px-8 py-3 rounded-full text-sm uppercase tracking-[0.1em] duration-300 ${tab === "discounts" ? "bg-[#55614A] text-white" : "border border-[#55614A] text-[#55614A]"}`}>
           Discount Codes ({discounts.filter((d) => d.active).length})
         </button>
       </div>
 
-      {/* DISCOUNT CODES TAB */}
       {tab === "discounts" && (
         <div className="mt-10">
           <div className="bg-[#D7DCCB] rounded-[30px] p-8 mb-8">
@@ -249,10 +265,8 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* ORDERS TAB */}
       {tab === "preorders" && (
         <>
-          {/* PRODUCTION SUMMARY */}
           {Object.keys(productTotals).length > 0 && (
             <div className="mt-8 bg-[#D7DCCB] rounded-[30px] p-8">
               <p className="text-[#66705D] tracking-[0.2em] uppercase text-sm mb-4">Production Summary</p>
