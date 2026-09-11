@@ -16,7 +16,7 @@ const products = {
       category: "For Oily & Acne-Prone Skin",
       use: "Purifies Oily Skin, Helps Reduce Breakouts & Leaves the Skin Fresh, Balanced, and Healthy-Looking.",
       image: "/images/teatreeoilsoap.jpeg",
-      price: "150 EGP",
+      price: "115 EGP",
       ingredients: [
         { name: "Sweet Almond Oil", desc: "Nourishes & Softens Skin" },
         { name: "Tea Tree Essential Oil", desc: "Helps Reduce Acne-Causing Bacteria" },
@@ -159,7 +159,7 @@ const products = {
       category: "للبشرة الدهنية والمعرضة للحبوب",
       use: "يطهر البشرة الدهنية ويساعد في تقليل الحبوب ويترك البشرة منتعشة ومتوازنة وذات مظهر صحي.",
       image: "/images/teatreeoilsoap.jpeg",
-      price: "150 EGP",
+      price: "115 EGP",
       ingredients: [
         { name: "زيت اللوز الحلو", desc: "يغذي البشرة ويجعلها أكثر نعومة" },
         { name: "زيت شجرة الشاي الأساسي", desc: "يساعد في تقليل البكتيريا المسببة للحبوب" },
