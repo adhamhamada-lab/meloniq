@@ -233,7 +233,9 @@ export default function Home() {
         </div>
       </div>
 
-      {/* BACK TO SCHOOL BUNDLES */}
+       
+       
+        {/* BACK TO SCHOOL BUNDLES */}
       <section className="px-6 md:px-16 pb-20 md:pb-28 reveal">
         <div className="mb-10 md:mb-14">
           <p className="tracking-[0.35em] text-[#7A8860] text-xs uppercase mb-3">Special Offer</p>
