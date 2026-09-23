@@ -22,8 +22,8 @@ const featuredProducts = [
 ];
 
 const BUNDLES = [
-  { id: 3, label: "Bundle 3", count: 3, price: 80, desc: "Pick any 3 soaps — 25g each" },
-  { id: 5, label: "Bundle 5", count: 5, price: 110, desc: "Pick any 5 soaps — 25g each" },
+  { id: 3, label: "Bundle 3", count: 3, price: 80, desc: "Pick any 3 soaps — 25g each", image: "/images/bundle-back-to-school.jpeg" },
+  { id: 5, label: "Bundle 5", count: 5, price: 110, desc: "Pick any 5 soaps — 25g each", image: "/images/bundle-back-to-school.jpeg" },
 ];
 
 type Product = { image: string; title: string; slug: string };
@@ -247,28 +247,31 @@ export default function Home() {
             <button
               key={bundle.id}
               onClick={() => setActiveBundle(bundle)}
-              className="group relative bg-[#D7DCCB] rounded-[28px] md:rounded-[36px] p-8 md:p-10 text-left hover:-translate-y-1 hover:shadow-xl duration-500 overflow-hidden"
+              className="group relative rounded-[28px] md:rounded-[36px] overflow-hidden text-left hover:-translate-y-1 hover:shadow-xl duration-500"
             >
-              {/* Background soap images */}
-              <div className="absolute right-4 bottom-0 flex gap-2 opacity-20 group-hover:opacity-30 duration-500">
-                {summerProducts.slice(0, bundle.count > 3 ? 4 : 3).map((p) => (
-                  <div key={p.slug} className="relative w-16 h-24 rounded-t-[12px] overflow-hidden">
-                    <Image src={p.image} alt={p.title} fill className="object-cover" />
-                  </div>
-                ))}
-              </div>
+              <div className="relative aspect-[4/3] w-full">
+                <Image
+                  src={bundle.image}
+                  alt={bundle.label}
+                  fill
+                  className="object-cover group-hover:scale-[1.04] duration-700"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
 
-              <div className="relative z-10">
-                <span className="inline-block bg-[#55614A] text-white text-[9px] uppercase tracking-[0.2em] px-3 py-1 rounded-full mb-4">
+                <span className="absolute top-4 left-4 md:top-6 md:left-6 z-10 bg-[#55614A] text-white text-[9px] uppercase tracking-[0.2em] px-3 py-1 rounded-full">
                   {bundle.count} soaps · 25g each
                 </span>
-                <h3 className="text-[40px] md:text-[56px] text-[#55614A] leading-[1] mb-2">{bundle.label}</h3>
-                <p className="text-[#66705D] text-sm mb-6">{bundle.desc}</p>
-                <div className="flex items-end justify-between">
-                  <p className="text-[32px] text-[#55614A]">{bundle.price} <span className="text-lg opacity-60">EGP</span></p>
-                  <span className="px-6 py-3 rounded-full bg-[#55614A] text-white text-xs uppercase tracking-[0.15em] group-hover:scale-105 duration-300">
-                    Choose Soaps →
-                  </span>
+
+                <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 z-10">
+                  <h3 className="text-[32px] md:text-[48px] text-white leading-[1] mb-1">{bundle.label}</h3>
+                  <p className="text-white/70 text-sm mb-4">{bundle.desc}</p>
+                  <div className="flex items-end justify-between">
+                    <p className="text-[26px] md:text-[32px] text-white">{bundle.price} <span className="text-base opacity-70">EGP</span></p>
+                    <span className="px-6 py-3 rounded-full bg-white text-[#55614A] text-xs uppercase tracking-[0.15em] group-hover:scale-105 duration-300">
+                      Choose Soaps →
+                    </span>
+                  </div>
                 </div>
               </div>
             </button>
