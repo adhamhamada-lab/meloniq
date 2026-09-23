@@ -24,13 +24,30 @@ type Item = { product: string; quantity: number };
 function PreorderContent() {
   const { items: cartItems, clearCart } = useCart();
   const params = useSearchParams();
-  const initialProduct = params.get("product") || "";
-  const initialQuantity = Number(params.get("quantity")) || 1;
-  const initialItems = cartItems.length > 0
-    ? cartItems.map((i) => ({ product: i.title, quantity: i.quantity }))
-    : [{ product: initialProduct, quantity: initialQuantity }];
 
-  const [items, setItems] = useState<Item[]>(initialItems);
+  // Bundle detection
+  const bundleId = params.get("bundle");
+  const bundlePrice = Number(params.get("price")) || 0;
+  const isBundle = !!bundleId && bundlePrice > 0;
+
+  // Build initial items
+  function getInitialItems(): Item[] {
+    if (isBundle) {
+      // جمع كل الـ products من الـ URL params
+      const allProducts = params.getAll("product");
+      const counts: Record<string, number> = {};
+      allProducts.forEach((p) => { counts[p] = (counts[p] || 0) + 1; });
+      return Object.entries(counts).map(([product, quantity]) => ({ product, quantity }));
+    }
+    if (cartItems.length > 0) {
+      return cartItems.map((i) => ({ product: i.title, quantity: i.quantity }));
+    }
+    const initialProduct = params.get("product") || "";
+    const initialQuantity = Number(params.get("quantity")) || 1;
+    return [{ product: initialProduct, quantity: initialQuantity }];
+  }
+
+  const [items, setItems] = useState<Item[]>(getInitialItems);
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [message, setMessage] = useState("");
@@ -68,10 +85,13 @@ function PreorderContent() {
 
   const validItems = items.filter((i) => i.product);
 
-  const total = validItems.reduce((sum, item) => {
+  // الـ total — لو bundle بياخد سعر الـ bundle مش سعر المنتجات
+  const rawTotal = validItems.reduce((sum, item) => {
     const product = PRODUCTS.find((p) => p.name === item.product);
     return sum + (product ? product.price * item.quantity : 0);
   }, 0);
+
+  const total = isBundle ? bundlePrice : rawTotal;
 
   const discountedTotal = discountInfo && discountStatus === "valid"
     ? discountInfo.type === "percentage"
@@ -91,6 +111,7 @@ function PreorderContent() {
         address: e.target.address.value,
         items,
         discount_code: discountStatus === "valid" ? discountCode : null,
+        bundle: isBundle ? { id: bundleId, price: bundlePrice } : null,
       }),
     });
     const data = await res.json().catch(() => ({}));
@@ -99,11 +120,10 @@ function PreorderContent() {
       clearCart();
       setDone(true);
     } else if (res.status === 409 && data.code === "DISCOUNT_ALREADY_USED") {
-      // الكود اتستخدم قبل كده بنفس الرقم — نرفض الطلب ونطلب من اليوزر يشيل الكود
       setDiscountStatus("invalid");
       setDiscountInfo(null);
       setDiscountCode("");
-      setMessage(data.error || "This discount code has already been used with this phone number. Please remove it and try again.");
+      setMessage(data.error || "This discount code has already been used with this phone number.");
     } else {
       setMessage(data.error || "Something went wrong. Please try again.");
     }
@@ -120,6 +140,11 @@ function PreorderContent() {
 
           {/* LEFT */}
           <div className="lg:sticky lg:top-32">
+            {isBundle && (
+              <span className="inline-block bg-[#55614A] text-white text-[10px] uppercase tracking-[0.2em] px-4 py-1.5 rounded-full mb-4">
+                Back to School Bundle {bundleId}
+              </span>
+            )}
             <p className="tracking-[0.35em] text-[#66705D] text-sm uppercase">Place Your Order</p>
             <h1 className="mt-6 text-[48px] sm:text-[70px] md:text-[120px] leading-[0.9] text-[#55614A]">Order</h1>
             <p className="mt-6 text-[#66705D] text-[17px] md:text-[20px] leading-relaxed max-w-[480px]">
@@ -149,38 +174,63 @@ function PreorderContent() {
             <form onSubmit={send} className="bg-[#D7DCCB] rounded-[30px] md:rounded-[60px] p-6 md:p-14 shadow-2xl w-full max-w-[700px] mx-auto flex flex-col gap-6 mt-10">
               <input required name="name" placeholder="Full Name" className={inputStyle} />
 
+              {/* Products — لو bundle نعرضهم read-only */}
               <div className="flex flex-col gap-4">
-                <p className="text-[#66705D] tracking-[0.15em] uppercase text-sm px-2">Products</p>
-                {items.map((item, index) => (
-                  <div key={index} className="flex gap-2 items-center w-full">
-                    <select
-                      required
-                      value={item.product}
-                      onChange={(e) => updateItem(index, "product", e.target.value)}
-                      className="bg-white text-[#55614A] rounded-full px-4 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-base flex-1 min-w-0"
-                    >
-                      <option value="" disabled>Select product</option>
-                      {PRODUCTS.map((p) => <option key={p.name} value={p.name}>{p.name}</option>)}
-                    </select>
-                    <input
-                      required type="number" min={1} value={item.quantity}
-                      onChange={(e) => updateItem(index, "quantity", Number(e.target.value))}
-                      className="bg-white text-[#55614A] rounded-full px-3 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-base w-[60px] text-center shrink-0"
-                    />
-                    {items.length > 1 && (
-                      <button type="button" onClick={() => removeItem(index)} className="w-9 h-9 rounded-full bg-white text-[#55614A] hover:bg-[#55614A] hover:text-white duration-300 text-xl flex items-center justify-center shrink-0">×</button>
-                    )}
+                <p className="text-[#66705D] tracking-[0.15em] uppercase text-sm px-2">
+                  {isBundle ? `Bundle ${bundleId} — Your Selection` : "Products"}
+                </p>
+
+                {isBundle ? (
+                  // Bundle: عرض فقط
+                  <div className="flex flex-col gap-3">
+                    {validItems.map((item, i) => {
+                      const product = PRODUCTS.find((p) => p.name === item.product);
+                      return (
+                        <div key={i} className="flex items-center gap-3 bg-white rounded-[20px] px-4 py-3">
+                          {product?.image && (
+                            <div className="relative w-10 h-10 rounded-[10px] overflow-hidden shrink-0">
+                              <Image src={product.image} alt={item.product} fill className="object-cover" />
+                            </div>
+                          )}
+                          <p className="text-[#55614A] text-sm flex-1">{item.product}</p>
+                          <span className="text-[#66705D] text-xs">× {item.quantity}</span>
+                        </div>
+                      );
+                    })}
                   </div>
-                ))}
-                <button type="button" onClick={addItem} className="self-start px-6 py-3 rounded-full border border-[#55614A] text-[#55614A] text-sm uppercase tracking-[0.1em] hover:bg-[#55614A] hover:text-white duration-300">
-                  + Add Item
-                </button>
+                ) : (
+                  // Normal order
+                  <>
+                    {items.map((item, index) => (
+                      <div key={index} className="flex gap-2 items-center w-full">
+                        <select
+                          required value={item.product}
+                          onChange={(e) => updateItem(index, "product", e.target.value)}
+                          className="bg-white text-[#55614A] rounded-full px-4 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-base flex-1 min-w-0"
+                        >
+                          <option value="" disabled>Select product</option>
+                          {PRODUCTS.map((p) => <option key={p.name} value={p.name}>{p.name}</option>)}
+                        </select>
+                        <input
+                          required type="number" min={1} value={item.quantity}
+                          onChange={(e) => updateItem(index, "quantity", Number(e.target.value))}
+                          className="bg-white text-[#55614A] rounded-full px-3 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-base w-[60px] text-center shrink-0"
+                        />
+                        {items.length > 1 && (
+                          <button type="button" onClick={() => removeItem(index)} className="w-9 h-9 rounded-full bg-white text-[#55614A] hover:bg-[#55614A] hover:text-white duration-300 text-xl flex items-center justify-center shrink-0">×</button>
+                        )}
+                      </div>
+                    ))}
+                    <button type="button" onClick={addItem} className="self-start px-6 py-3 rounded-full border border-[#55614A] text-[#55614A] text-sm uppercase tracking-[0.1em] hover:bg-[#55614A] hover:text-white duration-300">
+                      + Add Item
+                    </button>
+                  </>
+                )}
               </div>
 
               <input
                 required name="contact" placeholder="Phone Number" className={inputStyle}
-                value={contact}
-                onChange={(e) => setContact(e.target.value)}
+                value={contact} onChange={(e) => setContact(e.target.value)}
               />
               <textarea required name="address" placeholder="Delivery Address" rows={4} className="bg-white text-[#55614A] placeholder:text-[#7C8572] rounded-[32px] px-7 py-5 outline-none border border-transparent focus:border-[#55614A] resize-none duration-300 text-lg" />
 
@@ -207,10 +257,19 @@ function PreorderContent() {
               </div>
 
               {/* ORDER SUMMARY */}
-              {validItems.length > 0 && (
-                <div className="bg-white rounded-[24px] p-6 flex flex-col gap-4">
-                  <p className="text-[#66705D] tracking-[0.15em] uppercase text-sm">Order Summary</p>
-                  {validItems.map((item, i) => {
+              <div className="bg-white rounded-[24px] p-6 flex flex-col gap-4">
+                <p className="text-[#66705D] tracking-[0.15em] uppercase text-sm">Order Summary</p>
+
+                {isBundle ? (
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-[#55614A] text-sm font-medium">Back to School Bundle {bundleId}</p>
+                      <p className="text-[#66705D] text-xs">{validItems.reduce((s, i) => s + i.quantity, 0)} soaps · 25g each</p>
+                    </div>
+                    <span className="text-[#55614A] text-sm">{bundlePrice} EGP</span>
+                  </div>
+                ) : (
+                  validItems.map((item, i) => {
                     const product = PRODUCTS.find((p) => p.name === item.product);
                     return (
                       <div key={i} className="flex items-center gap-4">
@@ -224,18 +283,19 @@ function PreorderContent() {
                         <span className="text-[#55614A] text-sm">{product ? product.price * item.quantity : 0} EGP</span>
                       </div>
                     );
-                  })}
-                  <div className="border-t border-[#D7DCCB] pt-3 flex justify-between items-center">
-                    <p className="text-[#55614A] font-medium">Total</p>
-                    <div className="flex items-center gap-2">
-                      {discountedTotal !== total && (
-                        <span className="line-through text-[#66705D] text-sm opacity-60">{total} EGP</span>
-                      )}
-                      <span className="text-[#55614A] text-xl font-medium">{discountedTotal} EGP</span>
-                    </div>
+                  })
+                )}
+
+                <div className="border-t border-[#D7DCCB] pt-3 flex justify-between items-center">
+                  <p className="text-[#55614A] font-medium">Total</p>
+                  <div className="flex items-center gap-2">
+                    {discountedTotal !== total && (
+                      <span className="line-through text-[#66705D] text-sm opacity-60">{total} EGP</span>
+                    )}
+                    <span className="text-[#55614A] text-xl font-medium">{discountedTotal} EGP</span>
                   </div>
                 </div>
-              )}
+              </div>
 
               {message && <div className="rounded-[24px] bg-[#55614A] text-white py-4 px-6 text-center">{message}</div>}
 
