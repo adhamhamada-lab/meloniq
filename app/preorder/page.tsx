@@ -14,7 +14,7 @@ const PRODUCTS = [
   { name: "Saad Oil Soap", price: 160, image: "/images/saadoilsoap.jpeg" },
   { name: "Watermelon Soap", price: 100, image: "/images/watermelon-soap.jpg" },
   { name: "Pink Lemonade Soap", price: 100, image: "/images/pink-lemonade-soap.jpg" },
-  { name: "Pina Colada Soap", price: 100, image: "/images/pina-colada-soap.jpg" },
+  { name: "Piña Colada Soap", price: 100, image: "/images/pina-colada-soap.jpg" },
   { name: "Aloe & Cucumber Soap", price: 100, image: "/images/aloe-cucumber-soap.jpg" },
   { name: "Tropical Fruit Soap", price: 100, image: "/images/tropical-fruit-soap.jpg" },
 ];

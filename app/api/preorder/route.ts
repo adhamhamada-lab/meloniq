@@ -10,20 +10,73 @@ const PRODUCTS: Record<string, number> = {
   "Saad Oil Soap": 160,
   "Watermelon Soap": 100,
   "Pink Lemonade Soap": 100,
-  "Pina Colada Soap": 100,
+  "Piña Colada Soap": 100,
   "Aloe & Cucumber Soap": 100,
   "Tropical Fruit Soap": 100,
 };
+
+// تعريف الباندلز في السيرفر — المصدر الوحيد الموثوق للسعر والعدد
+const BUNDLES: Record<number, { count: number; price: number }> = {
+  3: { count: 3, price: 80 },
+  5: { count: 5, price: 110 },
+};
+
+// الصابونات المسموح اختيارها جوه أي باندل (نفس Summer Collection في الصفحة الرئيسية)
+const ALLOWED_BUNDLE_PRODUCTS = [
+  "Watermelon Soap",
+  "Pink Lemonade Soap",
+  "Piña Colada Soap",
+  "Aloe & Cucumber Soap",
+  "Tropical Fruit Soap",
+];
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    // حساب الـ total الأصلي
+    // حساب الـ total الأصلي (بيستخدم للطلبات العادية فقط)
     const originalTotal = (body.items || []).reduce((sum: number, item: any) => {
       const price = PRODUCTS[item.product] || 0;
       return sum + price * item.quantity;
     }, 0);
+
+    // التحقق من الباندل — السيرفر بيتأكد بنفسه، مش بيثق في أي رقم جاي من الفرونت إند
+    let isBundle = false;
+    let baseTotal = originalTotal;
+
+    if (body.bundle && body.bundle.id) {
+      const bundleConfig = BUNDLES[Number(body.bundle.id)];
+
+      if (!bundleConfig) {
+        return Response.json({ error: "Invalid bundle selected." }, { status: 400 });
+      }
+
+      const totalQuantity = (body.items || []).reduce(
+        (sum: number, item: any) => sum + (item.quantity || 0),
+        0
+      );
+
+      if (totalQuantity !== bundleConfig.count) {
+        return Response.json(
+          { error: `This bundle requires exactly ${bundleConfig.count} soaps.` },
+          { status: 400 }
+        );
+      }
+
+      const invalidItem = (body.items || []).find(
+        (item: any) => !ALLOWED_BUNDLE_PRODUCTS.includes(item.product)
+      );
+
+      if (invalidItem) {
+        return Response.json(
+          { error: "One or more selected soaps aren't available in this bundle." },
+          { status: 400 }
+        );
+      }
+
+      isBundle = true;
+      baseTotal = bundleConfig.price; // السعر بييجي من هنا بس، مش من الفرونت إند
+    }
 
     // منع استخدام نفس كود الخصم مرتين بنفس رقم التليفون
     if (body.discount_code && body.contact) {
@@ -52,8 +105,8 @@ export async function POST(req: Request) {
       }
     }
 
-    // حساب الـ total بعد الخصم
-    let finalTotal = originalTotal;
+    // حساب الـ total بعد الخصم (باندل أو عادي)
+    let finalTotal = baseTotal;
     if (body.discount_code) {
       const { data: discountData } = await supabase
         .from("discount_codes")
@@ -64,8 +117,8 @@ export async function POST(req: Request) {
 
       if (discountData) {
         finalTotal = discountData.type === "percentage"
-          ? Math.round(originalTotal * (1 - discountData.value / 100))
-          : originalTotal - discountData.value;
+          ? Math.round(baseTotal * (1 - discountData.value / 100))
+          : baseTotal - discountData.value;
       }
     }
 
@@ -105,7 +158,7 @@ export async function POST(req: Request) {
           items: body.items,
           discount_code: body.discount_code || "",
           total: finalTotal,
-          type: "preorder",
+          type: isBundle ? "bundle" : "preorder",
         }),
       });
     } catch (sheetError) {
@@ -117,18 +170,19 @@ export async function POST(req: Request) {
       await resend.emails.send({
         from: "Meloniq <onboarding@resend.dev>",
         to: "yusefmgaber@gmail.com",
-        subject: "⏳ New Pre-Order - Meloniq",
+        subject: isBundle ? "🎒 New Bundle Order - Meloniq" : "⏳ New Pre-Order - Meloniq",
         html: `
-          <h2>New Pre-Order Received</h2>
+          <h2>${isBundle ? "New Bundle Order Received" : "New Pre-Order Received"}</h2>
           <p><b>Name:</b> ${body.name}</p>
           <p><b>Phone:</b> ${body.contact}</p>
           <p><b>Address:</b> ${body.address}</p>
+          ${isBundle ? `<p><b>Bundle:</b> Bundle ${body.bundle.id} (${baseTotal} EGP)</p>` : ""}
           <h3>Items:</h3>
           <ul>
             ${body.items.map((i: any) => `<li>${i.product} × ${i.quantity}</li>`).join("")}
           </ul>
           ${body.discount_code ? `<p><b>Discount Code:</b> ${body.discount_code}</p>` : ""}
-          <p><b>Original Total:</b> ${originalTotal} EGP</p>
+          <p><b>Base Total:</b> ${baseTotal} EGP</p>
           <p><b>Final Total:</b> ${finalTotal} EGP</p>
         `,
       });
