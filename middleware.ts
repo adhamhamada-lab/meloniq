@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl
+
+  // راوت الفحص العام ده بيستخدمه العميل نفسه وقت الطلب — لازم يفضل من غير باسورد
+  if (pathname === '/api/discount/validate') {
+    return NextResponse.next()
+  }
+
   const auth = req.headers.get('authorization')
 
   const validUser = process.env.ADMIN_USER!
@@ -20,5 +27,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin', '/api/admin/:path*'],
+  matcher: ['/admin', '/api/admin/:path*', '/api/discount', '/api/discount/:path*'],
 }
