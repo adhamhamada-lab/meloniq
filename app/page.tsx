@@ -82,20 +82,11 @@ function StaggerGrid({ products, badge }: { products: Product[]; badge?: boolean
 function BundleSelector({ bundle, onClose }: { bundle: typeof BUNDLES[0]; onClose: () => void }) {
   const [selections, setSelections] = useState<string[]>([]);
 
-  function add(title: string) {
+  function toggle(title: string) {
     setSelections((prev) => {
+      if (prev.includes(title)) return prev.filter((s) => s !== title);
       if (prev.length < bundle.count) return [...prev, title];
       return prev;
-    });
-  }
-
-  function remove(title: string) {
-    setSelections((prev) => {
-      const idx = prev.indexOf(title);
-      if (idx === -1) return prev;
-      const copy = [...prev];
-      copy.splice(idx, 1);
-      return copy;
     });
   }
 
@@ -126,35 +117,26 @@ function BundleSelector({ bundle, onClose }: { bundle: typeof BUNDLES[0]; onClos
           <span className="text-xs text-[#66705D] ml-1 shrink-0">{selections.length}/{bundle.count}</span>
         </div>
 
-        {/* Products — تقدر تختار نفس الصابونة أكتر من مرة */}
+        {/* Products */}
         <div className="grid grid-cols-1 gap-3 max-h-[320px] overflow-y-auto pr-1">
           {summerProducts.map((item) => {
+            const selected = selections.includes(item.title);
             const count = selections.filter((s) => s === item.title).length;
-            const selected = count > 0;
-            const atMax = selections.length >= bundle.count;
             return (
               <button
                 key={item.title}
-                type="button"
-                onClick={() => { if (!atMax) add(item.title); }}
-                className={`flex items-center gap-4 p-3 rounded-[20px] text-left transition-all duration-200 ${
-                  selected ? "bg-[#55614A]" : "bg-[#D7DCCB] hover:bg-[#C8D4A8]"
-                } ${atMax && !selected ? "opacity-40" : ""}`}
+                onClick={() => toggle(item.title)}
+                className={`flex items-center gap-4 p-3 rounded-[20px] text-left transition-all duration-200 ${selected ? "bg-[#55614A]" : "bg-[#D7DCCB] hover:bg-[#C8D4A8]"}`}
               >
                 <div className="relative w-14 h-14 rounded-[14px] overflow-hidden shrink-0">
                   <Image src={item.image} alt={item.title} fill className="object-cover" />
                 </div>
                 <div className="flex-1">
                   <p className={`text-sm font-medium ${selected ? "text-white" : "text-[#55614A]"}`}>{item.title}</p>
-                  <p className={`text-xs mt-0.5 ${selected ? "text-white/60" : "text-[#66705D]"}`}>25g{count > 1 ? ` × ${count}` : ""}</p>
+                  <p className={`text-xs mt-0.5 ${selected ? "text-white/60" : "text-[#66705D]"}`}>25g</p>
                 </div>
                 {count > 0 && (
-                  <span
-                    role="button"
-                    onClick={(e) => { e.stopPropagation(); remove(item.title); }}
-                    className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium bg-white text-[#55614A] hover:bg-red-50 shrink-0"
-                    title="Remove one"
-                  >
+                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${selected ? "bg-white text-[#55614A]" : "bg-[#55614A] text-white"}`}>
                     {count}
                   </span>
                 )}
@@ -254,46 +236,48 @@ export default function Home() {
        
        
         {/* BACK TO SCHOOL BUNDLES */}
-      <section className="px-6 md:px-16 pb-20 md:pb-28 reveal">
-        <div className="mb-10 md:mb-14">
-          <p className="tracking-[0.35em] text-[#7A8860] text-xs uppercase mb-3">Special Offer</p>
-          <h2 className="text-[36px] md:text-[60px] text-[#55614A] leading-[1]">Back to School Bundles</h2>
-          <p className="mt-3 text-[#66705D] text-sm md:text-base max-w-[480px]">Mix and match from our Summer Collection — pick your favourites in one bundle.</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-          {BUNDLES.map((bundle) => (
-            <button
-              key={bundle.id}
-              onClick={() => setActiveBundle(bundle)}
-              className="group relative rounded-[28px] md:rounded-[36px] overflow-hidden text-left hover:-translate-y-1 hover:shadow-xl duration-500"
-            >
-              <div className="relative aspect-[4/3] w-full">
-                <Image
-                  src={bundle.image}
-                  alt={bundle.label}
-                  fill
-                  className="object-cover group-hover:scale-[1.04] duration-700"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+      <section className="px-6 md:px-16 py-20 md:py-32 reveal">
+        <div className="bg-[#D7DCCB] rounded-[32px] md:rounded-[48px] p-8 md:p-16">
+          <div className="mb-12 md:mb-16">
+            <p className="tracking-[0.35em] text-[#7A8860] text-xs uppercase mb-3">Special Offer</p>
+            <h2 className="text-[36px] md:text-[64px] text-[#55614A] leading-[1]">Back to School Bundles</h2>
+            <p className="mt-4 text-[#66705D] text-sm md:text-lg max-w-[520px]">Mix and match from our Summer Collection — pick your favourites in one bundle.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+            {BUNDLES.map((bundle) => (
+              <button
+                key={bundle.id}
+                onClick={() => setActiveBundle(bundle)}
+                className="group relative rounded-[28px] md:rounded-[40px] overflow-hidden text-left hover:-translate-y-1 hover:shadow-2xl duration-500"
+              >
+                <div className="relative aspect-[4/5] w-full">
+                  <Image
+                    src={bundle.image}
+                    alt={bundle.label}
+                    fill
+                    className="object-cover group-hover:scale-[1.04] duration-700"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
 
-                <span className="absolute top-4 left-4 md:top-6 md:left-6 z-10 bg-[#55614A] text-white text-[9px] uppercase tracking-[0.2em] px-3 py-1 rounded-full">
-                  {bundle.count} soaps · 25g each
-                </span>
+                  <span className="absolute top-5 left-5 md:top-8 md:left-8 z-10 bg-[#55614A] text-white text-[10px] md:text-xs uppercase tracking-[0.2em] px-4 py-1.5 rounded-full">
+                    {bundle.count} soaps · 25g each
+                  </span>
 
-                <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 z-10">
-                  <h3 className="text-[32px] md:text-[48px] text-white leading-[1] mb-1">{bundle.label}</h3>
-                  <p className="text-white/70 text-sm mb-4">{bundle.desc}</p>
-                  <div className="flex items-end justify-between">
-                    <p className="text-[26px] md:text-[32px] text-white">{bundle.price} <span className="text-base opacity-70">EGP</span></p>
-                    <span className="px-6 py-3 rounded-full bg-white text-[#55614A] text-xs uppercase tracking-[0.15em] group-hover:scale-105 duration-300">
-                      Choose Soaps →
-                    </span>
+                  <div className="absolute bottom-0 left-0 right-0 p-7 md:p-12 z-10">
+                    <h3 className="text-[40px] md:text-[64px] text-white leading-[1] mb-2">{bundle.label}</h3>
+                    <p className="text-white/70 text-sm md:text-base mb-6">{bundle.desc}</p>
+                    <div className="flex items-end justify-between">
+                      <p className="text-[30px] md:text-[40px] text-white">{bundle.price} <span className="text-lg opacity-70">EGP</span></p>
+                      <span className="px-7 py-3.5 rounded-full bg-white text-[#55614A] text-xs uppercase tracking-[0.15em] group-hover:scale-105 duration-300">
+                        Choose Soaps →
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </button>
-          ))}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
