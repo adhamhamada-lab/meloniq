@@ -82,11 +82,22 @@ function StaggerGrid({ products, badge }: { products: Product[]; badge?: boolean
 function BundleSelector({ bundle, onClose }: { bundle: typeof BUNDLES[0]; onClose: () => void }) {
   const [selections, setSelections] = useState<string[]>([]);
 
-  function toggle(title: string) {
+  // بتزود صابونة واحدة (تقدر تكرر نفس الصابونة أكتر من مرة)
+  function add(title: string) {
     setSelections((prev) => {
-      if (prev.includes(title)) return prev.filter((s) => s !== title);
       if (prev.length < bundle.count) return [...prev, title];
       return prev;
+    });
+  }
+
+  // بتشيل نسخة واحدة بس من الصابونة دي
+  function remove(title: string) {
+    setSelections((prev) => {
+      const idx = prev.indexOf(title);
+      if (idx === -1) return prev;
+      const copy = [...prev];
+      copy.splice(idx, 1);
+      return copy;
     });
   }
 
@@ -117,26 +128,35 @@ function BundleSelector({ bundle, onClose }: { bundle: typeof BUNDLES[0]; onClos
           <span className="text-xs text-[#66705D] ml-1 shrink-0">{selections.length}/{bundle.count}</span>
         </div>
 
-        {/* Products */}
+        {/* Products — تقدر تختار نفس الصابونة أكتر من مرة */}
         <div className="grid grid-cols-1 gap-3 max-h-[320px] overflow-y-auto pr-1">
           {summerProducts.map((item) => {
-            const selected = selections.includes(item.title);
             const count = selections.filter((s) => s === item.title).length;
+            const selected = count > 0;
+            const atMax = selections.length >= bundle.count;
             return (
               <button
                 key={item.title}
-                onClick={() => toggle(item.title)}
-                className={`flex items-center gap-4 p-3 rounded-[20px] text-left transition-all duration-200 ${selected ? "bg-[#55614A]" : "bg-[#D7DCCB] hover:bg-[#C8D4A8]"}`}
+                type="button"
+                onClick={() => { if (!atMax) add(item.title); }}
+                className={`flex items-center gap-4 p-3 rounded-[20px] text-left transition-all duration-200 ${
+                  selected ? "bg-[#55614A]" : "bg-[#D7DCCB] hover:bg-[#C8D4A8]"
+                } ${atMax && !selected ? "opacity-40" : ""}`}
               >
                 <div className="relative w-14 h-14 rounded-[14px] overflow-hidden shrink-0">
                   <Image src={item.image} alt={item.title} fill className="object-cover" />
                 </div>
                 <div className="flex-1">
                   <p className={`text-sm font-medium ${selected ? "text-white" : "text-[#55614A]"}`}>{item.title}</p>
-                  <p className={`text-xs mt-0.5 ${selected ? "text-white/60" : "text-[#66705D]"}`}>25g</p>
+                  <p className={`text-xs mt-0.5 ${selected ? "text-white/60" : "text-[#66705D]"}`}>25g{count > 1 ? ` × ${count}` : ""}</p>
                 </div>
                 {count > 0 && (
-                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${selected ? "bg-white text-[#55614A]" : "bg-[#55614A] text-white"}`}>
+                  <span
+                    role="button"
+                    onClick={(e) => { e.stopPropagation(); remove(item.title); }}
+                    className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium bg-white text-[#55614A] hover:bg-red-50 shrink-0"
+                    title="Remove one"
+                  >
                     {count}
                   </span>
                 )}
@@ -233,9 +253,7 @@ export default function Home() {
         </div>
       </div>
 
-       
-       
-        {/* BACK TO SCHOOL BUNDLES */}
+      {/* BACK TO SCHOOL BUNDLES */}
       <section className="px-6 md:px-16 py-20 md:py-32 reveal">
         <div className="bg-[#D7DCCB] rounded-[32px] md:rounded-[48px] p-8 md:p-16">
           <div className="mb-12 md:mb-16">
@@ -293,7 +311,6 @@ export default function Home() {
         <StaggerGrid products={summerProducts} badge />
       </section>
 
-      
       {/* ABOUT */}
       <section id="about" className="px-6 md:px-16 pb-20 md:pb-28 reveal">
         <div className="bg-[#D7DCCB] rounded-[28px] md:rounded-[40px] overflow-hidden">
