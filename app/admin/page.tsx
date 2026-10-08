@@ -126,6 +126,43 @@ export default function AdminPage() {
   const pending = preorders.filter((o) => o.status !== "done");
   const done = preorders.filter((o) => o.status === "done");
 
+  // الإيرادات الشهرية — من أول شهر فيه طلب لحد الشهر الحالي
+  const now = new Date();
+  const orderTimes = preorders
+    .map((o) => new Date(o.created_at).getTime())
+    .filter((n) => !isNaN(n));
+  const firstDate = orderTimes.length ? new Date(Math.min(...orderTimes)) : now;
+  const monthCount =
+    (now.getFullYear() - firstDate.getFullYear()) * 12 +
+    (now.getMonth() - firstDate.getMonth()) + 1;
+
+  const monthlyData = Array.from({ length: monthCount }, (_, idx) => {
+    const d = new Date(firstDate.getFullYear(), firstDate.getMonth() + idx, 1);
+    return {
+      key: `${d.getFullYear()}-${d.getMonth()}`,
+      label: d.toLocaleString("en-US", { month: "short" }),
+      year: d.getFullYear(),
+      total: 0,
+      collected: 0,
+      orders: 0,
+    };
+  });
+  preorders.forEach((o) => {
+    const d = new Date(o.created_at);
+    const m = monthlyData.find((x) => x.key === `${d.getFullYear()}-${d.getMonth()}`);
+    if (!m) return;
+    const t = calcOrderTotal(o, discounts);
+    m.total += t;
+    m.orders += 1;
+    if (o.status === "done") m.collected += t;
+  });
+  const thisMonth = monthlyData[monthlyData.length - 1];
+  const lastMonth = monthlyData.length > 1 ? monthlyData[monthlyData.length - 2] : null;
+  const maxMonth = Math.max(...monthlyData.map((m) => m.total), 1);
+  const monthChange = lastMonth && lastMonth.total > 0
+    ? Math.round(((thisMonth.total - lastMonth.total) / lastMonth.total) * 100)
+    : null;
+
   function OrderCard({ o, faded }: { o: Order; faded?: boolean }) {
     const total = calcOrderTotal(o, discounts);
     const rawTotal = (o.items || []).reduce((sum, item) => {
@@ -206,6 +243,86 @@ export default function AdminPage() {
             <p className="text-[#66705D] text-xs uppercase tracking-[0.2em]">Pending</p>
             <p className="text-[#55614A] text-4xl mt-2 font-medium">{pendingRevenue.toLocaleString()} <span className="text-xl opacity-70">EGP</span></p>
             <p className="text-[#66705D] text-xs mt-1">{preorders.filter((o) => o.status !== "done").length} pending</p>
+          </div>
+        </div>
+      )}
+
+      {!loading && (
+        <div className="mt-4 bg-[#D7DCCB] rounded-[25px] p-6 md:p-8">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+            <div>
+              <p className="text-[#66705D] text-xs uppercase tracking-[0.2em]">Monthly Revenue</p>
+              <p className="text-[#55614A] text-4xl mt-2 font-medium">
+                {thisMonth.total.toLocaleString()} <span className="text-xl opacity-70">EGP</span>
+              </p>
+              <p className="text-[#66705D] text-xs mt-1">
+                This month ({thisMonth.label} {thisMonth.year}) · {thisMonth.orders} orders
+                {monthChange !== null && lastMonth && (
+                  <span className={`ml-2 ${monthChange >= 0 ? "text-[#55614A]" : "text-red-500"}`}>
+                    {monthChange >= 0 ? "▲" : "▼"} {Math.abs(monthChange)}% vs {lastMonth.label}
+                  </span>
+                )}
+              </p>
+            </div>
+            <div className="flex items-center gap-4 text-xs text-[#66705D]">
+              <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#55614A]" /> Collected</span>
+              <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#B7C0A5]" /> Pending</span>
+            </div>
+          </div>
+
+          {/* رسم بياني لكل الشهور (بيتحرك أفقيًا لو الشهور كتير) */}
+          <div className="overflow-x-auto pb-2">
+            <div className="flex items-end gap-3 md:gap-5 h-48" style={{ minWidth: `${monthlyData.length * 72}px` }}>
+              {monthlyData.map((m, i) => {
+                const heightPct = m.total > 0 ? Math.max((m.total / maxMonth) * 100, 4) : 0;
+                const collectedPct = m.total > 0 ? (m.collected / m.total) * 100 : 0;
+                const isCurrent = i === monthlyData.length - 1;
+                return (
+                  <div key={m.key} className="flex-1 flex flex-col items-center justify-end h-full gap-2">
+                    <span className="text-[#55614A] text-[11px] md:text-xs">{m.total > 0 ? m.total.toLocaleString() : "—"}</span>
+                    <div className="w-full flex-1 flex items-end">
+                      <div
+                        className={`w-full rounded-t-[12px] overflow-hidden flex flex-col justify-end bg-[#B7C0A5] ${isCurrent ? "ring-2 ring-[#55614A]" : ""}`}
+                        style={{ height: `${heightPct}%` }}
+                      >
+                        <div className="w-full bg-[#55614A]" style={{ height: `${collectedPct}%` }} />
+                      </div>
+                    </div>
+                    <span className={`text-xs uppercase tracking-[0.1em] text-center leading-tight ${isCurrent ? "text-[#55614A] font-bold" : "text-[#66705D]"}`}>
+                      {m.label}
+                      <br />
+                      <span className="opacity-60 text-[10px]">{m.year}</span>
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* جدول بكل الشهور — الأحدث فوق */}
+          <div className="mt-8 overflow-x-auto">
+            <table className="w-full text-left text-[#55614A] text-sm min-w-[480px]">
+              <thead>
+                <tr className="text-[#66705D] text-xs uppercase tracking-[0.15em] border-b border-[#B7C0A5]">
+                  <th className="py-3 font-normal">Month</th>
+                  <th className="py-3 font-normal">Orders</th>
+                  <th className="py-3 font-normal">Collected</th>
+                  <th className="py-3 font-normal">Pending</th>
+                  <th className="py-3 font-normal text-right">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[...monthlyData].reverse().map((m) => (
+                  <tr key={m.key} className="border-b border-[#C5CBA8] last:border-0">
+                    <td className="py-3">{m.label} {m.year}</td>
+                    <td className="py-3">{m.orders}</td>
+                    <td className="py-3">{m.collected.toLocaleString()} EGP</td>
+                    <td className="py-3">{(m.total - m.collected).toLocaleString()} EGP</td>
+                    <td className="py-3 text-right font-medium">{m.total.toLocaleString()} EGP</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}
