@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import { useCart } from "@/app/context/CartContext";
+import { normalizeProduct } from "@/lib/products";
 
 const PRODUCTS = [
   { name: "Tea Tree Oil Soap", price: 115, image: "/images/teatreeoilsoap.jpeg" },
@@ -40,9 +41,9 @@ function PreorderContent() {
       return Object.entries(counts).map(([product, quantity]) => ({ product, quantity }));
     }
     if (cartItems.length > 0) {
-      return cartItems.map((i) => ({ product: i.title, quantity: i.quantity }));
+      return cartItems.map((i) => ({ product: normalizeProduct(i.title), quantity: i.quantity }));
     }
-    const initialProduct = params.get("product") || "";
+    const initialProduct = normalizeProduct(params.get("product") || "");
     const initialQuantity = Number(params.get("quantity")) || 1;
     return [{ product: initialProduct, quantity: initialQuantity }];
   }

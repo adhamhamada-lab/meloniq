@@ -1,19 +1,8 @@
 import { supabase } from "../../../lib/supabase";
 import { Resend } from "resend";
+import { normalizeProduct, productPrice } from "../../../lib/products";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-
-const PRODUCTS: Record<string, number> = {
-  "Tea Tree Oil Soap": 115,
-  "Argan & Frankincense Soap": 115,
-  "Licorice Oil Soap": 140,
-  "Saad Oil Soap": 160,
-  "Watermelon Soap": 100,
-  "Pink Lemonade Soap": 100,
-  "Piña Colada Soap": 100,
-  "Aloe & Cucumber Soap": 100,
-  "Tropical Fruit Soap": 100,
-};
 
 // تعريف الباندلز في السيرفر — المصدر الوحيد الموثوق للسعر والعدد
 const BUNDLES: Record<number, { count: number; price: number }> = {
@@ -21,7 +10,7 @@ const BUNDLES: Record<number, { count: number; price: number }> = {
   5: { count: 5, price: 110 },
 };
 
-// الصابونات المسموح اختيارها جوه أي باندل (نفس Summer Collection في الصفحة الرئيسية)
+// الصابونات المسموح اختيارها جوه أي باندل (Summer Collection)
 const ALLOWED_BUNDLE_PRODUCTS = [
   "Watermelon Soap",
   "Pink Lemonade Soap",
@@ -34,13 +23,19 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    // حساب الـ total الأصلي (بيستخدم للطلبات العادية فقط)
-    const originalTotal = (body.items || []).reduce((sum: number, item: any) => {
-      const price = PRODUCTS[item.product] || 0;
-      return sum + price * item.quantity;
-    }, 0);
+    // نوحّد أسماء المنتجات (عربي / إنجليزي / Pina) للاسم الإنجليزي الأساسي
+    const items = (body.items || []).map((i: any) => ({
+      product: normalizeProduct(i.product),
+      quantity: Number(i.quantity) || 0,
+    }));
 
-    // التحقق من الباندل — السيرفر بيتأكد بنفسه، مش بيثق في أي رقم جاي من الفرونت إند
+    // حساب الـ total الأصلي (للطلبات العادية)
+    const originalTotal = items.reduce(
+      (sum: number, item: any) => sum + productPrice(item.product) * item.quantity,
+      0
+    );
+
+    // التحقق من الباندل — السيرفر بيتأكد بنفسه
     let isBundle = false;
     let baseTotal = originalTotal;
 
@@ -51,11 +46,7 @@ export async function POST(req: Request) {
         return Response.json({ error: "Invalid bundle selected." }, { status: 400 });
       }
 
-      const totalQuantity = (body.items || []).reduce(
-        (sum: number, item: any) => sum + (item.quantity || 0),
-        0
-      );
-
+      const totalQuantity = items.reduce((sum: number, item: any) => sum + item.quantity, 0);
       if (totalQuantity !== bundleConfig.count) {
         return Response.json(
           { error: `This bundle requires exactly ${bundleConfig.count} soaps.` },
@@ -63,10 +54,7 @@ export async function POST(req: Request) {
         );
       }
 
-      const invalidItem = (body.items || []).find(
-        (item: any) => !ALLOWED_BUNDLE_PRODUCTS.includes(item.product)
-      );
-
+      const invalidItem = items.find((item: any) => !ALLOWED_BUNDLE_PRODUCTS.includes(item.product));
       if (invalidItem) {
         return Response.json(
           { error: "One or more selected soaps aren't available in this bundle." },
@@ -75,7 +63,7 @@ export async function POST(req: Request) {
       }
 
       isBundle = true;
-      baseTotal = bundleConfig.price; // السعر بييجي من هنا بس، مش من الفرونت إند
+      baseTotal = bundleConfig.price;
     }
 
     // منع استخدام نفس كود الخصم مرتين بنفس رقم التليفون
@@ -105,7 +93,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // حساب الـ total بعد الخصم (باندل أو عادي)
+    // حساب الـ total بعد الخصم
     let finalTotal = baseTotal;
     if (body.discount_code) {
       const { data: discountData } = await supabase
@@ -128,7 +116,7 @@ export async function POST(req: Request) {
         name: body.name,
         contact: body.contact,
         address: body.address,
-        items: body.items,
+        items,
         discount_code: body.discount_code || null,
         total: finalTotal,
       }])
@@ -155,7 +143,7 @@ export async function POST(req: Request) {
           name: body.name,
           contact: body.contact,
           address: body.address,
-          items: body.items,
+          items,
           discount_code: body.discount_code || "",
           total: finalTotal,
           type: isBundle ? "bundle" : "preorder",
@@ -179,7 +167,7 @@ export async function POST(req: Request) {
           ${isBundle ? `<p><b>Bundle:</b> Bundle ${body.bundle.id} (${baseTotal} EGP)</p>` : ""}
           <h3>Items:</h3>
           <ul>
-            ${body.items.map((i: any) => `<li>${i.product} × ${i.quantity}</li>`).join("")}
+            ${items.map((i: any) => `<li>${i.product} × ${i.quantity}</li>`).join("")}
           </ul>
           ${body.discount_code ? `<p><b>Discount Code:</b> ${body.discount_code}</p>` : ""}
           <p><b>Base Total:</b> ${baseTotal} EGP</p>

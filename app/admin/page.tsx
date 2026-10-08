@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { normalizeProduct, productPrice } from "@/lib/products";
 
 type Item = {
   product: string;
@@ -28,25 +29,13 @@ type DiscountCode = {
   created_at: string;
 };
 
-const PRODUCT_PRICES: Record<string, number> = {
-  "Tea Tree Oil Soap": 115,
-  "Argan & Frankincense Soap": 115,
-  "Licorice Oil Soap": 140,
-  "Saad Oil Soap": 160,
-  "Watermelon Soap": 100,
-  "Pink Lemonade Soap": 100,
-  "Pina Colada Soap": 100,
-  "Aloe & Cucumber Soap": 100,
-  "Tropical Fruit Soap": 100,
-};
-
 function calcOrderTotal(o: Order, discounts: DiscountCode[]) {
   // لو الـ total محفوظ في الـ database استخدمه
   if (o.total) return o.total;
 
   // لو لأ احسبه من الـ items مع الخصم
   const raw = (o.items || []).reduce((sum, item) => {
-    return sum + (PRODUCT_PRICES[item.product] || 0) * item.quantity;
+    return sum + productPrice(item.product) * item.quantity;
   }, 0);
 
   if (!o.discount_code) return raw;
@@ -125,7 +114,8 @@ export default function AdminPage() {
     .filter((o) => o.status !== "done")
     .flatMap((o) => o.items || [])
     .reduce((acc, item) => {
-      acc[item.product] = (acc[item.product] || 0) + item.quantity;
+      const key = normalizeProduct(item.product);
+      acc[key] = (acc[key] || 0) + item.quantity;
       return acc;
     }, {} as Record<string, number>);
 
@@ -139,7 +129,7 @@ export default function AdminPage() {
   function OrderCard({ o, faded }: { o: Order; faded?: boolean }) {
     const total = calcOrderTotal(o, discounts);
     const rawTotal = (o.items || []).reduce((sum, item) => {
-      return sum + (PRODUCT_PRICES[item.product] || 0) * item.quantity;
+      return sum + productPrice(item.product) * item.quantity;
     }, 0);
     const hasDiscount = o.discount_code && total !== rawTotal;
 
