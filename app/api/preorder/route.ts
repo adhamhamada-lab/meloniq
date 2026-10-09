@@ -29,15 +29,24 @@ export async function POST(req: Request) {
       quantity: Number(i.quantity) || 0,
     }));
 
+    // صابون إضافي بسعره العادي (بيتقبل مع الباندل بس)
+    const extraItems = (body.extra_items || [])
+      .map((i: any) => ({
+        product: normalizeProduct(i.product),
+        quantity: Number(i.quantity) || 0,
+      }))
+      .filter((i: any) => i.product && i.quantity > 0);
+
     // حساب الـ total الأصلي (للطلبات العادية)
     const originalTotal = items.reduce(
       (sum: number, item: any) => sum + productPrice(item.product) * item.quantity,
       0
     );
 
-    // التحقق من الباندل — السيرفر بيتأكد بنفسه
     let isBundle = false;
     let baseTotal = originalTotal;
+    let extrasTotal = 0;
+    let storedItems = items;
 
     if (body.bundle && body.bundle.id) {
       const bundleConfig = BUNDLES[Number(body.bundle.id)];
@@ -46,6 +55,7 @@ export async function POST(req: Request) {
         return Response.json({ error: "Invalid bundle selected." }, { status: 400 });
       }
 
+      // التحقق من الباندل بيتم على صابونات الباندل بس (مش الإضافي)
       const totalQuantity = items.reduce((sum: number, item: any) => sum + item.quantity, 0);
       if (totalQuantity !== bundleConfig.count) {
         return Response.json(
@@ -62,8 +72,25 @@ export async function POST(req: Request) {
         );
       }
 
+      // الصابون الإضافي لازم يكون منتج حقيقي بسعره العادي
+      if (extraItems.some((i: any) => productPrice(i.product) === 0)) {
+        return Response.json({ error: "One or more extra products are invalid." }, { status: 400 });
+      }
+
+      extrasTotal = extraItems.reduce(
+        (sum: number, item: any) => sum + productPrice(item.product) * item.quantity,
+        0
+      );
+
       isBundle = true;
-      baseTotal = bundleConfig.price;
+      baseTotal = bundleConfig.price + extrasTotal;
+
+      // نجمع الباندل + الإضافي في قايمة واحدة للإدارة (ملخص الإنتاج)
+      const merged: Record<string, number> = {};
+      [...items, ...extraItems].forEach((i: any) => {
+        merged[i.product] = (merged[i.product] || 0) + i.quantity;
+      });
+      storedItems = Object.entries(merged).map(([product, quantity]) => ({ product, quantity }));
     }
 
     // منع استخدام نفس كود الخصم مرتين بنفس رقم التليفون
@@ -116,7 +143,7 @@ export async function POST(req: Request) {
         name: body.name,
         contact: body.contact,
         address: body.address,
-        items,
+        items: storedItems,
         discount_code: body.discount_code || null,
         total: finalTotal,
       }])
@@ -143,7 +170,7 @@ export async function POST(req: Request) {
           name: body.name,
           contact: body.contact,
           address: body.address,
-          items,
+          items: storedItems,
           discount_code: body.discount_code || "",
           total: finalTotal,
           type: isBundle ? "bundle" : "preorder",
@@ -164,11 +191,15 @@ export async function POST(req: Request) {
           <p><b>Name:</b> ${body.name}</p>
           <p><b>Phone:</b> ${body.contact}</p>
           <p><b>Address:</b> ${body.address}</p>
-          ${isBundle ? `<p><b>Bundle:</b> Bundle ${body.bundle.id} (${baseTotal} EGP)</p>` : ""}
-          <h3>Items:</h3>
+          ${isBundle ? `<p><b>Bundle:</b> Bundle ${body.bundle.id} (${BUNDLES[Number(body.bundle.id)].price} EGP)</p>` : ""}
+          <h3>${isBundle ? "Bundle soaps:" : "Items:"}</h3>
           <ul>
             ${items.map((i: any) => `<li>${i.product} × ${i.quantity}</li>`).join("")}
           </ul>
+          ${isBundle && extraItems.length > 0 ? `
+            <h3>Extra soaps (regular price):</h3>
+            <ul>${extraItems.map((i: any) => `<li>${i.product} × ${i.quantity} — ${productPrice(i.product) * i.quantity} EGP</li>`).join("")}</ul>
+          ` : ""}
           ${body.discount_code ? `<p><b>Discount Code:</b> ${body.discount_code}</p>` : ""}
           <p><b>Base Total:</b> ${baseTotal} EGP</p>
           <p><b>Final Total:</b> ${finalTotal} EGP</p>

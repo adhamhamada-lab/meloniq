@@ -35,7 +35,7 @@ function PreorderContent() {
   function getInitialItems(): Item[] {
     if (isBundle) {
       // جمع كل الـ products من الـ URL params
-      const allProducts = params.getAll("product");
+      const allProducts = params.getAll("product").map((p) => normalizeProduct(p));
       const counts: Record<string, number> = {};
       allProducts.forEach((p) => { counts[p] = (counts[p] || 0) + 1; });
       return Object.entries(counts).map(([product, quantity]) => ({ product, quantity }));
@@ -49,6 +49,8 @@ function PreorderContent() {
   }
 
   const [items, setItems] = useState<Item[]>(getInitialItems);
+  // صابون إضافي بسعره العادي (مع الباندل بس)
+  const [extraItems, setExtraItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [message, setMessage] = useState("");
@@ -63,6 +65,12 @@ function PreorderContent() {
   }
   function addItem() { setItems((prev) => [...prev, { product: "", quantity: 1 }]); }
   function removeItem(index: number) { setItems((prev) => prev.filter((_, i) => i !== index)); }
+
+  function updateExtra(index: number, field: keyof Item, value: string | number) {
+    setExtraItems((prev) => prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)));
+  }
+  function addExtra() { setExtraItems((prev) => [...prev, { product: "", quantity: 1 }]); }
+  function removeExtra(index: number) { setExtraItems((prev) => prev.filter((_, i) => i !== index)); }
 
   async function validateDiscount() {
     if (!discountCode.trim()) return;
@@ -85,14 +93,15 @@ function PreorderContent() {
   }
 
   const validItems = items.filter((i) => i.product);
+  const validExtras = extraItems.filter((i) => i.product && i.quantity > 0);
 
-  // الـ total — لو bundle بياخد سعر الـ bundle مش سعر المنتجات
-  const rawTotal = validItems.reduce((sum, item) => {
-    const product = PRODUCTS.find((p) => p.name === item.product);
-    return sum + (product ? product.price * item.quantity : 0);
-  }, 0);
+  const priceOf = (name: string) => PRODUCTS.find((p) => p.name === name)?.price || 0;
 
-  const total = isBundle ? bundlePrice : rawTotal;
+  const rawTotal = validItems.reduce((sum, item) => sum + priceOf(item.product) * item.quantity, 0);
+  const extrasTotal = validExtras.reduce((sum, item) => sum + priceOf(item.product) * item.quantity, 0);
+
+  // لو باندل: سعر الباندل + الصابون الإضافي بسعره العادي
+  const total = isBundle ? bundlePrice + extrasTotal : rawTotal;
 
   const discountedTotal = discountInfo && discountStatus === "valid"
     ? discountInfo.type === "percentage"
@@ -111,6 +120,7 @@ function PreorderContent() {
         contact,
         address: e.target.address.value,
         items,
+        extra_items: isBundle ? validExtras : [],
         discount_code: discountStatus === "valid" ? discountCode : null,
         bundle: isBundle ? { id: bundleId, price: bundlePrice } : null,
       }),
@@ -131,6 +141,8 @@ function PreorderContent() {
   }
 
   const inputStyle = `bg-white text-[#55614A] placeholder:text-[#7C8572] rounded-full px-7 py-5 outline-none border border-transparent focus:border-[#55614A] duration-300 text-lg w-full`;
+  const selectStyle = "bg-white text-[#55614A] rounded-full px-4 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-base flex-1 min-w-0";
+  const qtyStyle = "bg-white text-[#55614A] rounded-full px-3 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-base w-[60px] text-center shrink-0";
 
   return (
     <main className="bg-[#E4E7D6] min-h-screen">
@@ -182,23 +194,55 @@ function PreorderContent() {
                 </p>
 
                 {isBundle ? (
-                  // Bundle: عرض فقط
-                  <div className="flex flex-col gap-3">
-                    {validItems.map((item, i) => {
-                      const product = PRODUCTS.find((p) => p.name === item.product);
-                      return (
-                        <div key={i} className="flex items-center gap-3 bg-white rounded-[20px] px-4 py-3">
-                          {product?.image && (
-                            <div className="relative w-10 h-10 rounded-[10px] overflow-hidden shrink-0">
-                              <Image src={product.image} alt={item.product} fill className="object-cover" />
-                            </div>
-                          )}
-                          <p className="text-[#55614A] text-sm flex-1">{item.product}</p>
-                          <span className="text-[#66705D] text-xs">× {item.quantity}</span>
+                  <>
+                    <div className="flex flex-col gap-3">
+                      {validItems.map((item, i) => {
+                        const product = PRODUCTS.find((p) => p.name === item.product);
+                        return (
+                          <div key={i} className="flex items-center gap-3 bg-white rounded-[20px] px-4 py-3">
+                            {product?.image && (
+                              <div className="relative w-10 h-10 rounded-[10px] overflow-hidden shrink-0">
+                                <Image src={product.image} alt={item.product} fill className="object-cover" />
+                              </div>
+                            )}
+                            <p className="text-[#55614A] text-sm flex-1">{item.product}</p>
+                            <span className="text-[#66705D] text-xs">× {item.quantity}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* صابون إضافي بسعره العادي */}
+                    <div className="mt-4 flex flex-col gap-4">
+                      <div className="px-2">
+                        <p className="text-[#66705D] tracking-[0.15em] uppercase text-sm">Add More Soaps</p>
+                        <p className="text-[#66705D] text-xs mt-1 opacity-80">Want more? Add any other soap at its regular price.</p>
+                      </div>
+
+                      {extraItems.map((item, index) => (
+                        <div key={index} className="flex gap-2 items-center w-full">
+                          <select
+                            required value={item.product}
+                            onChange={(e) => updateExtra(index, "product", e.target.value)}
+                            className={selectStyle}
+                          >
+                            <option value="" disabled>Select product</option>
+                            {PRODUCTS.map((p) => <option key={p.name} value={p.name}>{p.name} — {p.price} EGP</option>)}
+                          </select>
+                          <input
+                            required type="number" min={1} value={item.quantity}
+                            onChange={(e) => updateExtra(index, "quantity", Number(e.target.value))}
+                            className={qtyStyle}
+                          />
+                          <button type="button" onClick={() => removeExtra(index)} className="w-9 h-9 rounded-full bg-white text-[#55614A] hover:bg-[#55614A] hover:text-white duration-300 text-xl flex items-center justify-center shrink-0">×</button>
                         </div>
-                      );
-                    })}
-                  </div>
+                      ))}
+
+                      <button type="button" onClick={addExtra} className="self-start px-6 py-3 rounded-full border border-[#55614A] text-[#55614A] text-sm uppercase tracking-[0.1em] hover:bg-[#55614A] hover:text-white duration-300">
+                        + Add Soap
+                      </button>
+                    </div>
+                  </>
                 ) : (
                   // Normal order
                   <>
@@ -207,7 +251,7 @@ function PreorderContent() {
                         <select
                           required value={item.product}
                           onChange={(e) => updateItem(index, "product", e.target.value)}
-                          className="bg-white text-[#55614A] rounded-full px-4 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-base flex-1 min-w-0"
+                          className={selectStyle}
                         >
                           <option value="" disabled>Select product</option>
                           {PRODUCTS.map((p) => <option key={p.name} value={p.name}>{p.name}</option>)}
@@ -215,7 +259,7 @@ function PreorderContent() {
                         <input
                           required type="number" min={1} value={item.quantity}
                           onChange={(e) => updateItem(index, "quantity", Number(e.target.value))}
-                          className="bg-white text-[#55614A] rounded-full px-3 py-4 outline-none border border-transparent focus:border-[#55614A] duration-300 text-base w-[60px] text-center shrink-0"
+                          className={qtyStyle}
                         />
                         {items.length > 1 && (
                           <button type="button" onClick={() => removeItem(index)} className="w-9 h-9 rounded-full bg-white text-[#55614A] hover:bg-[#55614A] hover:text-white duration-300 text-xl flex items-center justify-center shrink-0">×</button>
@@ -262,13 +306,31 @@ function PreorderContent() {
                 <p className="text-[#66705D] tracking-[0.15em] uppercase text-sm">Order Summary</p>
 
                 {isBundle ? (
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-[#55614A] text-sm font-medium">Back to School Bundle {bundleId}</p>
-                      <p className="text-[#66705D] text-xs">{validItems.reduce((s, i) => s + i.quantity, 0)} soaps · 25g each</p>
+                  <>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-[#55614A] text-sm font-medium">Back to School Bundle {bundleId}</p>
+                        <p className="text-[#66705D] text-xs">{validItems.reduce((s, i) => s + i.quantity, 0)} soaps · 25g each</p>
+                      </div>
+                      <span className="text-[#55614A] text-sm">{bundlePrice} EGP</span>
                     </div>
-                    <span className="text-[#55614A] text-sm">{bundlePrice} EGP</span>
-                  </div>
+
+                    {validExtras.map((item, i) => {
+                      const product = PRODUCTS.find((p) => p.name === item.product);
+                      return (
+                        <div key={i} className="flex items-center gap-4">
+                          {product?.image && (
+                            <Image src={product.image} alt={item.product} width={60} height={60} className="w-[60px] h-[60px] rounded-[12px] object-cover shrink-0" />
+                          )}
+                          <div className="flex-1">
+                            <p className="text-[#55614A] text-sm font-medium">{item.product}</p>
+                            <p className="text-[#66705D] text-xs">× {item.quantity}</p>
+                          </div>
+                          <span className="text-[#55614A] text-sm">{priceOf(item.product) * item.quantity} EGP</span>
+                        </div>
+                      );
+                    })}
+                  </>
                 ) : (
                   validItems.map((item, i) => {
                     const product = PRODUCTS.find((p) => p.name === item.product);
