@@ -53,7 +53,7 @@ function calcOrderTotal(o: Order, discounts: DiscountCode[]) {
 }
 
 export default function AdminPage() {
-  const [tab, setTab] = useState<"preorders" | "discounts">("preorders");
+  const [tab, setTab] = useState<"preorders" | "revenue" | "discounts">("preorders");
   const [preorders, setPreorders] = useState<Order[]>([]);
   const [discounts, setDiscounts] = useState<DiscountCode[]>([]);
   const [loading, setLoading] = useState(true);
@@ -227,8 +227,21 @@ export default function AdminPage() {
 
       <h1 className="text-[50px] md:text-[90px] text-[#55614A]">Dashboard</h1>
 
-      {!loading && (
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="mt-8 flex gap-4 flex-wrap">
+        <button onClick={() => setTab("preorders")} className={`px-8 py-3 rounded-full text-sm uppercase tracking-[0.1em] duration-300 ${tab === "preorders" ? "bg-[#55614A] text-white" : "border border-[#55614A] text-[#55614A]"}`}>
+          Orders ({pending.length})
+        </button>
+        <button onClick={() => setTab("revenue")} className={`px-8 py-3 rounded-full text-sm uppercase tracking-[0.1em] duration-300 ${tab === "revenue" ? "bg-[#55614A] text-white" : "border border-[#55614A] text-[#55614A]"}`}>
+          Revenue
+        </button>
+        <button onClick={() => setTab("discounts")} className={`px-8 py-3 rounded-full text-sm uppercase tracking-[0.1em] duration-300 ${tab === "discounts" ? "bg-[#55614A] text-white" : "border border-[#55614A] text-[#55614A]"}`}>
+          Discount Codes ({discounts.filter((d) => d.active).length})
+        </button>
+      </div>
+
+      {tab === "revenue" && !loading && (
+        <div className="mt-10">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="bg-[#55614A] rounded-[25px] p-6">
             <p className="text-white/70 text-xs uppercase tracking-[0.2em]">Total Revenue</p>
             <p className="text-white text-4xl mt-2 font-medium">{totalRevenue.toLocaleString()} <span className="text-xl opacity-70">EGP</span></p>
@@ -245,10 +258,8 @@ export default function AdminPage() {
             <p className="text-[#66705D] text-xs mt-1">{preorders.filter((o) => o.status !== "done").length} pending</p>
           </div>
         </div>
-      )}
 
-      {!loading && (
-        <div className="mt-4 bg-[#D7DCCB] rounded-[25px] p-6 md:p-8">
+          <div className="mt-4 bg-[#D7DCCB] rounded-[25px] p-6 md:p-8">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
             <div>
               <p className="text-[#66705D] text-xs uppercase tracking-[0.2em]">Monthly Revenue</p>
@@ -270,7 +281,6 @@ export default function AdminPage() {
             </div>
           </div>
 
-          {/* رسم بياني لكل الشهور (بيتحرك أفقيًا لو الشهور كتير) */}
           <div className="overflow-x-auto pb-2">
             <div className="flex items-end gap-3 md:gap-5 h-48" style={{ minWidth: `${monthlyData.length * 72}px` }}>
               {monthlyData.map((m, i) => {
@@ -299,7 +309,6 @@ export default function AdminPage() {
             </div>
           </div>
 
-          {/* جدول بكل الشهور — الأحدث فوق */}
           <div className="mt-8 overflow-x-auto">
             <table className="w-full text-left text-[#55614A] text-sm min-w-[480px]">
               <thead>
@@ -325,16 +334,8 @@ export default function AdminPage() {
             </table>
           </div>
         </div>
+        </div>
       )}
-
-      <div className="mt-8 flex gap-4 flex-wrap">
-        <button onClick={() => setTab("preorders")} className={`px-8 py-3 rounded-full text-sm uppercase tracking-[0.1em] duration-300 ${tab === "preorders" ? "bg-[#55614A] text-white" : "border border-[#55614A] text-[#55614A]"}`}>
-          Orders ({pending.length})
-        </button>
-        <button onClick={() => setTab("discounts")} className={`px-8 py-3 rounded-full text-sm uppercase tracking-[0.1em] duration-300 ${tab === "discounts" ? "bg-[#55614A] text-white" : "border border-[#55614A] text-[#55614A]"}`}>
-          Discount Codes ({discounts.filter((d) => d.active).length})
-        </button>
-      </div>
 
       {tab === "discounts" && (
         <div className="mt-10">
