@@ -21,7 +21,7 @@ export async function POST(req: Request) {
 const { data, error } = await supabase
   .from("discount_codes")
   .insert([{
-    code: body.code,
+    code: String(body.code || "").trim(),
     type: body.type,
     value: body.value,
     active: true,

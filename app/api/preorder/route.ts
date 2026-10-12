@@ -1,6 +1,7 @@
 import { supabase } from "../../../lib/supabase";
 import { Resend } from "resend";
 import { normalizeProduct, productPrice } from "../../../lib/products";
+import { findActiveDiscount, hasUsedCode } from "../../../lib/discount";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -93,48 +94,42 @@ export async function POST(req: Request) {
       storedItems = Object.entries(merged).map(([product, quantity]) => ({ product, quantity }));
     }
 
-    // منع استخدام نفس كود الخصم مرتين بنفس رقم التليفون
-    if (body.discount_code && body.contact) {
-      const { data: existingUsage, error: usageCheckError } = await supabase
-        .from("discount_usage")
-        .select("id")
-        .ilike("code", body.discount_code)
-        .eq("phone", body.contact)
-        .limit(1);
-
-      if (usageCheckError) {
-        return Response.json(
-          { error: "Could not verify discount code usage. Please try again." },
-          { status: 500 }
-        );
-      }
-
-      if (existingUsage && existingUsage.length > 0) {
-        return Response.json(
-          {
-            error: "This discount code has already been used with this phone number. Please remove it and try again.",
-            code: "DISCOUNT_ALREADY_USED",
-          },
-          { status: 409 }
-        );
-      }
-    }
-
-    // حساب الـ total بعد الخصم
+    // كود الخصم: لازم يكون فعّال، ومينفعش نفس الرقم يستخدمه مرتين
+    const contact = String(body.contact || "").trim();
+    let discountRow: any = null;
     let finalTotal = baseTotal;
-    if (body.discount_code) {
-      const { data: discountData } = await supabase
-        .from("discount_codes")
-        .select("type, value")
-        .eq("active", true)
-        .ilike("code", body.discount_code)
-        .single();
 
-      if (discountData) {
-        finalTotal = discountData.type === "percentage"
-          ? Math.round(baseTotal * (1 - discountData.value / 100))
-          : baseTotal - discountData.value;
+    if (body.discount_code) {
+      discountRow = await findActiveDiscount(supabase, body.discount_code);
+
+      if (!discountRow) {
+        return Response.json({ error: "Invalid or expired discount code." }, { status: 400 });
       }
+
+      if (contact) {
+        const usage = await hasUsedCode(supabase, discountRow.code, contact);
+
+        if (usage.error) {
+          return Response.json(
+            { error: "Could not verify discount code usage. Please try again." },
+            { status: 500 }
+          );
+        }
+
+        if (usage.used) {
+          return Response.json(
+            {
+              error: "This discount code has already been used with this phone number. Please remove it and try again.",
+              code: "DISCOUNT_ALREADY_USED",
+            },
+            { status: 409 }
+          );
+        }
+      }
+
+      finalTotal = discountRow.type === "percentage"
+        ? Math.round(baseTotal * (1 - discountRow.value / 100))
+        : baseTotal - discountRow.value;
     }
 
     const { data, error } = await supabase
@@ -154,10 +149,10 @@ export async function POST(req: Request) {
     }
 
     // تسجيل استخدام الكود
-    if (body.discount_code && body.contact) {
+    if (discountRow && contact) {
       await supabase
         .from("discount_usage")
-        .insert([{ code: body.discount_code, phone: body.contact }]);
+        .insert([{ code: String(discountRow.code).trim(), phone: contact }]);
     }
 
     // Google Sheets

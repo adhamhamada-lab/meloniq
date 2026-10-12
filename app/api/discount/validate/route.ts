@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { findActiveDiscount, hasUsedCode } from "../../../../lib/discount";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -8,29 +9,18 @@ const supabase = createClient(
 export async function POST(req: Request) {
   const { code, phone } = await req.json();
 
-  const { data, error } = await supabase
-    .from("discount_codes")
-    .select("*")
-    .eq("code", code)
-    .eq("active", true)
-    .single();
+  const discount = await findActiveDiscount(supabase, code);
 
-  if (error || !data) {
+  if (!discount) {
     return Response.json({ valid: false, message: "Invalid or expired code" });
   }
 
   if (phone) {
-    const { data: usage } = await supabase
-      .from("discount_usage")
-      .select("id")
-      .eq("code", code)
-      .eq("phone", phone)
-      .single();
-
-    if (usage) {
+    const usage = await hasUsedCode(supabase, discount.code, phone);
+    if (usage.used) {
       return Response.json({ valid: false, message: "You have already used this code" });
     }
   }
 
-  return Response.json({ valid: true, type: data.type, value: data.value });
+  return Response.json({ valid: true, type: discount.type, value: discount.value });
 }
