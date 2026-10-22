@@ -1,15 +1,9 @@
 import { supabase } from "../../../lib/supabase";
 import { Resend } from "resend";
-import { normalizeProduct, productPrice } from "../../../lib/products";
+import { normalizeProduct, productPrice, BUNDLES } from "../../../lib/products";
 import { findActiveDiscount, hasUsedCode } from "../../../lib/discount";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-
-// تعريف الباندلز في السيرفر — المصدر الوحيد الموثوق للسعر والعدد
-const BUNDLES: Record<number, { count: number; price: number }> = {
-  3: { count: 3, price: 80 },
-  5: { count: 5, price: 110 },
-};
 
 // الصابونات المسموح اختيارها جوه أي باندل (Summer Collection)
 const ALLOWED_BUNDLE_PRODUCTS = [
@@ -86,12 +80,12 @@ export async function POST(req: Request) {
       isBundle = true;
       baseTotal = bundleConfig.price + extrasTotal;
 
-      // نجمع الباندل + الإضافي في قايمة واحدة للإدارة (ملخص الإنتاج)
-      const merged: Record<string, number> = {};
-      [...items, ...extraItems].forEach((i: any) => {
-        merged[i.product] = (merged[i.product] || 0) + i.quantity;
-      });
-      storedItems = Object.entries(merged).map(([product, quantity]) => ({ product, quantity }));
+      // بنحفظ صابونات الباندل بعلامة bundleId، والإضافي من غير علامة
+      // عشان الأدمن يحسب السعر الأصلي صح ويفرّق بينهم
+      storedItems = [
+        ...items.map((i: any) => ({ ...i, bundleId: Number(body.bundle.id) })),
+        ...extraItems,
+      ];
     }
 
     // كود الخصم: لازم يكون فعّال، ومينفعش نفس الرقم يستخدمه مرتين

@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { normalizeProduct, productPrice } from "@/lib/products";
+import { normalizeProduct, orderBaseTotal } from "@/lib/products";
 
 type Item = {
   product: string;
   quantity: number;
+  bundleId?: number;
 };
 
 type Order = {
@@ -34,9 +35,7 @@ function calcOrderTotal(o: Order, discounts: DiscountCode[]) {
   if (o.total) return o.total;
 
   // لو لأ احسبه من الـ items مع الخصم
-  const raw = (o.items || []).reduce((sum, item) => {
-    return sum + productPrice(item.product) * item.quantity;
-  }, 0);
+  const raw = orderBaseTotal(o.items || []);
 
   if (!o.discount_code) return raw;
 
@@ -165,10 +164,17 @@ export default function AdminPage() {
 
   function OrderCard({ o, faded }: { o: Order; faded?: boolean }) {
     const total = calcOrderTotal(o, discounts);
-    const rawTotal = (o.items || []).reduce((sum, item) => {
-      return sum + productPrice(item.product) * item.quantity;
-    }, 0);
-    const hasDiscount = o.discount_code && total !== rawTotal;
+    const rawTotal = orderBaseTotal(o.items || []);
+    const hasBundle = (o.items || []).some((i) => i.bundleId);
+    const dc = discounts.find((d) => d.code.trim().toLowerCase() === (o.discount_code || "").trim().toLowerCase());
+    const expected = dc
+      ? dc.type === "percentage"
+        ? Math.round(rawTotal * (1 - dc.value / 100))
+        : rawTotal - dc.value
+      : null;
+    // الطلبات القديمة (باندل من غير علامة) مش هنعرض لها سعر أصلي غلط
+    const priceKnown = hasBundle || expected === null || Math.abs(expected - total) <= 1;
+    const hasDiscount = o.discount_code && total !== rawTotal && priceKnown;
 
     return (
       <div className={`rounded-[35px] p-8 flex flex-col gap-4 ${faded ? "opacity-60 bg-[#c8cdb8]" : "bg-[#D7DCCB]"}`}>
@@ -183,6 +189,11 @@ export default function AdminPage() {
                     <span className="opacity-50 text-sm">#{i + 1}</span>
                     <span>{item.product}</span>
                     <span className="opacity-60">× {item.quantity}</span>
+                    {hasBundle && (
+                      <span className="text-[10px] uppercase tracking-[0.15em] bg-[#55614A] text-white rounded-full px-2 py-0.5 self-center">
+                        {item.bundleId ? `Bundle ${item.bundleId}` : "Extra"}
+                      </span>
+                    )}
                   </div>
                 ))}
               </div>

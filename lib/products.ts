@@ -15,7 +15,7 @@ export const PRODUCT_CATALOG = [
 function clean(s: string) {
   return (s || "")
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "") // يشيل علامة ñ وأمثالها
+    .replace(/[\u0300-\u036f]/g, "")
     .trim()
     .toLowerCase();
 }
@@ -26,7 +26,6 @@ for (const p of PRODUCT_CATALOG) {
   for (const a of p.aliases) LOOKUP[clean(a)] = p.name;
 }
 
-// يرجّع الاسم الإنجليزي الأساسي للمنتج (حتى لو جه بالعربي أو من غير ñ)
 export function normalizeProduct(name: string): string {
   return LOOKUP[clean(name)] || name;
 }
@@ -37,4 +36,26 @@ export const PRODUCT_PRICES: Record<string, number> = Object.fromEntries(
 
 export function productPrice(name: string): number {
   return PRODUCT_PRICES[normalizeProduct(name)] || 0;
+}
+
+// الباندلز — المصدر الوحيد للسعر والعدد (السيرفر والأدمن بيستخدموه)
+export const BUNDLES: Record<number, { count: number; price: number }> = {
+  3: { count: 3, price: 80 },
+  5: { count: 5, price: 110 },
+};
+
+export type OrderItem = { product: string; quantity: number; bundleId?: number };
+
+// إجمالي الطلب قبل الخصم: لو فيه باندل → سعر الباندل + الصابون الإضافي بسعره العادي
+export function orderBaseTotal(items: OrderItem[]): number {
+  const list = items || [];
+  const bundleItem = list.find((i) => i.bundleId);
+  if (!bundleItem) {
+    return list.reduce((sum, i) => sum + productPrice(i.product) * i.quantity, 0);
+  }
+  const bundlePrice = BUNDLES[Number(bundleItem.bundleId)]?.price || 0;
+  const extras = list
+    .filter((i) => !i.bundleId)
+    .reduce((sum, i) => sum + productPrice(i.product) * i.quantity, 0);
+  return bundlePrice + extras;
 }
