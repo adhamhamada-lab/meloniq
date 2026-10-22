@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { normalizeProduct, orderBaseTotal } from "@/lib/products";
+import { normalizeProduct, orderBaseTotal, describeOrder } from "@/lib/products";
 
 type Item = {
   product: string;
@@ -164,23 +164,32 @@ export default function AdminPage() {
 
   function OrderCard({ o, faded }: { o: Order; faded?: boolean }) {
     const total = calcOrderTotal(o, discounts);
-    const rawTotal = orderBaseTotal(o.items || []);
-    const hasBundle = (o.items || []).some((i) => i.bundleId);
     const dc = discounts.find((d) => d.code.trim().toLowerCase() === (o.discount_code || "").trim().toLowerCase());
-    const expected = dc
-      ? dc.type === "percentage"
-        ? Math.round(rawTotal * (1 - dc.value / 100))
-        : rawTotal - dc.value
-      : null;
-    // الطلبات القديمة (باندل من غير علامة) مش هنعرض لها سعر أصلي غلط
-    const priceKnown = hasBundle || expected === null || Math.abs(expected - total) <= 1;
-    const hasDiscount = o.discount_code && total !== rawTotal && priceKnown;
+    const apply = (n: number) =>
+      dc ? (dc.type === "percentage" ? Math.round(n * (1 - dc.value / 100)) : n - dc.value) : n;
+    const info = describeOrder(o.items || [], total, apply);
+    const rawTotal = info.base;
+    const hasDiscount = o.discount_code && info.known && total !== rawTotal;
+
+    const tagFor = (item: Item) => {
+      if (!info.bundleId) return null;
+      if (!info.inferred) return item.bundleId ? `Bundle ${item.bundleId}` : "Extra";
+      const k = info.bundleQty[normalizeProduct(item.product)] || 0;
+      if (k === 0) return "Extra";
+      if (k >= item.quantity) return `Bundle ${info.bundleId}`;
+      return `Bundle ×${k} + ${item.quantity - k} extra`;
+    };
 
     return (
       <div className={`rounded-[35px] p-8 flex flex-col gap-4 ${faded ? "opacity-60 bg-[#c8cdb8]" : "bg-[#D7DCCB]"}`}>
         <div className="flex-1">
           <p className="text-[#55614A]"><b>Name:</b> {o.name}</p>
           <div className="mt-3">
+            {info.bundleId && (
+              <span className="inline-block mb-3 bg-[#55614A] text-white text-xs uppercase tracking-[0.15em] rounded-full px-4 py-1.5">
+                Back to School Bundle {info.bundleId}
+              </span>
+            )}
             <p className="text-[#55614A] font-bold mb-2">Items:</p>
             {o.items && o.items.length > 0 ? (
               <div className="flex flex-col gap-1">
@@ -189,9 +198,9 @@ export default function AdminPage() {
                     <span className="opacity-50 text-sm">#{i + 1}</span>
                     <span>{item.product}</span>
                     <span className="opacity-60">× {item.quantity}</span>
-                    {hasBundle && (
+                    {tagFor(item) && (
                       <span className="text-[10px] uppercase tracking-[0.15em] bg-[#55614A] text-white rounded-full px-2 py-0.5 self-center">
-                        {item.bundleId ? `Bundle ${item.bundleId}` : "Extra"}
+                        {tagFor(item)}
                       </span>
                     )}
                   </div>

@@ -59,3 +59,84 @@ export function orderBaseTotal(items: OrderItem[]): number {
     .reduce((sum, i) => sum + productPrice(i.product) * i.quantity, 0);
   return bundlePrice + extras;
 }
+
+const SUMMER_SOAPS = [
+  "Watermelon Soap",
+  "Pink Lemonade Soap",
+  "Piña Colada Soap",
+  "Aloe & Cucumber Soap",
+  "Tropical Fruit Soap",
+];
+
+export type OrderInfo = {
+  bundleId?: number;
+  base: number; // السعر قبل الخصم
+  inferred: boolean; // true = طلب قديم اتعرف إنه باندل من الأرقام
+  bundleQty: Record<string, number>; // كمية كل صابونة جوه الباندل (للطلبات القديمة)
+  known: boolean; // false = مش قادرين نعرف السعر الأصلي بدقة
+};
+
+// بيحدد الطلب باندل ولا لأ، ويحسب السعر قبل الخصم — حتى للطلبات القديمة اللي معلهاش علامة
+export function describeOrder(
+  items: OrderItem[],
+  total: number,
+  apply: (n: number) => number
+): OrderInfo {
+  const list = items || [];
+
+  // طلب جديد: عليه علامة bundleId
+  const marked = list.find((i) => i.bundleId);
+  if (marked) {
+    return { bundleId: Number(marked.bundleId), base: orderBaseTotal(list), inferred: false, bundleQty: {}, known: true };
+  }
+
+  const retail = list.reduce((sum, i) => sum + productPrice(i.product) * i.quantity, 0);
+
+  // طلب عادي: الخصم على الأسعار العادية بيطلع نفس الإجمالي المحفوظ
+  if (!total || apply(retail) === total) {
+    return { base: retail, inferred: false, bundleQty: {}, known: true };
+  }
+
+  // طلب قديم: نجرب نعرف لو كان باندل (3 أو 5) + صابون إضافي ويطابق الإجمالي
+  const qty: Record<string, number> = {};
+  list.forEach((i) => {
+    const k = normalizeProduct(i.product);
+    qty[k] = (qty[k] || 0) + i.quantity;
+  });
+  const summer = SUMMER_SOAPS.filter((p) => qty[p] > 0);
+
+  for (const idStr of Object.keys(BUNDLES)) {
+    const id = Number(idStr);
+    const b = BUNDLES[id];
+    const pick: Record<string, number> = {};
+    let result: OrderInfo | null = null;
+
+    const rec = (idx: number, left: number) => {
+      if (result) return;
+      if (idx === summer.length) {
+        if (left !== 0) return;
+        let extras = 0;
+        Object.keys(qty).forEach((p) => {
+          extras += ((qty[p] || 0) - (pick[p] || 0)) * productPrice(p);
+        });
+        const base = b.price + extras;
+        if (apply(base) === total) {
+          result = { bundleId: id, base, inferred: true, bundleQty: { ...pick }, known: true };
+        }
+        return;
+      }
+      const p = summer[idx];
+      for (let k = Math.min(qty[p], left); k >= 0; k--) {
+        pick[p] = k;
+        rec(idx + 1, left - k);
+        if (result) return;
+      }
+      pick[p] = 0;
+    };
+
+    rec(0, b.count);
+    if (result) return result;
+  }
+
+  return { base: retail, inferred: false, bundleQty: {}, known: false };
+}
